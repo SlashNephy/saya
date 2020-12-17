@@ -10,6 +10,7 @@ plugins {
 object ThirdpartyVersion {
     const val Ktor = "1.4.3"
     const val JsonKt = "6.0.0"
+    const val Jsoup = "1.13.1"
     const val Exposed = "0.28.1"
     const val SQLiteJDBC = "3.30.1"
 
@@ -31,6 +32,9 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
+
+    // HTML parsing
+    implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")
 
     // sqlite
     implementation("org.jetbrains.exposed:exposed-core:${ThirdpartyVersion.Exposed}")
