@@ -1,28 +1,7 @@
-package blue.starry.untitled.nicolive
+package blue.starry.saya.services.nicolive.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.jsonkt.parseObject
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-
-suspend fun searchLivePrograms(word: String): SearchPrograms {
-    return HttpClient().use { client ->
-        client.get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&offset=0&sort=startTime&limit=20&searchWord=$word&searchTargets=keyword&order=desc") {
-            header("X-Frontend-Id", "89")
-            userAgent("nicocas-iOS/5.16.0 nico-webview/1.0.0")
-        }.parseObject {
-            SearchPrograms(it)
-        }
-    }
-}
-
-suspend fun main() {
-    searchLivePrograms("ニコニコ実況").data.forEach {
-        println(it.id)
-    }
-}
 
 data class SearchPrograms(override val json: JsonObject): JsonModel {
     val meta by model { Meta(it) }

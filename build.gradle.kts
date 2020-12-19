@@ -1,7 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 group = "blue.starry"
-version = "1.0-SNAPSHOT"
 
 plugins {
     kotlin("jvm") version "1.4.21"
@@ -30,7 +27,11 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-cio:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-websockets:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
 
     // HTML parsing
@@ -54,10 +55,28 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:${ThirdpartyVersion.JUnit}")
 }
 
-tasks.test {
-    useJUnitPlatform()
+kotlin {
+    target {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+                apiVersion = "1.4"
+                languageVersion = "1.4"
+                verbose = true
+            }
+        }
+    }
+
+    sourceSets.all {
+        languageSettings.progressiveMode = true
+        languageSettings.apply {
+            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            useExperimentalAnnotation("kotlin.io.path.ExperimentalPathApi")
+            useExperimentalAnnotation("io.ktor.locations.KtorExperimentalLocationsAPI")
+        }
+    }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+tasks.test {
+    useJUnitPlatform()
 }

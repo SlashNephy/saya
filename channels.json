@@ -1,0 +1,140 @@
+{
+  "jk1": {
+    "name": "NHK 総合",
+    "tags": ["NHK総合"],
+    "official": true
+  },
+  "jk2": {
+    "name": "Eテレ",
+    "tags": ["NHK_Eテレ"],
+    "official": true
+  },
+  "jk4": {
+    "name": "日本テレビ",
+    "tags": ["日本テレビ"],
+    "official": true
+  },
+  "jk5": {
+    "name": "テレビ朝日",
+    "tags": ["テレビ朝日"],
+    "official": true
+  },
+  "jk6": {
+    "name": "TBS テレビ",
+    "tags": ["TBSテレビ"],
+    "official": true
+  },
+  "jk7": {
+    "name": "テレビ東京",
+    "tags": ["テレビ東京"],
+    "official": true
+  },
+  "jk8": {
+    "name": "フジテレビ",
+    "tags": ["フジテレビ"],
+    "official": true
+  },
+  "jk9": {
+    "name": "TOKYO MX",
+    "tags": ["TOKYO_MX"],
+    "official": true
+  },
+  "jk101": {
+    "name": "NHKBS-1",
+    "tags": ["NHKBS-1"]
+  },
+  "jk103": {
+    "name": "NHK BSプレミアム",
+    "tags": ["NHK_BSプレミアム", "NHKBSプレミアム", "BSプレミアム"]
+  },
+  "jk141": {
+    "name": "BS 日テレ",
+    "tags": ["BS_日テレ", "BS日テレ"]
+  },
+  "jk151": {
+    "name": "BS 朝日",
+    "tags": ["BS_朝日", "BS朝日"]
+  },
+  "jk161": {
+    "name": "BS-TBS",
+    "tags": ["BS-TBS", "BSTBS"]
+  },
+  "jk171": {
+    "name": "BSジャパン",
+    "tags": ["BSジャパン", "BSテレ東"]
+  },
+  "jk181": {
+    "name": "BSフジ",
+    "tags": ["BSフジ"]
+  },
+  "jk191": {
+    "name": "WOWOWプライム"
+  },
+  "jk192": {
+    "name": "WOWOWライブ"
+  },
+  "jk193": {
+    "name": "WOWOWシネマ"
+  },
+  "jk200": {
+    "name": "スターチャンネル1"
+  },
+  "jk201": {
+    "name": "スターチャンネル2"
+  },
+  "jk202": {
+    "name": "スターチャンネル3"
+  },
+  "jk211": {
+    "name": "BSイレブン",
+    "tags": ["BS11"],
+    "official": true
+  },
+  "jk222": {
+    "name": "TwellV",
+    "tags": ["TwellV"]
+  },
+  "jk231": {
+    "name": "放送大学"
+  },
+  "jk234": {
+    "name": "BSグリーンチャンネル",
+    "tags": ["グリーンチャンネル"]
+  },
+  "jk236": {
+    "name": "BSアニマックス"
+  },
+  "jk238": {
+    "name": "FOX bs 238"
+  },
+  "jk241": {
+    "name": "BSスカパー!"
+  },
+  "jk242": {
+    "name": "J Sports 1"
+  },
+  "jk243": {
+    "name": "J Sports 2"
+  },
+  "jk244": {
+    "name": "J Sports 3"
+  },
+  "jk245": {
+    "name": "J Sports 4"
+  },
+  "jk251": {
+    "name": "BS釣りビジョン"
+  },
+  "jk252": {
+    "name": "IMAGICA BS"
+  },
+  "jk255": {
+    "name": "BS日本映画専門チャンネル"
+  },
+  "jk256": {
+    "name": "ディズニー・チャンネル"
+  },
+  "jk258": {
+    "name": "Dlife"
+  }
+}
