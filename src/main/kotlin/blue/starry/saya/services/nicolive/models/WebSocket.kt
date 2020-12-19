@@ -3,7 +3,7 @@ package blue.starry.saya.services.nicolive.models
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
 
-data class NicoLiveWebSocketJson(override val json: JsonObject): JsonModel {
+data class NicoLiveWebSocketSystemJson(override val json: JsonObject): JsonModel {
     val type by string
     val data by model { Data(it) }
 

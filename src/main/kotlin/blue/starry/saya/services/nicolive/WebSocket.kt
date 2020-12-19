@@ -3,8 +3,8 @@ package blue.starry.saya.services.nicolive
 import blue.starry.jsonkt.*
 import blue.starry.saya.services.httpClient
 import blue.starry.saya.services.nicolive.models.Channel
-import blue.starry.saya.services.nicolive.models.NicoLiveWebSocketJson
 import blue.starry.saya.services.nicolive.models.NicoLiveWebSocketMessageJson
+import blue.starry.saya.services.nicolive.models.NicoLiveWebSocketSystemJson
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
@@ -114,7 +114,7 @@ class NicoLiveSystemWebSocket(private val url: String) {
 
     private suspend fun DefaultClientWebSocketSession.consumeFrames() {
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            val message = frame.readText().parseObject { NicoLiveWebSocketJson(it) }
+            val message = frame.readText().parseObject { NicoLiveWebSocketSystemJson(it) }
 
             when (message.type) {
                 "ping" -> {
@@ -143,6 +143,9 @@ class NicoLiveSystemWebSocket(private val url: String) {
                 // 1分おきに来る
                 "statistics" -> {
                     stats.update(message.data)
+                }
+                "disconnect" -> {
+                    job.cancel()
                 }
             }
 
@@ -180,7 +183,7 @@ class NicoLiveStatistics {
             return 60 * (c - fc) / (ct - fct)
         }
 
-    fun update(data: NicoLiveWebSocketJson.Data) {
+    fun update(data: NicoLiveWebSocketSystemJson.Data) {
         viewers = data.viewers
         adPoints = data.adPoints
         giftPoints = data.giftPoints
@@ -202,7 +205,7 @@ class NicoLiveStatistics {
     }
 }
 
-class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, private val room: NicoLiveWebSocketJson) {
+class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, private val room: NicoLiveWebSocketSystemJson) {
     private val logger = KotlinLogging.logger("saya.services.nicolive")
     val stream = BroadcastChannel<NicoLiveWebSocketMessageJson.Chat>(1)
 
