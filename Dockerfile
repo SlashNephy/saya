@@ -12,9 +12,11 @@ COPY --chown=gradle:gradle . /home/gradle/build_home
 WORKDIR /home/gradle/build_home
 RUN gradle shadowJar -i --stacktrace
 
-FROM openjdk:8-jre
+FROM openjdk:8-jre-alpine
 RUN mkdir /app
 WORKDIR /app
 COPY --from=build /home/gradle/build_home/build/libs/saya-all.jar /app/saya.jar
+COPY resources /app/resources
+COPY channels.json /app/channels.json
 
-ENTRYPOINT ["java", "-jar", "/app/saya.jar"]
+ENTRYPOINT ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-XX:InitialRAMFraction=2", "-XX:MinRAMFraction=2", "-XX:MaxRAMFraction=2", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]

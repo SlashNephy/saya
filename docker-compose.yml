@@ -9,7 +9,6 @@ services:
       - '1017:1017'
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./channels.json:/app/channels.json:ro
     environment:
       TZ: Asia/Tokyo
       SAYA_HOST: 0.0.0.0

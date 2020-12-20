@@ -3,6 +3,11 @@ group = "blue.starry"
 plugins {
     kotlin("jvm") version "1.4.21"
     kotlin("plugin.serialization") version "1.4.21"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+
+    // For testing
+    id("com.adarshr.test-logger") version "2.0.0"
+    id("net.rdrei.android.buildtimetracker") version "0.11.0"
 }
 
 object ThirdpartyVersion {
@@ -13,7 +18,7 @@ object ThirdpartyVersion {
     const val SQLiteJDBC = "3.30.1"
 
     // logging
-    const val KotlinLogging = "2.0.3"
+    const val KotlinLogging = "2.0.4"
     const val Logback = "1.2.3"
     const val jansi = "1.18"
 
@@ -79,6 +84,41 @@ kotlin {
     }
 }
 
+/*
+ * Tests
+ */
+
+buildtimetracker {
+    reporters {
+        register("summary") {
+            options["ordered"] = "true"
+            options["barstyle"] = "ascii"
+            options["shortenTaskNames"] = "false"
+        }
+    }
+}
+
+testlogger {
+    theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
+}
+
 tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    manifest {
+        attributes("Main-Class" to "blue.starry.saya.MainKt")
+    }
+}
+
+task<JavaExec>("run") {
+    dependsOn("build")
+
+    group = "application"
+    main = "blue.starry.saya.MainKt"
+    classpath(configurations.runtimeClasspath, tasks.jar)
 }
