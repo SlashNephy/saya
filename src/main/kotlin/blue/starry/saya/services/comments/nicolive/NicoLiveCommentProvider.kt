@@ -127,6 +127,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
     }.apply {
         invokeOnCompletion {
             logger.trace { "cancel: NicoLiveMessageWebSocket: ${it?.stackTraceToString()}" }
+            provider.job.cancel()
         }
     }
 
