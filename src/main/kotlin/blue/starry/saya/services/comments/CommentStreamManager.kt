@@ -7,7 +7,7 @@ import java.nio.file.Paths
 import kotlin.io.path.readText
 
 object CommentStreamManager {
-    private val Streams = Paths.get("channels.json").readText().toJsonObject().map { entry ->
+    private val Streams = Paths.get("resources", "channels.json").readText().toJsonObject().map { entry ->
         val channel = entry.value.parseObject { Channel(it) }
 
         CommentStream(entry.key, channel)
