@@ -6,6 +6,7 @@ object Env {
     val SAYA_HOST by string
     val SAYA_PORT by int
     val SAYA_BASE_URI by string
+    val ANNICT_TOKEN by string
     val MIRAKURUN_HOST by string
     val MIRAKURUN_PORT by int
 }
