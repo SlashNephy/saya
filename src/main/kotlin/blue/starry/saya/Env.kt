@@ -5,6 +5,9 @@ import kotlin.properties.ReadOnlyProperty
 object Env {
     val SAYA_HOST by string
     val SAYA_PORT by int
+    val SAYA_BASE_URI by string
+    val MIRAKURUN_HOST by string
+    val MIRAKURUN_PORT by int
 }
 
 private val string: ReadOnlyProperty<Env, String?>

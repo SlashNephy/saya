@@ -1,7 +1,9 @@
 package blue.starry.saya.server
 
+import blue.starry.saya.Env
 import blue.starry.saya.server.endpoints.getCommentStats
 import blue.starry.saya.server.endpoints.getCommentStream
+import blue.starry.saya.server.endpoints.getIndex
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.locations.*
@@ -18,7 +20,8 @@ fun Application.module() {
     }
 
     routing {
-        route("/api") {
+        route(Env.SAYA_BASE_URI ?: "/") {
+            getIndex()
             getCommentStream()
             getCommentStats()
         }

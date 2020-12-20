@@ -31,6 +31,7 @@ dependencies {
     implementation("io.ktor:ktor-server-cio:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-websockets:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-html-builder:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
