@@ -1,4 +1,4 @@
-package blue.starry.saya.services.nicojk
+package blue.starry.saya.services.comments.nicojk
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.selectAll

@@ -1,4 +1,4 @@
-package blue.starry.saya.services.nicolive.models
+package blue.starry.saya.services.comments.nicolive.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
