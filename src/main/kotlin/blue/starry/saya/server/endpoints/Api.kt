@@ -16,8 +16,9 @@ import kotlinx.serialization.json.Json
 fun Route.getCommentStream() {
     webSocket("/comment/stream/{target}") {
         val target = call.parameters["target"] ?: return@webSocket call.respond(HttpStatusCode.BadRequest)
+        val serviceId = target.toIntOrNull()
         val stream = streams.find {
-            it.id == target
+            it.id == target || (serviceId !=null && it.channel.serviceIds.contains(serviceId))
         }
         val socket = stream?.getOrCreateSocket() ?: return@webSocket call.respond(HttpStatusCode.NotFound)
 
@@ -43,8 +44,9 @@ fun Route.getCommentStream() {
 fun Route.getCommentStats() {
     get("/comment/stats/{target}") {
         val target = call.parameters["target"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+        val serviceId = target.toIntOrNull()
         val stream = streams.find {
-            it.id == target
+            it.id == target || (serviceId !=null && it.channel.serviceIds.contains(serviceId))
         }
         val socket = stream?.getOrCreateSocket(false) ?: return@get call.respond(HttpStatusCode.NotFound)
 
