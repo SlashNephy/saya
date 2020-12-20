@@ -93,10 +93,15 @@ class NicoLiveSystemWebSocket(private val url: String) {
 
                 handshake()
                 consumeFrames()
-            } catch (_: ClosedReceiveChannelException) {
-                logger.debug("ws:close (${closeReason.await()})")
             } catch (t: Throwable) {
-                logger.error("ws:error (${closeReason.await()}), ${t.stackTraceToString()}")
+                when (t) {
+                    is ClosedReceiveChannelException, is CancellationException -> {
+                        logger.debug("ws:close (${closeReason.await()})")
+                    }
+                    else -> {
+                        logger.error("ws:error (${closeReason.await()}), ${t.stackTraceToString()}")
+                    }
+                }
             } finally {
                 job.cancel()
             }
@@ -232,10 +237,15 @@ class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, priv
 
                 handshake()
                 consumeFrames()
-            } catch (_: ClosedReceiveChannelException) {
-                logger.debug("mws:close (${closeReason.await()})")
             } catch (t: Throwable) {
-                logger.error("mws:error (${closeReason.await()}), ${t.stackTraceToString()}")
+                when (t) {
+                    is ClosedReceiveChannelException, is CancellationException -> {
+                        logger.debug("mws:close (${closeReason.await()})")
+                    }
+                    else -> {
+                        logger.error("mws:error (${closeReason.await()}), ${t.stackTraceToString()}")
+                    }
+                }
             } finally {
                 job.cancel()
             }
