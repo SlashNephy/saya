@@ -309,19 +309,21 @@ private suspend fun DefaultClientWebSocketSession.send(json: JsonElement) {
 }
 
 @Serializable
-data class Comment(val channel: String, val no: Int, val time: Int, val author: String, val text: String, val color: String, val type: String, val commands: List<String>) {
+data class Comment(val channel: String, val no: Int, val time: Int, val author: String, val text: String, val color: String, val type: String, val size: String, val commands: List<String>) {
     companion object {
         fun from(stream: Stream, chat: NicoLiveWebSocketMessageJson.Chat): Comment {
-            val (commands, color, type) = parseMail(chat.mail.orEmpty())
+            val (commands, parsed) = parseMail(chat.mail)
+            val (color, type, size) = parsed
 
-            return Comment(stream.id, chat.no, chat.date, chat.userId, chat.content, color, type, commands)
+            return Comment(stream.id, chat.no, chat.date, chat.userId, chat.content, color, type, size, commands)
         }
 
-        private fun parseMail(mail: String): Triple<List<String>, String, String> {
+        private fun parseMail(mail: String): Pair<List<String>, Triple<String, String, String>> {
             val commands = mail.split(' ').filterNot { it == "184" }.filterNot { it.isBlank() }
 
             var color = "#ffffff"
             var position = "right"
+            var size = "normal"
             commands.forEach { command ->
                 val c = parseColor(command)
                 if (c != null) {
@@ -332,9 +334,14 @@ data class Comment(val channel: String, val no: Int, val time: Int, val author: 
                 if (p != null) {
                     position = p
                 }
+
+                val s = parseSize(command)
+                if (s != null) {
+                    size = s
+                }
             }
 
-            return Triple(commands, color, position)
+            return commands to Triple(color, position, size)
         }
 
         private fun parseColor(command: String): String? {
@@ -377,6 +384,14 @@ data class Comment(val channel: String, val no: Int, val time: Int, val author: 
                 "shita" -> "bottom"
                 else -> null
             }
+        }
+
+        private fun parseSize(command: String): String? {
+            if (command == "small" || command == "medium" || command == "big") {
+                return command
+            }
+
+            return null
         }
     }
 }

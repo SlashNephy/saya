@@ -36,7 +36,7 @@ data class NicoLiveWebSocketMessageJson(override val json: JsonObject) : JsonMod
         val vpos by int
         val date by int
         val dateUsec by int("date_usec")
-        val mail by nullableString
+        val mail by string { "" }
         val userId by string("user_id")
         val anonymity by int { 0 }
         val premium by int { 0 }
