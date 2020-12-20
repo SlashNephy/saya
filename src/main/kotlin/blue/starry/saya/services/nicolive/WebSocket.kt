@@ -318,7 +318,7 @@ data class Comment(val channel: String, val no: Int, val time: Int, val author: 
         }
 
         private fun parseMail(mail: String): Triple<List<String>, String, String> {
-            val commands = mail.split(' ').filter { it != "184" }
+            val commands = mail.split(' ').filterNot { it == "184" }.filterNot { it.isBlank() }
 
             var color = "#ffffff"
             var position = "right"
