@@ -48,7 +48,7 @@ data class Stream(val id: String, val channel: Channel) {
                 }
         }.firstOrNull() ?: return null
 
-        underlyingSocket = NicoLiveSystemWebSocket(data.site.relive.webSocketUrl)
+        underlyingSocket = NicoLiveSystemWebSocket(this, data.site.relive.webSocketUrl)
         return underlyingSocket
     }
 
@@ -70,8 +70,8 @@ data class Stream(val id: String, val channel: Channel) {
     }
 }
 
-class NicoLiveSystemWebSocket(private val url: String) {
-    private val logger = KotlinLogging.logger("saya.services.nicolive")
+class NicoLiveSystemWebSocket(val stream: Stream, private val url: String) {
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
     val job = GlobalScope.launch {
         connect()
     }.apply {
@@ -158,6 +158,7 @@ class NicoLiveSystemWebSocket(private val url: String) {
                 // 1分おきに来る
                 "statistics" -> {
                     stats.update(message.data)
+                    logger.debug { "コメント勢い: ${stats.commentRate} コメ/min" }
                 }
                 "disconnect" -> {
                     job.cancel()
@@ -178,8 +179,6 @@ data class NicoLiveStatistics(
     var commentRate: Int? = null
 ) {
     @Transient
-    private val logger = KotlinLogging.logger("saya.services.nicolive")
-    @Transient
     private var commentsTime: Int? = null
     @Transient
     private var firstComments: Int? = null
@@ -190,8 +189,6 @@ data class NicoLiveStatistics(
         viewers = data.viewers
         adPoints = data.adPoints
         giftPoints = data.giftPoints
-
-        logger.debug { "コメント勢い: $commentRate コメ/min" }
     }
 
     // stats の精度がよくないのでコメントの no から計算
@@ -219,8 +216,8 @@ data class NicoLiveStatistics(
 }
 
 class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, private val room: NicoLiveWebSocketSystemJson) {
-    private val logger = KotlinLogging.logger("saya.services.nicolive")
-    val stream = BroadcastChannel<Comment>(1)
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${system.stream.id}")
+    val comments = BroadcastChannel<Comment>(1)
 
     val job = GlobalScope.launch(system.job) {
         connect()
@@ -294,11 +291,11 @@ class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, priv
                 NicoLiveWebSocketMessageJson(it)
             }
             val comment = message.chat?.let {
-                Comment.from(it)
+                Comment.from(system.stream, it)
             }
 
             if (comment != null) {
-                stream.send(comment)
+                comments.send(comment)
                 system.stats.update(comment)
             }
 
@@ -312,12 +309,12 @@ private suspend fun DefaultClientWebSocketSession.send(json: JsonElement) {
 }
 
 @Serializable
-data class Comment(val no: Int, val time: Int, val author: String, val text: String, val color: String, val type: String, val commands: List<String>) {
+data class Comment(val channel: String, val no: Int, val time: Int, val author: String, val text: String, val color: String, val type: String, val commands: List<String>) {
     companion object {
-        fun from(chat: NicoLiveWebSocketMessageJson.Chat): Comment {
+        fun from(stream: Stream, chat: NicoLiveWebSocketMessageJson.Chat): Comment {
             val (commands, color, type) = parseMail(chat.mail.orEmpty())
 
-            return Comment(chat.no, chat.date, chat.userId, chat.content, color, type, commands)
+            return Comment(stream.id, chat.no, chat.date, chat.userId, chat.content, color, type, commands)
         }
 
         private fun parseMail(mail: String): Triple<List<String>, String, String> {

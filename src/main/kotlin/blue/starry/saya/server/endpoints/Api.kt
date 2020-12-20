@@ -32,7 +32,7 @@ fun Route.getCommentStream() {
                 }
             }
 
-            socket.messageSocket!!.stream.openSubscription().consumeEach {
+            socket.messageSocket!!.comments.openSubscription().consumeEach {
                 send(Json.encodeToString(it))
             }
         } finally {
