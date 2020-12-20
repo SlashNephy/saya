@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 
 data class Stream(val id: String, val channel: Channel) {
@@ -68,6 +69,10 @@ class NicoLiveSystemWebSocket(private val url: String) {
     private val logger = KotlinLogging.logger("saya.services.nicolive")
     val job = GlobalScope.launch {
         connect()
+    }.apply {
+        invokeOnCompletion {
+            logger.trace { "cancel: NicoLiveSystemWebSocket: ${it?.stackTraceToString()}" }
+        }
     }
 
     var messageSocket: NicoLiveMessageWebSocket? = null
@@ -192,25 +197,29 @@ class NicoLiveStatistics {
     }
 
     // stats の精度がよくないのでコメントの no から計算
-    fun update(chat: NicoLiveWebSocketMessageJson.Chat) {
+    fun update(comment: Comment) {
         if (firstComments == null) {
-            firstComments = chat.no
+            firstComments = comment.no
         }
         if (firstCommentsTime == null) {
-            firstCommentsTime = chat.date
+            firstCommentsTime = comment.time
         }
 
-        comments = chat.no
-        commentsTime = chat.date
+        comments = comment.no
+        commentsTime = comment.time
     }
 }
 
 class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, private val room: NicoLiveWebSocketSystemJson) {
     private val logger = KotlinLogging.logger("saya.services.nicolive")
-    val stream = BroadcastChannel<NicoLiveWebSocketMessageJson.Chat>(1)
+    val stream = BroadcastChannel<Comment>(1)
 
     val job = GlobalScope.launch(system.job) {
         connect()
+    }.apply {
+        invokeOnCompletion {
+            logger.trace { "cancel: NicoLiveMessageWebSocket: ${it?.stackTraceToString()}" }
+        }
     }
 
     private suspend fun connect() {
@@ -268,11 +277,16 @@ class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, priv
 
     private suspend fun DefaultClientWebSocketSession.consumeFrames() {
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            val message = frame.readText().parseObject { NicoLiveWebSocketMessageJson(it) }
+            val message = frame.readText().parseObject {
+                NicoLiveWebSocketMessageJson(it)
+            }
+            val comment = message.chat?.let {
+                Comment.from(it)
+            }
 
-            message.chat?.also {
-                stream.send(it)
-                system.stats.update(it)
+            if (comment != null) {
+                stream.send(comment)
+                system.stats.update(comment)
             }
 
             logger.trace { message }
@@ -282,4 +296,77 @@ class NicoLiveMessageWebSocket(private val system: NicoLiveSystemWebSocket, priv
 
 private suspend fun DefaultClientWebSocketSession.send(json: JsonElement) {
     send(json.encodeToString())
+}
+
+@Serializable
+data class Comment(val no: Int, val time: Int, val author: String, val text: String, val color: String, val type: String, val commands: List<String>) {
+    companion object {
+        fun from(chat: NicoLiveWebSocketMessageJson.Chat): Comment {
+            val (commands, color, type) = parseMail(chat.mail.orEmpty())
+
+            return Comment(chat.no, chat.date, chat.userId, chat.content, color, type, commands)
+        }
+
+        private fun parseMail(mail: String): Triple<List<String>, String, String> {
+            val commands = mail.split(' ').filter { it != "184" }
+
+            var color = "#ffffff"
+            var position = "right"
+            commands.forEach { command ->
+                val c = parseColor(command)
+                if (c != null) {
+                    color = c
+                }
+
+                val p = parsePosition(command)
+                if (p != null) {
+                    position = p
+                }
+            }
+
+            return Triple(commands, color, position)
+        }
+
+        private fun parseColor(command: String): String? {
+            return when (command) {
+                "red" -> "#e54256"
+                "pink" -> "#ff8080"
+                "orange" -> "#ffc000"
+                "yellow" -> "#ffe133"
+                "green" -> "#64dd17"
+                "cyan" -> "#39ccff"
+                "blue" -> "#0000ff"
+                "purple" -> "#d500f9"
+                "black" -> "#000000"
+                "white" -> "#ffffff"
+                "white2" -> "#cccc99"
+                "niconicowhite" -> "#cccc99"
+                "red2" -> "#cc0033"
+                "truered" -> "#cc0033"
+                "pink2" -> "#ff33cc"
+                "orange2" -> "#ff6600"
+                "passionorange" -> "#ff6600"
+                "yellow2" -> "#999900"
+                "madyellow" -> "#999900"
+                "green2" -> "#00cc66"
+                "elementalgreen" -> "#00cc66"
+                "cyan2" -> "#00cccc"
+                "blue2" -> "#3399ff"
+                "marineblue" -> "#3399ff"
+                "purple2" -> "#6633cc"
+                "nobleviolet" -> "#6633cc"
+                "black2" -> "#666666"
+                else -> null
+            }
+        }
+
+        private fun parsePosition(command: String): String? {
+            return when (command) {
+                "ue" -> "top"
+                "naka" -> "right"
+                "shita" -> "bottom"
+                else -> null
+            }
+        }
+    }
 }
