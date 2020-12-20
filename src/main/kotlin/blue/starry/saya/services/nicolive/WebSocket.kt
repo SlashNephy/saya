@@ -14,12 +14,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import mu.KotlinLogging
 
 data class Stream(val id: String, val channel: Channel) {
     private var underlyingSocket: NicoLiveSystemWebSocket? = null
 
-    suspend fun getOrCreateSocket(): NicoLiveSystemWebSocket? {
+    suspend fun getOrCreateSocket(creating: Boolean = true): NicoLiveSystemWebSocket? {
         // タグなし
         if (channel.tags.isEmpty()) {
             return null
@@ -28,6 +29,10 @@ data class Stream(val id: String, val channel: Channel) {
         val soc = underlyingSocket
         if (soc != null && soc.job.isActive) {
             return soc
+        }
+
+        if (!creating) {
+            return null
         }
 
         val data = channel.tags.flatMap { tag ->
@@ -159,41 +164,29 @@ class NicoLiveSystemWebSocket(private val url: String) {
     }
 }
 
-class NicoLiveStatistics {
+@Serializable
+data class NicoLiveStatistics(
+    var viewers: Int? = null,
+    var adPoints: Int? = null,
+    var giftPoints: Int? = null,
+    var comments: Int? = null,
+    var commentRate: Int? = null
+) {
+    @Transient
     private val logger = KotlinLogging.logger("saya.services.nicolive")
-
-    var viewers: Int? = null
-        private set
-    var adPoints: Int? = null
-        private set
-    var giftPoints: Int? = null
-        private set
-
-    var comments: Int? = null
-        private set
+    @Transient
     private var commentsTime: Int? = null
+    @Transient
     private var firstComments: Int? = null
+    @Transient
     private var firstCommentsTime: Int? = null
-
-    val commentsPerMin: Int?
-        get() {
-            val c = comments ?: return null
-            val fc = firstComments ?: return null
-            val ct = commentsTime ?: return null
-            val fct = firstCommentsTime ?: return null
-            if (ct == fct) {
-                return null
-            }
-
-            return 60 * (c - fc) / (ct - fct)
-        }
 
     fun update(data: NicoLiveWebSocketSystemJson.Data) {
         viewers = data.viewers
         adPoints = data.adPoints
         giftPoints = data.giftPoints
 
-        logger.debug { "コメント勢い: $commentsPerMin コメ/min" }
+        logger.debug { "コメント勢い: $commentRate コメ/min" }
     }
 
     // stats の精度がよくないのでコメントの no から計算
@@ -207,6 +200,16 @@ class NicoLiveStatistics {
 
         comments = comment.no
         commentsTime = comment.time
+
+        val c = comments ?: return
+        val fc = firstComments ?: return
+        val ct = commentsTime ?: return
+        val fct = firstCommentsTime ?: return
+        if (ct == fct) {
+            return
+        }
+
+        commentRate = 60 * (c - fc) / (ct - fct)
     }
 }
 

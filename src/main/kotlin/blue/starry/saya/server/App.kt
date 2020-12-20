@@ -1,6 +1,7 @@
 package blue.starry.saya.server
 
-import blue.starry.saya.server.endpoints.getCommentsStream
+import blue.starry.saya.server.endpoints.getCommentStats
+import blue.starry.saya.server.endpoints.getCommentStream
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.locations.*
@@ -18,7 +19,8 @@ fun Application.module() {
 
     routing {
         route("/api") {
-            getCommentsStream()
+            getCommentStream()
+            getCommentStats()
         }
     }
 }

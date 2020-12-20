@@ -1,6 +1,7 @@
 package blue.starry.saya.server.endpoints
 
 import blue.starry.saya.services.nicolive.streams
+import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.response.*
@@ -12,8 +13,8 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-fun Route.getCommentsStream() {
-    webSocket("/comments/stream/{target}") {
+fun Route.getCommentStream() {
+    webSocket("/comment/stream/{target}") {
         val target = call.parameters["target"] ?: return@webSocket call.respond(HttpStatusCode.BadRequest)
         val stream = streams.find {
             it.id == target
@@ -35,6 +36,20 @@ fun Route.getCommentsStream() {
             }
         } finally {
             stream.removeSubscriber()
+        }
+    }
+}
+
+fun Route.getCommentStats() {
+    get("/comment/stats/{target}") {
+        val target = call.parameters["target"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+        val stream = streams.find {
+            it.id == target
+        }
+        val socket = stream?.getOrCreateSocket(false) ?: return@get call.respond(HttpStatusCode.NotFound)
+
+        call.respondText {
+            Json.encodeToString(socket.stats)
         }
     }
 }
