@@ -17,6 +17,6 @@ RUN mkdir /app
 WORKDIR /app
 COPY --from=build /home/gradle/build_home/build/libs/saya-all.jar /app/saya.jar
 COPY resources /app/resources
-COPY channels.json /app/channels.json
+COPY resources/channels.json /app/channels.json
 
 ENTRYPOINT ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-XX:InitialRAMFraction=2", "-XX:MinRAMFraction=2", "-XX:MaxRAMFraction=2", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]

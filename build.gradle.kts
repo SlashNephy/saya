@@ -17,6 +17,7 @@ object ThirdpartyVersion {
     const val Exposed = "0.28.1"
     const val SQLiteJDBC = "3.30.1"
     const val AnnictKt = "0.2.2"
+    const val Penicillin = "6.0.0"
 
     // logging
     const val KotlinLogging = "2.0.4"
@@ -30,6 +31,7 @@ object ThirdpartyVersion {
 repositories {
     mavenCentral()
     jcenter()
+    maven(url = "https://kotlin.bintray.com/kotlinx")
     maven(url = "https://dl.bintray.com/starry-blue-sky/stable")
 }
 
@@ -42,6 +44,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
     implementation("jp.annict:annict-kt:${ThirdpartyVersion.AnnictKt}")
+    implementation("blue.starry:penicillin:${ThirdpartyVersion.Penicillin}")
 
     // HTML parsing
     implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")

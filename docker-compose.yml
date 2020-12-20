@@ -15,6 +15,10 @@ services:
       SAYA_PORT: 1017
       SAYA_BASE_URI: /
       ANNICT_TOKEN: xxx
+      TWITTER_CK: xxx
+      TWITTER_CS: xxx
+      TWITTER_AT: xxx
+      TWITTER_ATS: xxx
       MIRAKURUN_HOST: mirakurun
       MIRAKURUN_PORT: 40772
       CHINACHU_HOST: chinachu
