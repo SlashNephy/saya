@@ -19,7 +19,7 @@ import kotlinx.serialization.Serializable
     /**
      * コメントの投稿時間 (エポック秒)
      */
-    val time: Int,
+    val time: Long,
 
     /**
      * コメントの投稿者名

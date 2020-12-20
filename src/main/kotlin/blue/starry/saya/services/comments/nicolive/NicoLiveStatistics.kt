@@ -16,15 +16,25 @@ class NicoLiveStatistics: CommentStatisticsProvider {
         private set
     override var comments = 0
         private set
-    override var commentsPerMinute = 0
-        private set
+    override val commentsPerMinute: Int
+        get() {
+            val c = comments
+            val fc = firstComments ?: return 0
+            val ct = commentsTime ?: return 0
+            val fct = firstCommentsTime ?: return 0
+            if (ct == fct) {
+                return 0
+            }
+
+            return 60 * (c - fc) / (ct - fct).toInt()
+        }
 
     @Transient
-    private var commentsTime: Int? = null
+    private var commentsTime: Long? = null
     @Transient
     private var firstComments: Int? = null
     @Transient
-    private var firstCommentsTime: Int? = null
+    private var firstCommentsTime: Long? = null
 
     fun update(data: NicoLiveWebSocketSystemJson.Data) {
         viewers = data.viewers
@@ -43,15 +53,5 @@ class NicoLiveStatistics: CommentStatisticsProvider {
 
         comments = comment.no
         commentsTime = comment.time
-
-        val c = comments
-        val fc = firstComments ?: return
-        val ct = commentsTime ?: return
-        val fct = firstCommentsTime ?: return
-        if (ct == fct) {
-            return
-        }
-
-        commentsPerMinute = 60 * (c - fc) / (ct - fct)
     }
 }

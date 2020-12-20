@@ -34,7 +34,7 @@ data class NicoLiveWebSocketMessageJson(override val json: JsonObject) : JsonMod
         val thread by string
         val no by int
         val vpos by int
-        val date by int
+        val date by long
         val dateUsec by int("date_usec")
         val mail by string { "" }
         val userId by string("user_id")
