@@ -20,7 +20,7 @@ fun Application.module() {
     }
 
     routing {
-        route(Env.SAYA_BASE_URI ?: "/") {
+        route(Env.SAYA_BASE_URI) {
             getIndex()
             getCommentStream()
             getCommentStats()

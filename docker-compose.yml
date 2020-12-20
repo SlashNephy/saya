@@ -17,3 +17,5 @@ services:
       ANNICT_TOKEN: xxx
       MIRAKURUN_HOST: mirakurun
       MIRAKURUN_PORT: 40772
+      CHINACHU_HOST: chinachu
+      CHINACHU_PORT: 20772
