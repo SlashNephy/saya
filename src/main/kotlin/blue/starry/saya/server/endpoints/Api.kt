@@ -1,6 +1,5 @@
 package blue.starry.saya.server.endpoints
 
-import blue.starry.jsonkt.encodeToString
 import blue.starry.saya.services.nicolive.streams
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
@@ -9,6 +8,9 @@ import io.ktor.routing.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 fun Route.getCommentsStream() {
     webSocket("/comments/stream/{target}") {
@@ -21,12 +23,15 @@ fun Route.getCommentsStream() {
         try {
             stream.addSubscriber()
 
-            while (socket.messageSocket == null) {
-                delay(100)
+            // タイムアウト 10s
+            withTimeout(10000) {
+                while (socket.messageSocket == null) {
+                    delay(100)
+                }
             }
 
             socket.messageSocket!!.stream.openSubscription().consumeEach {
-                send(it.json.encodeToString())
+                send(Json.encodeToString(it))
             }
         } finally {
             stream.removeSubscriber()
