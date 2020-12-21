@@ -5,12 +5,22 @@ package blue.starry.saya.services.comments
  */
 interface CommentStatisticsProvider {
     /**
-     * コメント数
+     * コメントに関する統計情報
      */
-    val comments: Int
+    interface Statistics {
+        /**
+         * コメント数
+         */
+        val comments: Int
+
+        /**
+         * コメント流速 (分)
+         */
+        val commentsPerMinute: Int
+    }
 
     /**
-     * コメント流速 (分)
+     * コメントに関する統計情報を提供する
      */
-    val commentsPerMinute: Int
+    fun provide(): Statistics
 }

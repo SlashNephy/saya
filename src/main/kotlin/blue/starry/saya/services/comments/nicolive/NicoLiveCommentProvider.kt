@@ -16,12 +16,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
+import java.util.concurrent.atomic.AtomicInteger
 
 class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
 
     override val comments = BroadcastChannel<Comment>(1)
-    override val stats = NicoLiveStatistics()
+    override val subscriptions = AtomicInteger(0)
+    override val stats = NicoLiveStatisticsProvider()
     override val job = GlobalScope.launch {
         connect()
     }.apply {
@@ -107,7 +109,7 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
                 // 1分おきに来る
                 "statistics" -> {
                     stats.update(message.data)
-                    logger.debug { "コメント勢い: ${stats.commentsPerMinute} コメ/min" }
+                    logger.debug { "コメント勢い: ${stats.provide().commentsPerMinute} コメ/min" }
                 }
                 "disconnect" -> {
                     job.cancel()

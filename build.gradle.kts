@@ -17,7 +17,7 @@ object ThirdpartyVersion {
     const val Exposed = "0.28.1"
     const val SQLiteJDBC = "3.30.1"
     const val AnnictKt = "0.2.2"
-    const val Penicillin = "6.0.0"
+    const val Penicillin = "6.0.1"
 
     // logging
     const val KotlinLogging = "2.0.4"

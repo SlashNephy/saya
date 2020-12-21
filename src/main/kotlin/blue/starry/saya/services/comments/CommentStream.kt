@@ -3,23 +3,22 @@ package blue.starry.saya.services.comments
 import blue.starry.saya.services.comments.nicolive.NicoLiveApi
 import blue.starry.saya.services.comments.nicolive.NicoLiveCommentProvider
 import blue.starry.saya.services.comments.nicolive.models.Channel
+import blue.starry.saya.services.comments.twitter.TwitterHashTagProvider
 
 data class CommentStream(val id: String, val channel: Channel) {
-    private var nicoLiveCommentProvider: NicoLiveCommentProvider? = null
-
-    suspend fun getNicoLiveCommentProvider(creating: Boolean = true): NicoLiveCommentProvider? {
-        val p = nicoLiveCommentProvider
-        // アクティブな CommentProvider が存在するとき
-        if (p != null && p.job.isActive) {
-            return p
+    var nico: NicoLiveCommentProvider? = null
+        get() {
+            val provider = field
+            return if (provider.isActive) {
+                provider
+            } else {
+                null
+            }
         }
 
-        if (!creating) {
-            return null
-        }
-
-        nicoLiveCommentProvider = createNicoLiveCommentProvider()
-        return nicoLiveCommentProvider
+    suspend fun getOrCreateNicoLiveProvider(): NicoLiveCommentProvider? {
+        nico = nico ?: createNicoLiveCommentProvider()
+        return nico
     }
 
     private suspend fun createNicoLiveCommentProvider(): NicoLiveCommentProvider? {
@@ -43,25 +42,17 @@ data class CommentStream(val id: String, val channel: Channel) {
         return NicoLiveCommentProvider(this, data.site.relive.webSocketUrl)
     }
 
-    private fun closeProvider() {
-        nicoLiveCommentProvider?.job?.cancel()
-    }
+    val twitter = mutableMapOf<String, TwitterHashTagProvider?>()
 
-    private var subscriptions = 0
-
-    /**
-     * ストリームの購読数をチェックし自動で [CommentProvider] を閉じる
-     */
-    suspend fun withSession(block: suspend () -> Unit) {
-        try {
-            subscriptions++
-
-            block()
-        } finally {
-            if (--subscriptions <= 0) {
-                subscriptions = 0
-                closeProvider()
-            }
-        }
+    fun getOrCreateTwitterProvider(tag: String?): TwitterHashTagProvider? {
+        val key = tag ?: TwitterHashTagProvider.SampleStreamTag
+        twitter[key] = twitter[key] ?: TwitterHashTagProvider(this, key)
+        return twitter[key]
     }
 }
+
+/**
+ * アクティブな [CommentProvider] であるかどうか
+ */
+private val CommentProvider?.isActive: Boolean
+    get() = this?.job?.isActive == true
