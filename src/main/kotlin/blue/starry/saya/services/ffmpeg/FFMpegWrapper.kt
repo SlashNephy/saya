@@ -6,6 +6,7 @@ import blue.starry.saya.services.mirakurun.models.Service
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.writeLines
 
 object FFMpegWrapper {
     val TmpDir: Path = Paths.get("tmp")
@@ -28,6 +29,14 @@ object FFMpegWrapper {
 
         // outout
         val output = TmpDir.resolve("live_${service.serviceId}_${preset.name}.m3u8")
+        output.writeLines(listOf(
+            "#EXTM3U",
+            "#EXT-X-VERSION:3",
+            "#EXT-X-ALLOW-CACHE:NO",
+            "#EXT-X-TARGETDURATION:0",
+            "#EXT-X-MEDIA-SEQUENCE:0",
+            "#EXT-X-ENDLIST"
+        ))
 
         builder.command(
             "ffmpeg",
