@@ -3,7 +3,10 @@ version: '3.8'
 services:
   saya:
     container_name: saya
-    build: .
+    build:
+      context: .
+      args:
+        CPUCORE=4
     restart: always
     ports:
       - '1017:1017'

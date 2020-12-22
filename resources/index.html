@@ -78,7 +78,7 @@
                       </span>
 
                       <div class="text-sm font-medium text-pink-400">
-                        /comment/stream/<span class="text-red-900">{target}</span>
+                        /comments/<span class="text-red-900">{target}</span>/stream
                       </div>
                     </div>
                   </td>
@@ -90,7 +90,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{target}</div>
                     <div class="text-sm text-gray-500">niconico Jikkyo ID (like jk1),</div>
-                    <div class="text-sm text-gray-500">or DTV service id (like 211).</div>
+                    <div class="text-sm text-gray-500">or DTV service id (like 211)</div>
                   </td>
                 </tr>
 
@@ -102,7 +102,7 @@
                       </span>
 
                       <div class="text-sm font-medium text-pink-400">
-                        /comment/stats/<span class="text-red-900">{target}</span>
+                        /comments/<span class="text-red-900">{target}</span>/stats
                       </div>
                     </div>
                   </td>
@@ -114,6 +114,29 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{target}</div>
                     <div class="text-sm text-gray-500">Same as /comment/stream/{target}</div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <span class="px-2 m-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-300 text-gray-800">
+                        GET
+                      </span>
+
+                      <div class="text-sm font-medium text-pink-400">
+                        /services/<span class="text-red-900">{target}</span>/hls
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">Returns live HLS stream.</div>
+                    <div class="text-sm text-gray-500">Response: application/X-mpegURL</div>
+                    <div class="text-sm text-gray-500">Error: 404 if {target} not found.</div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">{target}</div>
+                    <div class="text-sm text-gray-500">DTV service id (like 211)</div>
                   </td>
                 </tr>
               </tbody>
