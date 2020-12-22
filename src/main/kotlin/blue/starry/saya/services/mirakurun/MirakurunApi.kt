@@ -9,7 +9,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 object MirakurunApi {
-    private val ApiBaseUri = "http://${Env.MIRAKURUN_HOST}:${Env.MIRAKURUN_PORT}/api"
+    val ApiBaseUri = "http://${Env.MIRAKURUN_HOST}:${Env.MIRAKURUN_PORT}/api"
 
     suspend fun putVersionUpdate(force: Boolean? = null) = httpClient.put<HttpResponse>("$ApiBaseUri/version/update")
 

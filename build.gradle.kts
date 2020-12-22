@@ -18,6 +18,7 @@ object ThirdpartyVersion {
     const val SQLiteJDBC = "3.30.1"
     const val AnnictKt = "0.2.2"
     const val Penicillin = "6.0.1"
+    const val ApacheCommonsCodec = "1.15"
 
     // logging
     const val KotlinLogging = "2.0.4"
@@ -45,6 +46,7 @@ dependencies {
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
     implementation("jp.annict:annict-kt:${ThirdpartyVersion.AnnictKt}")
     implementation("blue.starry:penicillin:${ThirdpartyVersion.Penicillin}")
+    implementation("commons-codec:commons-codec:${ThirdpartyVersion.ApacheCommonsCodec}")
 
     // HTML parsing
     implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")
