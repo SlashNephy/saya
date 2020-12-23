@@ -1,8 +1,4 @@
-# saya
-
-DTV backend service with powerful features such as niconico jikkyo support.
-
----
+# saya: Japanese DTV backend service with powerful features
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.21-blue)](https://kotlinlang.org)
 [![release](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases/latest)
