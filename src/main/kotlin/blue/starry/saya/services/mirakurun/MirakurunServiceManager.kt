@@ -1,16 +1,12 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.saya.services.mirakurun.models.Service
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 object MirakurunServiceManager {
-    private val services = mutableListOf<Service>()
-
-    init {
-        GlobalScope.launch {
-            val new = MirakurunApi.getServices()
-            services.addAll(new)
+    private val services by lazy {
+        runBlocking {
+            MirakurunApi.getServices()
         }
     }
 
