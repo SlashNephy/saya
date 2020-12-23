@@ -11,7 +11,7 @@ plugins {
 }
 
 object ThirdpartyVersion {
-    const val Ktor = "1.4.3"
+    const val Ktor = "1.5.0"
     const val JsonKt = "6.0.0"
     const val Jsoup = "1.13.1"
     const val Exposed = "0.28.1"
@@ -38,7 +38,6 @@ repositories {
 
 dependencies {
     implementation("io.ktor:ktor-server-cio:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-websockets:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-html-builder:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
@@ -86,8 +85,8 @@ kotlin {
         languageSettings.apply {
             useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             useExperimentalAnnotation("kotlin.io.path.ExperimentalPathApi")
-            useExperimentalAnnotation("io.ktor.locations.KtorExperimentalLocationsAPI")
             useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+            useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
         }
     }
 }
