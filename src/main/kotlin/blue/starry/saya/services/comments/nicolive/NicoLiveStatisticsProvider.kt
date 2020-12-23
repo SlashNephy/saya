@@ -48,8 +48,8 @@ class NicoLiveStatisticsProvider: CommentStatisticsProvider {
 
     fun update(data: NicoLiveWebSocketSystemJson.Data) {
         viewers.set(data.viewers)
-        adPoints.set(data.adPoints)
-        giftPoints.set(data.giftPoints)
+        adPoints.set(data.adPoints ?: 0)
+        giftPoints.set(data.giftPoints ?: 0)
     }
 
     // stats の精度がよくないのでコメントの no から計算

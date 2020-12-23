@@ -18,8 +18,8 @@ data class NicoLiveWebSocketSystemJson(override val json: JsonObject): JsonModel
         // statistics
         val viewers by int
         val comments by int
-        val adPoints by int
-        val giftPoints by int
+        val adPoints by nullableInt
+        val giftPoints by nullableInt
 
         data class MessageServer(override val json: JsonObject): JsonModel {
             val uri by string
