@@ -65,7 +65,7 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
     && rm -rf /tmp/ffmpeg
 
 COPY --from=builder /app/build/libs/saya-all.jar /app/saya.jar
-COPY resources/ /app/resources/
+COPY docs/ /app/docs/
 
 WORKDIR /app
 ENTRYPOINT ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-XX:InitialRAMFraction=2", "-XX:MinRAMFraction=2", "-XX:MaxRAMFraction=2", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]

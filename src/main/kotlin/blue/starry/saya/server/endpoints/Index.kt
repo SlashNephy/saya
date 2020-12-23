@@ -7,6 +7,6 @@ import java.io.File
 
 fun Route.getIndex() {
     get("/") {
-        call.respondFile(File("resources"), "index.html")
+        call.respondFile(File("docs"), "index.html")
     }
 }
