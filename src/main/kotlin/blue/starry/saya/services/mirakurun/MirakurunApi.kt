@@ -11,7 +11,9 @@ import io.ktor.client.statement.*
 object MirakurunApi {
     val ApiBaseUri = "http://${Env.MIRAKURUN_HOST}:${Env.MIRAKURUN_PORT}/api"
 
-    suspend fun putVersionUpdate(force: Boolean? = null) = httpClient.put<HttpResponse>("$ApiBaseUri/version/update")
+    suspend fun putVersionUpdate(force: Boolean? = null) = httpClient.put<HttpResponse>("$ApiBaseUri/version/update") {
+        parameter("force", force)
+    }
 
     suspend fun getVersion() = httpClient.get<String>("$ApiBaseUri/version").parseObject {
         Version(it)

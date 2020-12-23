@@ -26,3 +26,5 @@ services:
       MIRAKURUN_PORT: 40772
       CHINACHU_HOST: chinachu
       CHINACHU_PORT: 20772
+      EPGSTATION_HOST: epgstation
+      EPGSTATION_PORT: 8888

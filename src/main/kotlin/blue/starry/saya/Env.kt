@@ -15,6 +15,8 @@ object Env {
     val MIRAKURUN_PORT by int { 40772 }
     val CHINACHU_HOST by string { "chinachu" }
     val CHINACHU_PORT by int { 20772 }
+    val EPGSTATION_HOST by string { "epgstation" }
+    val EPGSTATION_PORT by int { 8888 }
 }
 
 private val string: ReadOnlyProperty<Env, String>
