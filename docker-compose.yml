@@ -17,6 +17,9 @@ services:
       SAYA_HOST: 0.0.0.0
       SAYA_PORT: 1017
       SAYA_BASE_URI: /
+      SAYA_TMP_DIR: tmp
+      SAYA_HLS_SEGMENT_SEC: 1
+      SAYA_HLS_SEGMENT_SIZE: 4
       ANNICT_TOKEN: xxx
       TWITTER_CK: xxx
       TWITTER_CS: xxx

@@ -6,6 +6,9 @@ object Env {
     val SAYA_HOST by string { "0.0.0.0" }
     val SAYA_PORT by int { 1017 }
     val SAYA_BASE_URI by string { "/" }
+    val SAYA_TMP_DIR by string { "tmp" }
+    val SAYA_HLS_SEGMENT_SEC by int { 2 }
+    val SAYA_HLS_SEGMENT_SIZE by int { 3 }
     val ANNICT_TOKEN by string
     val TWITTER_CK by string
     val TWITTER_CS by string

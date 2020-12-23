@@ -1,24 +1,26 @@
 package blue.starry.saya.services.ffmpeg
 
 import blue.starry.saya.Env
+import blue.starry.saya.addAllFuzzy
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.mirakurun.models.Service
+import mu.KotlinLogging
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.io.path.writeLines
 
 object FFMpegWrapper {
-    val TmpDir: Path = Paths.get("tmp")
+    private val logger = KotlinLogging.logger("saya.FFMpegWrapper")
+    val TmpDir: Path = Paths.get(Env.SAYA_TMP_DIR)
 
     /**
      * Mirakurun の M2TS ストリームを HLS に変換する
      */
-    fun startliveHLS(service: Service, preset: Preset, segmentSec: Int, segmentSize: Int): Pair<Process, Path> {
+    @ExperimentalStdlibApi
+    fun startliveHLS(service: Service, preset: Preset, subTitle: Boolean): Pair<Process, Path> {
         val builder = ProcessBuilder()
 
-        // stdout, stderr を受け取る
-        builder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        // stderr を受け取る
         builder.redirectError(ProcessBuilder.Redirect.INHERIT)
 
         // work dir
@@ -29,63 +31,83 @@ object FFMpegWrapper {
 
         // outout
         val output = TmpDir.resolve("live_${service.serviceId}_${preset.name}.m3u8")
-        output.writeLines(listOf(
-            "#EXTM3U",
-            "#EXT-X-VERSION:3",
-            "#EXT-X-ALLOW-CACHE:NO",
-            "#EXT-X-TARGETDURATION:0",
-            "#EXT-X-MEDIA-SEQUENCE:0",
-            "#EXT-X-ENDLIST"
-        ))
 
-        builder.command(
-            "ffmpeg",
+        buildList {
+            add("ffmpeg")
+
             // ハードウェアアクセラレーション
             // "-hwaccel", "vaapi",
+
             // 入力
-            "-dual_mono_mode", "main",
-            "-i", "${MirakurunApi.ApiBaseUri}/services/${service.id}/stream?decode=1",
-            "-user-agent", "saya/1.0 (+https://github.com/SlashNephy/saya)",
+            addAllFuzzy(
+                // "-re",
+                "-dual_mono_mode", "main",
+                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.id}/stream?decode=1",
+                "-user-agent", "saya/1.0 (+https://github.com/SlashNephy/saya)",
+                "-max_muxing_queue_size", "2048"
+            )
+
             // HLS
-            "-f", "hls",
-            "-hls_segment_type", "mpegts",
-            "-hls_base_url", "${Env.SAYA_BASE_URI.removeSuffix("/")}/segments/",
-            "-hls_time", "$segmentSec",
-            "-g", "${segmentSec * 30}",
-            "-hls_list_size", "$segmentSize",
-            "-hls_allow_cache", "0",
-            "-hls_flags", "delete_segments",
-            "-hls_segment_filename", "live_${service.serviceId}_${preset.name}_%06d.ts",
+            addAllFuzzy(
+                "-f", "hls",
+                "-hls_segment_type", "mpegts",
+                "-hls_base_url", "${Env.SAYA_BASE_URI.removeSuffix("/")}/segments/",
+                "-hls_time", Env.SAYA_HLS_SEGMENT_SEC,
+                "-g", Env.SAYA_HLS_SEGMENT_SEC * 30,
+                "-hls_list_size", Env.SAYA_HLS_SEGMENT_SIZE,
+                "-hls_allow_cache", "0",
+                "-hls_flags", "delete_segments",
+                "-hls_segment_filename", "live_${service.serviceId}_${preset.name}_%09d.ts"
+            )
+
             // 映像
-            "-c:v", "libx264",
-            "-vb", preset.vb,
-            "-vf", "yadif=0:-1:1",
-            "-aspect", "${preset.width}:${preset.height}",
-            "-preset", "superfast",
-            "-r", "30000/1001",
+            addAllFuzzy(
+                "-c:v", "libx264",
+                "-vb", preset.vb,
+                "-vf", "yadif=0:-1:1",
+                "-aspect", "${preset.width}:${preset.height}",
+                "-preset", "ultrafast",
+                "-r", "30000/1001"
+            )
+
             // 音声
-            "-c:a", "libfdk_aac",
-            "-ab", preset.ab,
-            "-ar", "${preset.ar}",
-            "-ac", "2",
+            addAllFuzzy(
+                "-c:a", "libfdk_aac",
+                "-ab", preset.ab,
+                "-ar", preset.ar,
+                "-ac", "2"
+            )
+
             // 字幕
-            // 字幕無効化: "-sn",
-            "-map", "0", "-ignore_unknown",
+            // if (subTitle) {
+            addAllFuzzy("-map", "0", "-ignore_unknown")
+            // } else {
+            //     add("-sn")
+            // }
+
             // その他
-            "-flags", "+loop+global_header",
-            "-movflags", "+faststart",
-            "-hide_banner",
-            "-loglevel", "error",
+            addAllFuzzy(
+                "-threads", "0",
+                "-flags", "+loop+global_header",
+                "-movflags", "+faststart",
+                "-hide_banner",
+                "-loglevel", "fatal"
+            )
+
             // 出力
-            output.fileName.toString()
-        )
+            add(output.fileName.toString())
+        }.also {
+            builder.command(it)
+
+            logger.trace { "Process: $it" }
+        }
 
         return builder.start() to output
     }
 
     sealed class Preset(val name: String, val width: Int, val height: Int, val vb: String, val ab: String, val ar: Int) {
-        object High: Preset("1080p", 1920, 1080, "6800k", "192k", 48000)
-        object Medium: Preset("720p", 1280, 720, "4800k", "192k", 48000)
+        object High: Preset("1080p", 1920, 1080, "6000k", "192k", 48000)
+        object Medium: Preset("720p", 1280, 720, "4000k", "192k", 48000)
         object Low: Preset("360p", 640, 360, "1500k", "128k", 48000)
     }
 }

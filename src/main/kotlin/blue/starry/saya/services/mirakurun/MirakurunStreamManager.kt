@@ -5,6 +5,7 @@ import blue.starry.saya.services.mirakurun.models.Service
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import mu.KotlinLogging
 import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
@@ -12,21 +13,22 @@ import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
 object MirakurunStreamManager {
+    private val logger = KotlinLogging.logger("saya.MirakurunStreamManager")
     private val mutex = Mutex()
     private val streams = mutableListOf<Session>()
 
-    suspend fun openLiveHLS(service: Service, preset: FFMpegWrapper.Preset): Path {
+    suspend fun openLiveHLS(service: Service, preset: FFMpegWrapper.Preset, subTitle: Boolean): Path {
         mutex.withLock {
             // 終了したストリームを掃除
-            streams.removeIf { it.job.isCompleted }
+            streams.removeIf { it.job.isCompleted || !it.process.isAlive }
 
-            val previous = streams.find { it.service.id == service.id && it.preset == preset }
+            val previous = streams.find { it.service.serviceId == service.serviceId && it.preset == preset }
             if (previous != null) {
                 previous.mark()
                 return previous.path
             }
 
-            val (process, path) = FFMpegWrapper.startliveHLS(service, preset, 2, 4)
+            val (process, path) = FFMpegWrapper.startliveHLS(service, preset, subTitle)
 
             streams += Session(service, preset, path, process)
             return path
@@ -47,7 +49,7 @@ object MirakurunStreamManager {
         }
 
         val job = GlobalScope.launch {
-            val limit = 30.seconds
+            val limit = 15.seconds
 
             while (isActive) {
                 delay(limit)
@@ -58,6 +60,8 @@ object MirakurunStreamManager {
                     // 既定の時間以上アクセスがなかったら自動でストリームを停止
                     if (limit < duration) {
                         process.destroy()
+                        logger.trace { "Killed $process (SID: ${service.serviceId}, Preset: ${preset.name})" }
+
                         cancel()
                     }
                 }
