@@ -1,25 +1,33 @@
 # Gradle Cache Dependencies Stage
 # This stage caches plugin/project dependencies from *.gradle.kts and gradle.properties.
-# Refer https://qiita.com/tkrplus/items/044790b4054bf644890a
-FROM gradle:6.7.1-jdk8 AS builder
+# Gradle image erases GRADLE_USER_HOME each layer. So we need COPY GRADLE_USER_HOME.
+# Refer https://stackoverflow.com/a/59022743
+FROM gradle:6.7.1-jdk8 AS cache
 WORKDIR /app
+ENV GRADLE_USER_HOME /app/gradle
 COPY *.gradle.kts gradle.properties /app/
-RUN gradle build --quiet --parallel
+# Full build if there are any deps changes
+RUN gradle shadowJar --parallel --no-daemon --quiet
 
 # Gradle Build Stage
-# This stage builds saya, and generates fat jar.
+# This stage builds and generates fat jar.
+FROM gradle:6.7.1-jdk8 AS build
+WORKDIR /app
+COPY --from=cache /app/gradle /home/gradle/.gradle
+COPY *.gradle.kts gradle.properties /app/
 COPY src/main/ /app/src/main/
-RUN gradle shadowJar --parallel
+# Stop printing Welcome
+RUN gradle -version > /dev/null \
+    && gradle shadowJar --parallel --no-daemon
 
 # Final Stage
 FROM openjdk:8-jre-alpine
 
-## ffmpeg build
+## ffmpeg build Stage
 ## ffmpeg version must be <4.2 for subtitle support.
 ## Refer issue https://github.com/EMWUI/EDCB_Material_WebUI/issues/17
 ARG FFMPEG_VERSION=4.1.6
 ARG CPUCORE=4
-
 RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
     && apk add --update --no-cache --virtual .build-deps \
         build-base \
@@ -64,8 +72,8 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
     && apk del --purge .build-deps \
     && rm -rf /tmp/ffmpeg
 
-COPY --from=builder /app/build/libs/saya-all.jar /app/saya.jar
+COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
 
 WORKDIR /app
-ENTRYPOINT ["java", "-server", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-XX:InitialRAMFraction=2", "-XX:MinRAMFraction=2", "-XX:MaxRAMFraction=2", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]
+ENTRYPOINT ["java", "-server", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]
