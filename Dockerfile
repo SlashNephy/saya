@@ -76,4 +76,4 @@ COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
 
 WORKDIR /app
-ENTRYPOINT ["java", "-server", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=100", "-XX:+UseStringDeduplication", "-jar", "/app/saya.jar"]
+ENTRYPOINT ["java", "-jar", "/app/saya.jar"]
