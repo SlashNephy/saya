@@ -9,6 +9,11 @@ interface CommentStatisticsProvider {
      */
     interface Statistics {
         /**
+         * コメントの配信元 (e.g. lv2646436)
+         */
+        val source: String
+
+        /**
          * コメント数
          */
         val comments: Int

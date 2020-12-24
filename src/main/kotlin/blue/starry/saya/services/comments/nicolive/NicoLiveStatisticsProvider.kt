@@ -7,8 +7,9 @@ import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
-class NicoLiveStatisticsProvider: CommentStatisticsProvider {
+class NicoLiveStatisticsProvider(private val source: String): CommentStatisticsProvider {
     @Serializable data class Statistics(
+        override val source: String,
         override val comments: Int,
         override val commentsPerMinute: Int,
         val viewers: Int,
@@ -38,6 +39,7 @@ class NicoLiveStatisticsProvider: CommentStatisticsProvider {
 
     override fun provide(): Statistics {
         return Statistics(
+            source = source,
             comments = comments.get(),
             commentsPerMinute = commentsPerMinute,
             viewers = viewers.get(),

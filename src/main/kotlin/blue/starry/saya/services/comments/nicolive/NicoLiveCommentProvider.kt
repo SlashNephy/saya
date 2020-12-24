@@ -18,12 +18,12 @@ import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 
-class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String): CommentProvider {
+class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, source: String): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
 
     override val comments = BroadcastChannel<Comment>(1)
     override val subscriptions = AtomicInteger(0)
-    override val stats = NicoLiveStatisticsProvider()
+    override val stats = NicoLiveStatisticsProvider(source)
     override val job = GlobalScope.launch {
         connect()
     }.apply {

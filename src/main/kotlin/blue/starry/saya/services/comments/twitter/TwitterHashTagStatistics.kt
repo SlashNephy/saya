@@ -7,8 +7,9 @@ import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
-class TwitterHashTagStatistics: CommentStatisticsProvider {
+class TwitterHashTagStatistics(private val source: String): CommentStatisticsProvider {
     @Serializable data class Statistics(
+        override val source: String,
         override val comments: Int,
         override val commentsPerMinute: Int
     ): CommentStatisticsProvider.Statistics
@@ -30,6 +31,7 @@ class TwitterHashTagStatistics: CommentStatisticsProvider {
 
     override fun provide(): Statistics {
         return Statistics(
+            source = source,
             comments = comments.get(),
             commentsPerMinute = commentsPerMinute
         )

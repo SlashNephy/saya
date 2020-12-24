@@ -28,7 +28,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
     override val comments = BroadcastChannel<Comment>(1)
     override val subscriptions = AtomicInteger(0)
-    override val stats = TwitterHashTagStatistics()
+    override val stats = TwitterHashTagStatistics("#${tag}")
     override val job = GlobalScope.launch {
         if (tag != SampleStreamTag) {
             twitter.stream.filter(track = listOf(tag)).listen(object: FilterStreamListener {
