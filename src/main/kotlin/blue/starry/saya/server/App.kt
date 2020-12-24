@@ -1,10 +1,7 @@
 package blue.starry.saya.server
 
 import blue.starry.saya.Env
-import blue.starry.saya.server.endpoints.getCommentStats
-import blue.starry.saya.server.endpoints.getCommentStream
-import blue.starry.saya.server.endpoints.getIndex
-import blue.starry.saya.server.endpoints.getServiceHLS
+import blue.starry.saya.server.endpoints.*
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.routing.*
@@ -25,9 +22,31 @@ fun Application.module() {
         route(Env.SAYA_BASE_URI) {
             getIndex()
 
-            getCommentStream()
-            getCommentStats()
-            getServiceHLS()
+            route("comments") {
+                route("{target}") {
+                    route("stream") {
+                        wsCommentStream()
+                    }
+
+                    route("stats") {
+                        getCommentStats()
+                    }
+                }
+            }
+
+            route("services") {
+                route("{serviceId}") {
+                    route("hls") {
+                        getServiceHLS()
+                    }
+                }
+            }
+
+            route("segments") {
+                route("{filename}") {
+                    getSegment()
+                }
+            }
         }
     }
 }

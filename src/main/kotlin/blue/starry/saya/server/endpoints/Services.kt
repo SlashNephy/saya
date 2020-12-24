@@ -13,12 +13,11 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import java.nio.file.Files
-import java.nio.file.Paths
 
 private val m3u8 = ContentType("application", "x-mpegURL")
 
 fun Route.getServiceHLS() {
-    get("/services/{serviceId}/hls") {
+    get {
         // Mirakurun の /services/{id} は Service#id であり Service#serviceId ではない！！！
         // ユーザフレンドリーな ServiceId を受け入れる
         val serviceId: Int by call.parameters
@@ -44,20 +43,5 @@ fun Route.getServiceHLS() {
         }
 
         call.respond(LocalFileContent(playlist.toFile(), m3u8))
-    }
-
-    get("/segments/{filename}") {
-        val filename: String by call.parameters
-        val path = if (filename == "blank.ts") {
-            Paths.get("docs", filename)
-        } else {
-            FFMpegWrapper.TmpDir.resolve(filename)
-        }
-
-        if (!Files.exists(path)) {
-            return@get call.respond(HttpStatusCode.NotFound)
-        }
-
-        call.respond(LocalFileContent(path.toFile(), ContentType.Application.OctetStream))
     }
 }

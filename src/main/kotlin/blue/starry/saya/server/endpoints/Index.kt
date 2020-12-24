@@ -6,7 +6,7 @@ import io.ktor.routing.*
 import java.io.File
 
 fun Route.getIndex() {
-    get("/") {
+    get {
         call.respondFile(File("docs"), "index.html")
     }
 }
