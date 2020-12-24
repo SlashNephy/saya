@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 
-class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, source: String): CommentProvider {
+class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, val source: String): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
 
     override val comments = BroadcastChannel<Comment>(1)
@@ -197,7 +197,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
                 NicoLiveWebSocketMessageJson(it)
             }
             val comment = message.chat?.let {
-                createComment(provider.stream, it)
+                createComment(it)
             }
 
             if (comment != null) {
@@ -209,11 +209,11 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
         }
     }
 
-    private fun createComment(stream: CommentStream, chat: NicoLiveWebSocketMessageJson.Chat): Comment {
+    private fun createComment(chat: NicoLiveWebSocketMessageJson.Chat): Comment {
         val (commands, parsed) = parseMail(chat.mail)
         val (color, type, size) = parsed
 
-        return Comment(stream.id, chat.no, chat.date, chat.userId, chat.content, color, type, size, commands)
+        return Comment(provider.source, chat.no, chat.date, chat.userId, chat.content, color, type, size, commands)
     }
 
     private fun parseMail(mail: String): Pair<List<String>, Triple<String, String, String>> {

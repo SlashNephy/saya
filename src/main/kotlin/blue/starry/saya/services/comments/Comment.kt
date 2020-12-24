@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable data class Comment(
     /**
-     * コメントの配信元 (e.g. jk1)
+     * コメントの配信元 (e.g. https://live2.nicovideo.jp/watch/lv2646436)
      */
-    val channel: String,
+    val source: String,
 
     /**
      * コメント番号
