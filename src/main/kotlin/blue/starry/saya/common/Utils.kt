@@ -1,6 +1,9 @@
 package blue.starry.saya
 
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.response.*
 
 /**
  * 文字列を ffmpeg のプリセット定義に変換する
@@ -32,4 +35,8 @@ internal fun String?.toBooleanFuzzy(): Boolean {
 
 internal fun MutableCollection<String>.addAllFuzzy(vararg elements: Any) {
     addAll(elements.map { it.toString() })
+}
+
+internal suspend fun ApplicationCall.respondOrNotFound(message: Any?) {
+    respond(message ?: respond(HttpStatusCode.NotFound))
 }

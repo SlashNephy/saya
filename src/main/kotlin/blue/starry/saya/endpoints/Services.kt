@@ -1,8 +1,9 @@
-package blue.starry.saya.server.endpoints
+package blue.starry.saya.endpoints
 
-import blue.starry.saya.Env
+import blue.starry.saya.common.Env
+import blue.starry.saya.respondOrNotFound
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
-import blue.starry.saya.services.mirakurun.MirakurunServiceManager
+import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.mirakurun.MirakurunStreamManager
 import blue.starry.saya.toBooleanFuzzy
 import blue.starry.saya.toFFMpegPreset
@@ -16,12 +17,12 @@ import java.nio.file.Files
 
 private val m3u8 = ContentType("application", "x-mpegURL")
 
-fun Route.getServiceHLS() {
+fun Route.getServicesHLS() {
     get {
         // Mirakurun の /services/{id} は Service#id であり Service#serviceId ではない！！！
         // ユーザフレンドリーな ServiceId を受け入れる
-        val serviceId: Int by call.parameters
-        val service = MirakurunServiceManager.findByServiceId(serviceId) ?: return@get call.respond(HttpStatusCode.NotFound)
+        val id: Int by call.parameters
+        val service = MirakurunDataManager.Services.find { it.serviceId == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         val preset = call.parameters["preset"].toFFMpegPreset() ?: FFMpegWrapper.Preset.High
         val subTitle = call.parameters["subtitle"].toBooleanFuzzy()
@@ -29,7 +30,7 @@ fun Route.getServiceHLS() {
         val playlist = MirakurunStreamManager.openLiveHLS(service, preset, subTitle)
 
         if (!Files.exists(playlist)) {
-            return@get call.respondText(m3u8) {
+            call.respondText(m3u8) {
                 """
                 #EXTM3U
                 #EXT-X-VERSION:3
@@ -40,8 +41,36 @@ fun Route.getServiceHLS() {
                 ${Env.SAYA_BASE_URI.removeSuffix("/")}/segments/blank.ts
                 """.trimIndent()
             }
+        } else {
+            call.respond(LocalFileContent(playlist.toFile(), m3u8))
         }
+    }
+}
 
-        call.respond(LocalFileContent(playlist.toFile(), m3u8))
+fun Route.getServices() {
+    get {
+        call.respond(
+            MirakurunDataManager.Services.toList()
+        )
+    }
+}
+
+fun Route.getService() {
+    get {
+        val id: Int by call.parameters
+
+        call.respondOrNotFound(
+            MirakurunDataManager.Services.find { it.serviceId == id }
+        )
+    }
+}
+
+fun Route.getServicePrograms() {
+    get {
+        val id: Int by call.parameters
+
+        call.respond(
+            MirakurunDataManager.Programs.filter { it.serviceId == id }
+        )
     }
 }

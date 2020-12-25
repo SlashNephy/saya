@@ -1,4 +1,4 @@
-package blue.starry.saya.services.mirakurun.models
+package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
@@ -102,7 +102,7 @@ data class Service(override val json: JsonObject): JsonModel {
         val name by nullableString
         val satelite by nullableString
         val space by nullableInt
-        val services by model { Service(it) }
+        val services by modelList { Service(it) }
     }
 }
 
@@ -114,12 +114,12 @@ data class Program(override val json: JsonObject): JsonModel {
     val startAt by long
     val duration by int
     val isFree by boolean
-    val name by string
-    val description by string
-    val video by model { Video(it) }
-    val audio by model { Audio(it) }
+    val name by string { "" }
+    val description by string { "" }
+    val video by nullableModel { Video(it) }
+    val audio by nullableModel { Audio(it) }
     val genres by modelList { Genre(it) }
-    val extended by jsonObject
+    val extended by nullableJsonObject
     val relatedItems by modelList { RelatedItem(it) }
     val series by nullableModel { Series(it) }
 
