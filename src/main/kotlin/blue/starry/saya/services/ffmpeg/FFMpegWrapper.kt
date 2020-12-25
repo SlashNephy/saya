@@ -1,9 +1,9 @@
 package blue.starry.saya.services.ffmpeg
 
-import blue.starry.saya.Env
 import blue.starry.saya.addAllFuzzy
+import blue.starry.saya.common.Env
+import blue.starry.saya.models.Service
 import blue.starry.saya.services.mirakurun.MirakurunApi
-import blue.starry.saya.services.mirakurun.models.Service
 import mu.KotlinLogging
 import java.nio.file.Files
 import java.nio.file.Path
@@ -79,11 +79,11 @@ object FFMpegWrapper {
             )
 
             // 字幕
-            // if (subTitle) {
-            addAllFuzzy("-map", "0", "-ignore_unknown")
-            // } else {
-            //     add("-sn")
-            // }
+             if (subTitle) {
+                addAllFuzzy("-map", "0", "-ignore_unknown")
+             } else {
+                 add("-sn")
+             }
 
             // その他
             addAllFuzzy(
