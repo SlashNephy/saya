@@ -1,4 +1,4 @@
-package blue.starry.saya.server.endpoints
+package blue.starry.saya.endpoints
 
 import io.ktor.application.*
 import io.ktor.response.*

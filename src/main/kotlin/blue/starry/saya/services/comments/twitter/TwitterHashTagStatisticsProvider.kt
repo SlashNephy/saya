@@ -1,19 +1,14 @@
 package blue.starry.saya.services.comments.twitter
 
-import blue.starry.penicillin.extensions.idObj
+import blue.starry.penicillin.extensions.createdAt
+import blue.starry.penicillin.extensions.instant
 import blue.starry.penicillin.models.Status
+import blue.starry.saya.models.TwitterHashTagStatistics
 import blue.starry.saya.services.comments.CommentStatisticsProvider
-import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
-class TwitterHashTagStatistics(private val source: String): CommentStatisticsProvider {
-    @Serializable data class Statistics(
-        override val source: String,
-        override val comments: Int,
-        override val commentsPerMinute: Int
-    ): CommentStatisticsProvider.Statistics
-
+class TwitterHashTagStatisticsProvider(private val source: String): CommentStatisticsProvider {
     private val comments = AtomicInteger()
     private val commentsTime = AtomicLong()
     private val firstCommentsTime = AtomicLong()
@@ -29,8 +24,8 @@ class TwitterHashTagStatistics(private val source: String): CommentStatisticsPro
             return 60 * c / (ct - fct).toInt()
         }
 
-    override fun provide(): Statistics {
-        return Statistics(
+    override fun provide(): TwitterHashTagStatistics {
+        return TwitterHashTagStatistics(
             source = source,
             comments = comments.get(),
             commentsPerMinute = commentsPerMinute
@@ -38,7 +33,7 @@ class TwitterHashTagStatistics(private val source: String): CommentStatisticsPro
     }
 
     fun add(status: Status) {
-        val time = status.idObj.epochTimeMillis / 1000
+        val time = status.createdAt.instant.epochSecond
         if (firstCommentsTime.get() == 0L) {
             firstCommentsTime.set(time)
         }

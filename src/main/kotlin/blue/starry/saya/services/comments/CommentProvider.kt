@@ -1,5 +1,6 @@
 package blue.starry.saya.services.comments
 
+import blue.starry.saya.models.Comment
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import java.util.concurrent.atomic.AtomicInteger

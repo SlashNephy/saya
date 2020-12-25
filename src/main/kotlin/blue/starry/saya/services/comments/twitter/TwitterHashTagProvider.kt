@@ -7,9 +7,10 @@ import blue.starry.penicillin.endpoints.stream.filter
 import blue.starry.penicillin.endpoints.stream.sample
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
-import blue.starry.saya.services.comments.Comment
+import blue.starry.saya.models.Comment
 import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
+import blue.starry.saya.services.twitter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
     override val comments = BroadcastChannel<Comment>(1)
     override val subscriptions = AtomicInteger(0)
-    override val stats = TwitterHashTagStatistics("#${tag}")
+    override val stats = TwitterHashTagStatisticsProvider("#${tag}")
     override val job = GlobalScope.launch {
         if (tag != SampleStreamTag) {
             twitter.stream.filter(track = listOf(tag)).listen(object: FilterStreamListener {

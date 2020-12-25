@@ -1,4 +1,4 @@
-package blue.starry.saya.server.endpoints
+package blue.starry.saya.endpoints
 
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import io.ktor.application.*
@@ -21,9 +21,9 @@ fun Route.getSegment() {
         }
 
         if (!Files.exists(path)) {
-            return@get call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.NotFound)
+        } else {
+            call.respond(LocalFileContent(path.toFile(), ContentType.Application.OctetStream))
         }
-
-        call.respond(LocalFileContent(path.toFile(), ContentType.Application.OctetStream))
     }
 }

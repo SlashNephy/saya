@@ -1,7 +1,7 @@
 package blue.starry.saya.services.comments.nicolive
 
 import blue.starry.jsonkt.*
-import blue.starry.saya.services.comments.Comment
+import blue.starry.saya.models.Comment
 import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson

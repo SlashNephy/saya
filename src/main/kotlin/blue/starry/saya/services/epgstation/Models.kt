@@ -1,4 +1,4 @@
-package blue.starry.saya.services.epgstation.models
+package blue.starry.saya.services.epgstation
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.JsonModel

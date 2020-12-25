@@ -1,4 +1,4 @@
-package blue.starry.saya.services.chinachu.models
+package blue.starry.saya.services.chinachu
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*

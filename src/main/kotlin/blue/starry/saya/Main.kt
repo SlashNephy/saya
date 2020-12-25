@@ -1,6 +1,6 @@
 package blue.starry.saya
 
-import blue.starry.saya.server.module
+import blue.starry.saya.common.Env
 import io.ktor.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*

@@ -1,8 +1,7 @@
 package blue.starry.saya.services.epgstation
 
 import blue.starry.jsonkt.parseArray
-import blue.starry.saya.Env
-import blue.starry.saya.services.epgstation.models.Channel
+import blue.starry.saya.common.Env
 import blue.starry.saya.services.httpClient
 import io.ktor.client.request.*
 

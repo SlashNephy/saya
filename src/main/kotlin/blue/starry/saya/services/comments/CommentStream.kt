@@ -27,19 +27,17 @@ data class CommentStream(val id: String, val channel: Channel) {
             return null
         }
 
-        val (url, data) = channel.tags.flatMap { tag ->
+        val (source, data) = channel.tags.flatMap { tag ->
             NicoLiveApi.getLivePrograms(tag).data
                 .filter { data ->
                     // 公式番組優先
                     !channel.official || data.tags.any { it.text == "ニコニコ実況" }
                 }.map {
-                    "https://live2.nicovideo.jp/watch/${it.id}"
-                }.map {
-                    it to NicoLiveApi.getEmbeddedData(it)
+                    it.id to NicoLiveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${it.id}")
                 }
         }.firstOrNull() ?: return null
 
-        return NicoLiveCommentProvider(this, data.site.relive.webSocketUrl, url)
+        return NicoLiveCommentProvider(this, data.site.relive.webSocketUrl, source)
     }
 
     val twitter = mutableMapOf<String, TwitterHashTagProvider?>()
@@ -54,5 +52,5 @@ data class CommentStream(val id: String, val channel: Channel) {
 /**
  * アクティブな [CommentProvider] であるかどうか
  */
-private val CommentProvider?.isActive: Boolean
+val CommentProvider?.isActive: Boolean
     get() = this?.job?.isActive == true

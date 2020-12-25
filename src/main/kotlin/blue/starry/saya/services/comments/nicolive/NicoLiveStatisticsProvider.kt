@@ -1,22 +1,13 @@
 package blue.starry.saya.services.comments.nicolive
 
-import blue.starry.saya.services.comments.Comment
+import blue.starry.saya.models.Comment
+import blue.starry.saya.models.NicoCommentStatistics
 import blue.starry.saya.services.comments.CommentStatisticsProvider
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
-import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
 class NicoLiveStatisticsProvider(private val source: String): CommentStatisticsProvider {
-    @Serializable data class Statistics(
-        override val source: String,
-        override val comments: Int,
-        override val commentsPerMinute: Int,
-        val viewers: Int,
-        val adPoints: Int,
-        val giftPoints: Int
-    ): CommentStatisticsProvider.Statistics
-
     private val comments = AtomicInteger()
     private val commentsTime = AtomicLong()
     private val firstComments = AtomicInteger()
@@ -37,8 +28,8 @@ class NicoLiveStatisticsProvider(private val source: String): CommentStatisticsP
     private val adPoints = AtomicInteger()
     private val giftPoints = AtomicInteger()
 
-    override fun provide(): Statistics {
-        return Statistics(
+    override fun provide(): NicoCommentStatistics {
+        return NicoCommentStatistics(
             source = source,
             comments = comments.get(),
             commentsPerMinute = commentsPerMinute,
