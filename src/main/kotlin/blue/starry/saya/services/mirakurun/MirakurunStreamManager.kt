@@ -1,5 +1,6 @@
 package blue.starry.saya.services.mirakurun
 
+import blue.starry.saya.common.Env
 import blue.starry.saya.endpoints.Subscription
 import blue.starry.saya.models.Service
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
@@ -29,6 +30,10 @@ object MirakurunStreamManager {
                 return previous.path
             }
 
+            if (streams.size >= Env.SAYA_MAX_FFMPEG_PROCESSES) {
+                error("Too many ffmpeg processes are running. So we cannot create new one.")
+            }
+            
             val (process, path) = FFMpegWrapper.startliveHLS(service, preset, subTitle)
 
             streams += Session(service, preset, path, process)

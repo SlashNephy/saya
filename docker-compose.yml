@@ -20,6 +20,7 @@ services:
       SAYA_TMP_DIR: tmp
       SAYA_HLS_SEGMENT_SEC: 1
       SAYA_HLS_SEGMENT_SIZE: 4
+      SAYA_MAX_FFMPEG_PROCESSES: 3
       ANNICT_TOKEN: xxx
       TWITTER_CK: xxx
       TWITTER_CS: xxx
