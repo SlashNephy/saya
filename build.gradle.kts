@@ -16,7 +16,7 @@ object ThirdpartyVersion {
     const val Jsoup = "1.13.1"
     const val Exposed = "0.28.1"
     const val SQLiteJDBC = "3.30.1"
-    const val AnnictKt = "0.2.2"
+    const val AnnictKt = "1.1.3"
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
     const val KtorSwagger = "0.7.0"

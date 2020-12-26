@@ -12,7 +12,7 @@ import io.ktor.client.features.cookies.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
-import jp.annict.lib.impl.v1.client.AnnictClient
+import jp.annict.client.AnnictClient
 import mu.KotlinLogging
 
 val httpClient by lazy {
