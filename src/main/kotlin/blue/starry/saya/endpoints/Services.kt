@@ -75,3 +75,10 @@ fun Route.getServicePrograms() {
         )
     }
 }
+
+fun Route.putServices() {
+    put {
+        MirakurunDataManager.Services.update()
+        call.respond(HttpStatusCode.OK)
+    }
+}

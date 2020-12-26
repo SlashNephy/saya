@@ -3,6 +3,7 @@ package blue.starry.saya.endpoints
 import blue.starry.saya.respondOrNotFound
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
@@ -22,5 +23,12 @@ fun Route.getProgram() {
         call.respondOrNotFound(
             MirakurunDataManager.Programs.find { it.id == id }
         )
+    }
+}
+
+fun Route.putPrograms() {
+    put {
+        MirakurunDataManager.Programs.update()
+        call.respond(HttpStatusCode.OK)
     }
 }

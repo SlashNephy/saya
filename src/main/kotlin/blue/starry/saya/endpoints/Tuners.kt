@@ -54,3 +54,10 @@ fun Route.deleteTunerProcess() {
         call.respond(HttpStatusCode.OK)
     }
 }
+
+fun Route.putTuners() {
+    put {
+        MirakurunDataManager.Tuners.update()
+        call.respond(HttpStatusCode.OK)
+    }
+}

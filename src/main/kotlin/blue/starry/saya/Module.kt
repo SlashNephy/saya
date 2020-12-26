@@ -72,6 +72,7 @@ fun Application.module() {
 
             route("services") {
                 getServices()
+                putServices()
 
                 route("{id}") {
                     getService()
@@ -116,6 +117,7 @@ fun Application.module() {
 
             route("programs") {
                 getPrograms()
+                putPrograms()
 
                 route("{id}") {
                     getProgram()
@@ -124,6 +126,7 @@ fun Application.module() {
 
             route("channels") {
                 getChannels()
+                putChannels()
 
                 route("{type}") {
                     getChannelsByType()
@@ -140,6 +143,7 @@ fun Application.module() {
 
             route("tuners") {
                 getTuners()
+                putTuners()
 
                 route("{index}") {
                     getTuner()
@@ -153,6 +157,7 @@ fun Application.module() {
 
             route("logos") {
                 getLogos()
+                putLogos()
 
                 route("{id}") {
                     getLogo()
