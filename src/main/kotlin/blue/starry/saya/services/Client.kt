@@ -15,7 +15,9 @@ import io.ktor.http.*
 import jp.annict.client.AnnictClient
 import mu.KotlinLogging
 
-val httpClient by lazy {
+const val SayaUserAgent = "saya/1.0 (+https://github.com/SlashNephy/saya)"
+
+val SayaHttpClient by lazy {
     HttpClient {
         install(WebSockets)
         install(HttpCookies) {
@@ -34,21 +36,21 @@ val httpClient by lazy {
         }
 
         defaultRequest {
-            userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+            userAgent(SayaUserAgent)
         }
     }
 }
 
-val twitter by lazy {
+val SayaTwitterClient by lazy {
     PenicillinClient {
         account {
             application(Env.TWITTER_CK, Env.TWITTER_CS)
             token(Env.TWITTER_AT, Env.TWITTER_ATS)
         }
-        httpClient(httpClient)
+        httpClient(SayaHttpClient)
     }
 }
 
-val annictClient by lazy {
+val SayaAnnictClient by lazy {
     AnnictClient(Env.ANNICT_TOKEN)
 }

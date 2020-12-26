@@ -3,6 +3,7 @@ package blue.starry.saya.services.ffmpeg
 import blue.starry.saya.addAllFuzzy
 import blue.starry.saya.common.Env
 import blue.starry.saya.models.Service
+import blue.starry.saya.services.SayaUserAgent
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import mu.KotlinLogging
 import java.nio.file.Files
@@ -42,8 +43,8 @@ object FFMpegWrapper {
             addAllFuzzy(
                 // "-re",
                 "-dual_mono_mode", "main",
+                "-user-agent", SayaUserAgent,
                 "-i", "${MirakurunApi.ApiBaseUri}/services/${service.id}/stream?decode=1",
-                "-user-agent", "saya/1.0 (+https://github.com/SlashNephy/saya)",
                 "-max_muxing_queue_size", "2048"
             )
 

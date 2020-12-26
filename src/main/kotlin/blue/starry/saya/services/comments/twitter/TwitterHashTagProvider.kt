@@ -10,7 +10,7 @@ import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.Comment
 import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
-import blue.starry.saya.services.twitter
+import blue.starry.saya.services.SayaTwitterClient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
     override val stats = TwitterHashTagStatisticsProvider("#${tag}")
     override val job = GlobalScope.launch {
         if (tag != SampleStreamTag) {
-            twitter.stream.filter(track = listOf(tag)).listen(object: FilterStreamListener {
+            SayaTwitterClient.stream.filter(track = listOf(tag)).listen(object: FilterStreamListener {
                 override suspend fun onConnect() {
                     logger.debug { "twitter:connect" }
                 }
@@ -50,7 +50,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
                 }
             }, false)
         } else {
-            twitter.stream.sample.listen(object: SampleStreamListener {
+            SayaTwitterClient.stream.sample.listen(object: SampleStreamListener {
                 override suspend fun onConnect() {
                     logger.debug { "twitter:connect" }
                 }

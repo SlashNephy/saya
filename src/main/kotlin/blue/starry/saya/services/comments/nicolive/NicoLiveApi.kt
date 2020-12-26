@@ -1,7 +1,7 @@
 package blue.starry.saya.services.comments.nicolive
 
 import blue.starry.jsonkt.parseObject
-import blue.starry.saya.services.httpClient
+import blue.starry.saya.services.SayaHttpClient
 import blue.starry.saya.services.comments.nicolive.models.EmbeddedData
 import blue.starry.saya.services.comments.nicolive.models.SearchPrograms
 import io.ktor.client.request.*
@@ -10,7 +10,7 @@ import org.jsoup.Jsoup
 
 object NicoLiveApi {
     suspend fun getLivePrograms(tag: String): SearchPrograms {
-        return httpClient.get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&sort=startTime&limit=20&searchWord=$tag&searchTargets=tagsExact&order=desc") {
+        return SayaHttpClient.get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&sort=startTime&limit=20&searchWord=$tag&searchTargets=tagsExact&order=desc") {
             header("X-Frontend-Id", "89")
             header("X-Model-Name", "iPhone10,1")
             header("X-Connection-Environment", "wifi")
@@ -22,7 +22,7 @@ object NicoLiveApi {
     }
 
     suspend fun getEmbeddedData(url: String): EmbeddedData {
-        return httpClient.get<String>(url)
+        return SayaHttpClient.get<String>(url)
             .let {
                 Jsoup.parse(it)
             }

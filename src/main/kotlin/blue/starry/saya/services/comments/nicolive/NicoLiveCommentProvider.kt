@@ -6,7 +6,7 @@ import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
-import blue.starry.saya.services.httpClient
+import blue.starry.saya.services.SayaHttpClient
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
@@ -33,7 +33,7 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
     }
 
     private suspend fun connect() {
-        httpClient.webSocket(url) {
+        SayaHttpClient.webSocket(url) {
             try {
                 logger.debug { "ws:connect" }
 
@@ -134,7 +134,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
     }
 
     private suspend fun connect() {
-        httpClient.webSocket(room.messageServer.uri) {
+        SayaHttpClient.webSocket(room.messageServer.uri) {
             try {
                 logger.debug { "mws:connect" }
 
