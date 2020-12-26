@@ -114,6 +114,8 @@ object MirakurunDataManager {
                 serviceId = mirakurun.serviceId,
                 data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(mirakurun.id))
             )
+        }.sortedBy {
+            it.id
         }
     }
 
