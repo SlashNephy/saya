@@ -29,9 +29,7 @@ fun Application.module() {
     install(ContentNegotiation) {
         json()
     }
-    install(Sessions) {
-
-    }
+    install(Sessions)
     install(CORS) {
         anyHost()
     }
@@ -150,6 +148,14 @@ fun Application.module() {
                         getTunerProcess()
                         deleteTunerProcess()
                     }
+                }
+            }
+
+            route("logos") {
+                getLogos()
+
+                route("{id}") {
+                    getLogo()
                 }
             }
         }

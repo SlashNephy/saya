@@ -56,7 +56,7 @@ object MirakurunApi {
         Service(it)
     }
 
-    suspend fun getServiceStream(id: Int, priority: Int? = null, decode: Boolean? = null) = httpClient.get<HttpStatement>("$ApiBaseUri/services/$id/stream") {
+    suspend fun getServiceStream(id: Long, priority: Int? = null, decode: Boolean? = null) = httpClient.get<HttpStatement>("$ApiBaseUri/services/$id/stream") {
         header("X-Mirakurun-Priority", priority)
         parameter("decode", when (decode) {
             true -> 1
@@ -65,9 +65,9 @@ object MirakurunApi {
         })
     }
 
-    suspend fun getServiceLogo(id: Int) = httpClient.get<ByteArray>("$ApiBaseUri/services/$id/logo")
+    suspend fun getServiceLogo(id: Long) = httpClient.get<ByteArray>("$ApiBaseUri/services/$id/logo")
 
-    suspend fun getService(id: Int) = httpClient.get<String>("$ApiBaseUri/services/$id").parseObject {
+    suspend fun getService(id: Long) = httpClient.get<String>("$ApiBaseUri/services/$id").parseObject {
         Service(it)
     }
 

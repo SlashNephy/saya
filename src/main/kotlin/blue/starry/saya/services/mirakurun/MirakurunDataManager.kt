@@ -1,23 +1,24 @@
 package blue.starry.saya.services.mirakurun
 
-import blue.starry.saya.models.Channel
+import blue.starry.saya.models.*
 import blue.starry.saya.models.Program
-import blue.starry.saya.models.Service
 import blue.starry.saya.models.Tuner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.jsonPrimitive
+import org.apache.commons.codec.binary.Base64
+import java.util.*
 
 object MirakurunDataManager {
     val Channels = ReadOnlyContainer {
         MirakurunApi.getChannels().mapNotNull { mirakurun ->
             Channel(
-                Channel.Type.values().firstOrNull { it.name == mirakurun.type } ?: return@mapNotNull null,
-                mirakurun.channel,
-                mirakurun.name.orEmpty(),
-                mirakurun.services.map { it.serviceId }
+                type = Channel.Type.values().firstOrNull { it.name == mirakurun.type } ?: return@mapNotNull null,
+                group = mirakurun.channel,
+                name = mirakurun.name.orEmpty(),
+                services = mirakurun.services.map { it.serviceId }
             )
         }
     }
@@ -25,11 +26,11 @@ object MirakurunDataManager {
     val Services = ReadOnlyContainer {
         MirakurunApi.getServices().mapNotNull { mirakurun ->
             Service(
-                mirakurun.id,
-                mirakurun.serviceId,
-                mirakurun.name,
-                if (mirakurun.hasLogoData) mirakurun.logoId else null,
-                Channels.find {
+                id = mirakurun.id,
+                serviceId = mirakurun.serviceId,
+                name = mirakurun.name,
+                logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
+                channel = Channels.find {
                     it.group == mirakurun.channel.channel
                 } ?: return@mapNotNull null
             )
@@ -41,13 +42,13 @@ object MirakurunDataManager {
 
         MirakurunApi.getPrograms().map { mirakurun ->
             Program(
-                mirakurun.id,
-                mirakurun.serviceId,
-                mirakurun.startAt / 1000,
-                (mirakurun.startAt + mirakurun.duration) /10000,
-                mirakurun.duration / 1000,
-                mirakurun.name,
-                buildString {
+                id = mirakurun.id,
+                serviceId = mirakurun.serviceId,
+                startAt = mirakurun.startAt / 1000,
+                endAt = (mirakurun.startAt + mirakurun.duration) /10000,
+                duration = mirakurun.duration / 1000,
+                name = mirakurun.name,
+                description = buildString {
                     appendLine(mirakurun.description)
                     appendLine()
 
@@ -55,17 +56,17 @@ object MirakurunDataManager {
                         append("\n◇${it.key}\n${it.value.jsonPrimitive.content}")
                     }
                 }.trim(),
-                mirakurun.name.replace("[無料]", "[無]").let {
+                flags = mirakurun.name.replace("[無料]", "[無]").let {
                     flagRegex.findAll(it).map { match ->
                         match.groupValues[1]
-                   }.toList()
+                    }.toList()
                 },
-                mirakurun.genres.map {
+                genres = mirakurun.genres.map {
                     Program.Genre.values().elementAtOrElse(it.lv1) {
                         Program.Genre.Etc
                     }
                 }.distinct(),
-                Program.Meta(
+                meta = Program.Meta(
                     mirakurun.video?.type,
                     mirakurun.video?.resolution,
                     mirakurun.audio?.samplingRate
@@ -77,25 +78,39 @@ object MirakurunDataManager {
     val Tuners = ReadOnlyContainer {
         MirakurunApi.getTuners().map { mirakurun ->
             Tuner(
-                mirakurun.index,
-                mirakurun.name,
-                mirakurun.types.mapNotNull { type ->
+                index = mirakurun.index,
+                name = mirakurun.name,
+                types = mirakurun.types.mapNotNull { type ->
                     Channel.Type.values().firstOrNull { it.name == type }
                 },
-                mirakurun.command,
-                mirakurun.pid,
-                mirakurun.users.map {
+                command = mirakurun.command,
+                pid = mirakurun.pid,
+                users = mirakurun.users.map {
                     Tuner.User(
                         it.id,
                         it.priority,
                         it.agent
                     )
                 },
-                mirakurun.isAvailable,
-                mirakurun.isRemote,
-                mirakurun.isFree,
-                mirakurun.isUsing,
-                mirakurun.isFault
+                isAvailable = mirakurun.isAvailable,
+                isRemote = mirakurun.isRemote,
+                isFree = mirakurun.isFree,
+                isUsing = mirakurun.isUsing,
+                isFault = mirakurun.isFault
+            )
+        }
+    }
+
+    val Logos = ReadOnlyContainer {
+        Services.filter {
+            it.logoId != null
+        }.distinctBy {
+            it.logoId
+        }.map {
+            Logo(
+                id = it.logoId!!,
+                serviceId = it.serviceId,
+                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(it.id))
             )
         }
     }

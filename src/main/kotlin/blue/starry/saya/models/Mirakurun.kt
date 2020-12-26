@@ -65,6 +65,11 @@ data class Logo(
     val id: Int,
 
     /**
+     * DTV サービス ID
+     */
+    val serviceId: Int,
+
+    /**
      * ロゴデータ (PNG, base64)
      */
     val data: String
