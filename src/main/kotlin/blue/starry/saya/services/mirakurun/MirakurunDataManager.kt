@@ -4,12 +4,14 @@ import blue.starry.saya.models.*
 import blue.starry.saya.models.Program
 import blue.starry.saya.models.Tuner
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.jsonPrimitive
 import org.apache.commons.codec.binary.Base64
 import java.util.*
+import kotlin.time.hours
 
 object MirakurunDataManager {
     val Channels = ReadOnlyContainer {
@@ -106,11 +108,11 @@ object MirakurunDataManager {
             it.logoId != null
         }.distinctBy {
             it.logoId
-        }.map {
+        }.map { mirakurun ->
             Logo(
-                id = it.logoId!!,
-                serviceId = it.serviceId,
-                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(it.id))
+                id = mirakurun.logoId!!,
+                serviceId = mirakurun.serviceId,
+                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(mirakurun.id))
             )
         }
     }
@@ -121,7 +123,10 @@ object MirakurunDataManager {
 
         init {
             GlobalScope.launch {
-                update()
+                while (true) {
+                    update()
+                    delay(1.hours)
+                }
             }
         }
 
