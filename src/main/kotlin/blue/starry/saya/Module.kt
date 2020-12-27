@@ -84,6 +84,14 @@ fun Application.module() {
                     route("programs") {
                         getServicePrograms()
                     }
+
+                    route("m2ts") {
+                        getServicesM2TS()
+                    }
+
+                    route("xspf") {
+                        getServicesXspf()
+                    }
                 }
             }
 
