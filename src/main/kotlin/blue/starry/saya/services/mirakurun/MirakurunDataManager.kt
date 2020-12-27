@@ -47,7 +47,7 @@ object MirakurunDataManager {
                 id = mirakurun.id,
                 serviceId = mirakurun.serviceId,
                 startAt = mirakurun.startAt / 1000,
-                endAt = (mirakurun.startAt + mirakurun.duration) /10000,
+                endAt = (mirakurun.startAt + mirakurun.duration) / 1000,
                 duration = mirakurun.duration / 1000,
                 name = mirakurun.name,
                 description = buildString {
@@ -55,7 +55,7 @@ object MirakurunDataManager {
                     appendLine()
 
                     mirakurun.extended?.forEach {
-                        append("\n◇${it.key}\n${it.value.jsonPrimitive.content}")
+                        append("\n◇ ${it.key}\n${it.value.jsonPrimitive.content}")
                     }
                 }.trim(),
                 flags = mirakurun.name.replace("[無料]", "[無]").let {
