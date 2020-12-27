@@ -14,27 +14,28 @@ import java.util.*
 import kotlin.time.hours
 
 object MirakurunDataManager {
+    val Services = ReadOnlyContainer {
+        MirakurunApi.getServices().map { mirakurun ->
+            Service(
+                id = mirakurun.id,
+                name = mirakurun.name,
+                logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
+                channel = mirakurun.channel.channel
+            )
+        }
+    }
+
     val Channels = ReadOnlyContainer {
         MirakurunApi.getChannels().mapNotNull { mirakurun ->
             Channel(
                 type = Channel.Type.values().firstOrNull { it.name == mirakurun.type } ?: return@mapNotNull null,
                 group = mirakurun.channel,
                 name = mirakurun.name.orEmpty(),
-                services = mirakurun.services.map { it.serviceId }
-            )
-        }
-    }
-
-    val Services = ReadOnlyContainer {
-        MirakurunApi.getServices().mapNotNull { mirakurun ->
-            Service(
-                id = mirakurun.id,
-                serviceId = mirakurun.serviceId,
-                name = mirakurun.name,
-                logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
-                channel = Channels.find {
-                    it.group == mirakurun.channel.channel
-                } ?: return@mapNotNull null
+                serviceIds = Services.filter {
+                    it.channel == mirakurun.channel
+                }.map {
+                    it.id
+                }
             )
         }
     }
@@ -108,11 +109,11 @@ object MirakurunDataManager {
             it.logoId != null
         }.distinctBy {
             it.logoId
-        }.map { mirakurun ->
+        }.map { service ->
             Logo(
-                id = mirakurun.logoId!!,
-                serviceId = mirakurun.serviceId,
-                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(mirakurun.id))
+                id = service.logoId!!,
+                serviceId = service.id,
+                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(service.id))
             )
         }.sortedBy {
             it.id

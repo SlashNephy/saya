@@ -45,7 +45,7 @@ object MirakurunStreamManager {
         return mutex.withLock {
             streams.map {
                 // how to determine `count`?
-                Subscription(it.service.serviceId.toString(), Subscription.Type.HLS, 1)
+                Subscription(it.service.id.toString(), Subscription.Type.HLS, 1)
             }
         }
     }

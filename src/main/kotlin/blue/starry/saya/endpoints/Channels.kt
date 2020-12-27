@@ -15,39 +15,13 @@ fun Route.getChannels() {
     }
 }
 
-fun Route.getChannelsByType() {
+fun Route.getChannelsByGroup() {
     get {
-        val type: String by call.parameters
-
-        call.respond(
-            MirakurunDataManager.Channels.filter {
-                it.type.name.equals(type, true)
-            }
-        )
-    }
-}
-
-fun Route.getChannelsByTypeAndGroup() {
-    get {
-        val type: String by call.parameters
         val group: String by call.parameters
 
         call.respond(
             MirakurunDataManager.Channels.filter {
-                it.type.name.equals(type, true) && it.group == group
-            }
-        )
-    }
-}
-
-fun Route.getChannelServicesByTypeAndGroup() {
-    get {
-        val type: String by call.parameters
-        val group: String by call.parameters
-
-        call.respond(
-            MirakurunDataManager.Channels.filter {
-                it.type.name.equals(type, true) && it.group == group
+                it.group == group
             }
         )
     }

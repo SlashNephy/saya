@@ -10,11 +10,6 @@ data class Service(
     val id: Long,
 
     /**
-     * DTV サービス ID
-     */
-    val serviceId: Int,
-
-    /**
      * DTV サービス名
      */
     val name: String,
@@ -27,7 +22,7 @@ data class Service(
     /**
      * チャンネル
      */
-    val channel: Channel
+    val channel: String
 )
 
 @Serializable
@@ -50,7 +45,7 @@ data class Channel(
     /**
      * DTV サービス ID のリスト
      */
-    val services: List<Int>
+    val serviceIds: List<Long>
 ) {
     enum class Type {
         GR, BS, CS, SKY
@@ -67,7 +62,7 @@ data class Logo(
     /**
      * DTV サービス ID
      */
-    val serviceId: Int,
+    val serviceId: Long,
 
     /**
      * ロゴデータ (PNG, base64)

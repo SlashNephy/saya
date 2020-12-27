@@ -136,16 +136,8 @@ fun Application.module() {
                 getChannels()
                 putChannels()
 
-                route("{type}") {
-                    getChannelsByType()
-
-                    route("{group}") {
-                        getChannelsByTypeAndGroup()
-
-                        route("services") {
-                            getChannelServicesByTypeAndGroup()
-                        }
-                    }
+                route("{group}") {
+                    getChannelsByGroup()
                 }
             }
 
