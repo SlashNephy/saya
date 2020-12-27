@@ -31,7 +31,7 @@ object FFMpegWrapper {
         builder.directory(TmpDir.toFile())
 
         // outout
-        val output = TmpDir.resolve("live_${service.serviceId}_${preset.name}.m3u8")
+        val output = TmpDir.resolve("live_${service.id}_${preset.name}.m3u8")
 
         buildList {
             add("ffmpeg")
@@ -58,7 +58,7 @@ object FFMpegWrapper {
                 "-hls_list_size", Env.SAYA_HLS_SEGMENT_SIZE,
                 "-hls_allow_cache", "0",
                 "-hls_flags", "delete_segments",
-                "-hls_segment_filename", "live_${service.serviceId}_${preset.name}_%09d.ts"
+                "-hls_segment_filename", "live_${service.id}_${preset.name}_%09d.ts"
             )
 
             // 映像

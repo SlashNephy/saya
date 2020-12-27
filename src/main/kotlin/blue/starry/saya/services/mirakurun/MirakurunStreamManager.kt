@@ -24,7 +24,7 @@ object MirakurunStreamManager {
             // 終了したストリームを掃除
             streams.removeIf { it.job.isCompleted || !it.process.isAlive }
 
-            val previous = streams.find { it.service.serviceId == service.serviceId && it.preset == preset }
+            val previous = streams.find { it.service.id == service.id && it.preset == preset }
             if (previous != null) {
                 previous.mark()
                 return previous.path
@@ -33,7 +33,7 @@ object MirakurunStreamManager {
             if (streams.size >= Env.SAYA_MAX_FFMPEG_PROCESSES) {
                 error("Too many ffmpeg processes are running. So we cannot create new one.")
             }
-            
+
             val (process, path) = FFMpegWrapper.startliveHLS(service, preset, subTitle)
 
             streams += Session(service, preset, path, process)
@@ -75,7 +75,7 @@ object MirakurunStreamManager {
                     // 既定の時間以上アクセスがなかったら自動でストリームを停止
                     if (limit < duration) {
                         process.destroy()
-                        logger.trace { "Killed $process (SID: ${service.serviceId}, Preset: ${preset.name})" }
+                        logger.trace { "Killed $process (Service: ${service.id}, Preset: ${preset.name})" }
 
                         cancel()
                     }

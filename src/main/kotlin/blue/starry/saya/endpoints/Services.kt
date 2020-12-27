@@ -24,10 +24,8 @@ private val m3u8 = ContentType("application", "x-mpegURL")
 
 fun Route.getServicesHLS() {
     get {
-        // Mirakurun の /services/{id} は Service#id であり Service#serviceId ではない！！！
-        // ユーザフレンドリーな ServiceId を受け入れる
-        val id: Int by call.parameters
-        val service = MirakurunDataManager.Services.find { it.serviceId == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+        val id: Long by call.parameters
+        val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         val preset = call.parameters["preset"].toFFMpegPreset() ?: FFMpegWrapper.Preset.High
         val subTitle = call.parameters["subtitle"].toBooleanFuzzy()
@@ -60,20 +58,20 @@ fun Route.getServices() {
 
 fun Route.getService() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
 
         call.respondOrNotFound(
-            MirakurunDataManager.Services.find { it.serviceId == id }
+            MirakurunDataManager.Services.find { it.id == id }
         )
     }
 }
 
 fun Route.getServicePrograms() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
 
         call.respond(
-            MirakurunDataManager.Programs.filter { it.serviceId == id }
+            MirakurunDataManager.Programs.filter { it.id == id }
         )
     }
 }
@@ -87,8 +85,8 @@ fun Route.putServices() {
 
 fun Route.getServicesM2TS() {
     get {
-        val id: Int by call.parameters
-        val service = MirakurunDataManager.Services.find { it.serviceId == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+        val id: Long by call.parameters
+        val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority: Int? by call.parameters
 
         MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).execute {
@@ -106,15 +104,15 @@ fun Route.getServicesM2TS() {
 
 fun Route.getServicesXspf() {
     get {
-        val id: Int by call.parameters
-        val service = MirakurunDataManager.Services.find { it.serviceId == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+        val id: Long by call.parameters
+        val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         call.respondTextWriter(ContentType("application", "xspf+xml")) {
             appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
             appendLine("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">")
             appendLine("<trackList>")
             appendLine("<track>")
-            val url = (Env.SAYA_URL_PREFIX ?: "http://${Env.SAYA_HOST}:${Env.SAYA_PORT}") + "${Env.SAYA_BASE_URI.removeSuffix("/")}/services/${service.serviceId}/m2ts"
+            val url = (Env.SAYA_URL_PREFIX ?: "http://${Env.SAYA_HOST}:${Env.SAYA_PORT}") + "${Env.SAYA_BASE_URI.removeSuffix("/")}/services/${service.id}/m2ts"
             appendLine("<location>$url</location>")
             appendLine("<title>${service.name}</title>")
             appendLine("</track>")
