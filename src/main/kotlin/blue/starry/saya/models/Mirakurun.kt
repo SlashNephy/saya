@@ -1,13 +1,19 @@
 package blue.starry.saya.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Service(
     /**
-     * ID
+     * 内部 ID
      */
-    val id: Long,
+    @Transient internal val internalId: Long = 0,
+
+    /**
+     * DTV サービス ID
+     */
+    val id: Int,
 
     /**
      * DTV サービス名
@@ -45,7 +51,7 @@ data class Channel(
     /**
      * DTV サービス ID のリスト
      */
-    val serviceIds: List<Long>
+    val serviceIds: List<Int>
 ) {
     enum class Type {
         GR, BS, CS, SKY
@@ -62,7 +68,7 @@ data class Logo(
     /**
      * DTV サービス ID
      */
-    val serviceId: Long,
+    val serviceId: Int,
 
     /**
      * ロゴデータ (PNG, base64)

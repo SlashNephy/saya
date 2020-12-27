@@ -17,7 +17,8 @@ object MirakurunDataManager {
     val Services = ReadOnlyContainer {
         MirakurunApi.getServices().map { mirakurun ->
             Service(
-                id = mirakurun.id,
+                internalId = mirakurun.id,
+                id = mirakurun.serviceId,
                 name = mirakurun.name,
                 logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
                 channel = mirakurun.channel.channel
@@ -113,7 +114,7 @@ object MirakurunDataManager {
             Logo(
                 id = service.logoId!!,
                 serviceId = service.id,
-                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(service.id))
+                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(service.internalId))
             )
         }.sortedBy {
             it.id

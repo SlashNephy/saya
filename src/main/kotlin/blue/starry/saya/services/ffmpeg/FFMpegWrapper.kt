@@ -44,7 +44,7 @@ object FFMpegWrapper {
                 // "-re",
                 "-dual_mono_mode", "main",
                 "-user-agent", SayaUserAgent,
-                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.id}/stream?decode=1",
+                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1",
                 // "-max_muxing_queue_size", "2048"
             )
 

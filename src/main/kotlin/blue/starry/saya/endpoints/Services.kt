@@ -24,7 +24,7 @@ private val m3u8 = ContentType("application", "x-mpegURL")
 
 fun Route.getServicesHLS() {
     get {
-        val id: Long by call.parameters
+        val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         val preset = call.parameters["preset"].toFFMpegPreset() ?: FFMpegWrapper.Preset.High
@@ -58,7 +58,7 @@ fun Route.getServices() {
 
 fun Route.getService() {
     get {
-        val id: Long by call.parameters
+        val id: Int by call.parameters
 
         call.respondOrNotFound(
             MirakurunDataManager.Services.find { it.id == id }
@@ -68,10 +68,10 @@ fun Route.getService() {
 
 fun Route.getServicePrograms() {
     get {
-        val id: Long by call.parameters
+        val id: Int by call.parameters
 
         call.respond(
-            MirakurunDataManager.Programs.filter { it.id == id }
+            MirakurunDataManager.Programs.filter { it.serviceId == id }
         )
     }
 }
@@ -85,11 +85,11 @@ fun Route.putServices() {
 
 fun Route.getServicesM2TS() {
     get {
-        val id: Long by call.parameters
+        val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).execute {
+        MirakurunApi.getServiceStream(service.internalId, decode = true, priority = priority).execute {
             val channel = it.receive<ByteReadChannel>()
 
             call.respondBytesWriter {
@@ -104,7 +104,7 @@ fun Route.getServicesM2TS() {
 
 fun Route.getServicesXspf() {
     get {
-        val id: Long by call.parameters
+        val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         call.response.header(HttpHeaders.ContentDisposition, ContentDisposition.Attachment.withParameter(
