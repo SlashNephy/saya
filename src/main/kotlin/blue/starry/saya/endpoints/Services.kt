@@ -87,7 +87,7 @@ fun Route.getServicesM2TS() {
     get {
         val id: Long by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
-        val priority: Int? by call.parameters
+        val priority = call.parameters["priority"]?.toIntOrNull()
 
         MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).execute {
             val channel = it.receive<ByteReadChannel>()
@@ -106,6 +106,10 @@ fun Route.getServicesXspf() {
     get {
         val id: Long by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+
+        call.response.header(HttpHeaders.ContentDisposition, ContentDisposition.Attachment.withParameter(
+            ContentDisposition.Parameters.FileName, "watch.xspf"
+        ).toString())
 
         call.respondTextWriter(ContentType("application", "xspf+xml")) {
             appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
