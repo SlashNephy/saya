@@ -94,8 +94,8 @@ fun Route.getServicesM2TS() {
 
             call.respondBytesWriter {
                 while (!channel.isClosedForRead) {
-                    val bytes = channel.toByteArray(512)
-                    writeAvailable(bytes)
+                    val byte = channel.readByte()
+                    writeByte(byte)
                 }
             }
         }
