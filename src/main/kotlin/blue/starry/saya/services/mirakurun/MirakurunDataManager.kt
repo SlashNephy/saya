@@ -1,110 +1,43 @@
 package blue.starry.saya.services.mirakurun
 
-import blue.starry.saya.models.*
-import blue.starry.saya.models.Program
-import blue.starry.saya.models.Tuner
+import blue.starry.jsonkt.*
+import blue.starry.saya.models.Logo
+import io.ktor.utils.io.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.json.jsonPrimitive
+import mu.KotlinLogging
 import org.apache.commons.codec.binary.Base64
-import java.text.Normalizer
-import java.util.*
 import kotlin.time.hours
+import kotlin.time.seconds
 
 object MirakurunDataManager {
+    private val logger = KotlinLogging.logger("saya.MirakurunDataManager")
+
     val Services = ReadOnlyContainer {
         MirakurunApi.getServices().map { mirakurun ->
-            Service(
-                internalId = mirakurun.id,
-                id = mirakurun.serviceId,
-                name = Normalizer.normalize(mirakurun.name, Normalizer.Form.NFKC),
-                logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
-                channel = mirakurun.channel.channel
-            )
+            mirakurun.toSayaService()
         }
     }
 
     val Channels = ReadOnlyContainer {
         MirakurunApi.getChannels().mapNotNull { mirakurun ->
-            Channel(
-                type = Channel.Type.values().firstOrNull { it.name == mirakurun.type } ?: return@mapNotNull null,
-                group = mirakurun.channel,
-                name = Normalizer.normalize(mirakurun.name.orEmpty(), Normalizer.Form.NFKC),
-                serviceIds = Services.filter {
-                    it.channel == mirakurun.channel
-                }.map {
-                    it.id
-                }
-            )
+            mirakurun.toSayaChannel()
         }
     }
 
     val Programs = ReadOnlyContainer {
-        val flagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
-
         MirakurunApi.getPrograms().map { mirakurun ->
-            val name = Normalizer.normalize(mirakurun.name, Normalizer.Form.NFKC)
-
-            Program(
-                id = mirakurun.id,
-                serviceId = mirakurun.serviceId,
-                startAt = mirakurun.startAt / 1000,
-                endAt = (mirakurun.startAt + mirakurun.duration) / 1000,
-                duration = mirakurun.duration / 1000,
-                name = name.replace(flagRegex, " "),
-                description = buildString {
-                    appendLine(mirakurun.description)
-                    appendLine()
-
-                    mirakurun.extended?.forEach {
-                        appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
-                    }
-                }.let {
-                    Normalizer.normalize(it, Normalizer.Form.NFKC)
-                }.trim(),
-                flags = flagRegex.findAll(name).map { match ->
-                    match.groupValues[1]
-                }.toList(),
-                genres = mirakurun.genres.map {
-                    Program.Genre.values().elementAtOrElse(it.lv1) {
-                        Program.Genre.Etc
-                    }
-                }.distinct(),
-                meta = Program.Meta(
-                    mirakurun.video?.type,
-                    mirakurun.video?.resolution,
-                    mirakurun.audio?.samplingRate
-                )
-            )
+            mirakurun.toSayaProgram()
         }
     }
 
     val Tuners = ReadOnlyContainer {
         MirakurunApi.getTuners().map { mirakurun ->
-            Tuner(
-                index = mirakurun.index,
-                name = mirakurun.name,
-                types = mirakurun.types.mapNotNull { type ->
-                    Channel.Type.values().firstOrNull { it.name == type }
-                },
-                command = mirakurun.command,
-                pid = mirakurun.pid,
-                users = mirakurun.users.map {
-                    Tuner.User(
-                        it.id,
-                        it.priority,
-                        it.agent
-                    )
-                },
-                isAvailable = mirakurun.isAvailable,
-                isRemote = mirakurun.isRemote,
-                isFree = mirakurun.isFree,
-                isUsing = mirakurun.isUsing,
-                isFault = mirakurun.isFault
-            )
+            mirakurun.toSayaTuner()
         }
     }
 
@@ -124,13 +57,86 @@ object MirakurunDataManager {
         }
     }
 
+    init {
+        GlobalScope.launch {
+            while (isActive) {
+                delay(10.seconds)
+
+                try {
+                    MirakurunApi.getEventStream().receive { channel: ByteReadChannel ->
+                        readEventStream(channel)
+                    }
+                } catch (e: Throwable) {
+                    logger.error(e) { "Error in connectEventStream" }
+                }
+            }
+        }
+    }
+
+    private suspend fun readEventStream(channel: ByteReadChannel) {
+        while (!channel.isClosedForRead) {
+            val line = channel.readUTF8Line() ?: continue
+            val json = line.toJsonElementOrNull() ?: continue
+
+            when (json) {
+                is JsonObject -> {
+                    val event = json.parseObject { Event(it) }
+                    handleEvent(event)
+                }
+                is JsonArray -> {
+                    val events = json.parseArray { Event(it) }
+                    events.forEach { event ->
+                        handleEvent(event)
+                    }
+                }
+                else -> {
+                    logger.warn { "Unknown JSON: $json" }
+                }
+            }
+        }
+    }
+
+    private suspend fun handleEvent(event: Event) {
+        when (event.resource) {
+            Event.Resource.program -> {
+                val program = Program(event.data).toSayaProgram()
+
+                when (event.type) {
+                    Event.Type.create -> Programs.add(program)
+                    Event.Type.update,
+                    Event.Type.redefine -> Programs.replace(program) { it.id == program.id }
+                }
+            }
+            Event.Resource.service -> {
+                val service = Service(event.data).toSayaService()
+
+                when (event.type) {
+                    Event.Type.create -> Services.add(service)
+                    Event.Type.update,
+                    Event.Type.redefine -> Services.replace(service) { it.id == service.id }
+                }
+            }
+            Event.Resource.tuner -> {
+                val tuner = Tuner(event.data).toSayaTuner()
+
+                when (event.type) {
+                    Event.Type.create -> Tuners.add(tuner)
+                    Event.Type.update,
+                    Event.Type.redefine -> Tuners.replace(tuner) { it.index == tuner.index }
+                }
+            }
+        }
+
+        logger.trace { event }
+    }
+
     class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>) {
         private val mutex = Mutex()
         private val collection = mutableListOf<T>()
 
         init {
             GlobalScope.launch {
-                while (true) {
+                while (isActive) {
                     update()
                     delay(1.hours)
                 }
@@ -139,8 +145,28 @@ object MirakurunDataManager {
 
         suspend fun update() {
             mutex.withLock {
+                val new = block()
+
                 collection.clear()
-                collection.addAll(block())
+                collection.addAll(new)
+            }
+        }
+
+        suspend fun add(new: T) {
+            mutex.withLock {
+                collection.add(new)
+            }
+        }
+
+        suspend fun replace(new: T, predicate: (T) -> Boolean) {
+            mutex.withLock {
+                val index = collection.indexOfFirst(predicate)
+
+                if (index < 0) {
+                    add(new)
+                } else {
+                    collection[index] = new
+                }
             }
         }
 

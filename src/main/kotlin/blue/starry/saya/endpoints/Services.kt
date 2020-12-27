@@ -2,12 +2,12 @@ package blue.starry.saya.endpoints
 
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.respondOrNotFound
+import blue.starry.saya.common.toBooleanFuzzy
+import blue.starry.saya.common.toFFMpegPreset
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.mirakurun.MirakurunStreamManager
-import blue.starry.saya.common.toBooleanFuzzy
-import blue.starry.saya.common.toFFMpegPreset
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -89,9 +89,7 @@ fun Route.getServicesM2TS() {
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getServiceStream(service.internalId, decode = true, priority = priority).execute {
-            val channel = it.receive<ByteReadChannel>()
-
+        MirakurunApi.getServiceStream(service.internalId, decode = true, priority = priority).receive { channel: ByteReadChannel ->
             call.respondBytesWriter {
                 while (!channel.isClosedForRead) {
                     val byte = channel.readByte()

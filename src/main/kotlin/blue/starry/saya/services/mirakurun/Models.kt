@@ -159,8 +159,22 @@ data class Program(override val json: JsonObject): JsonModel {
 }
 
 data class Event(override val json: JsonObject): JsonModel {
-    val resource by string
-    val type by string
+    val resource by enum<String, Resource>()
+    val type by enum<String, Type>()
     val data by jsonObject
-    val time by int
+    val time by long
+
+    enum class Resource: StringJsonEnum {
+        program, service, tuner;
+
+        override val value
+            get() = name
+    }
+
+    enum class Type: StringJsonEnum {
+        create, update, redefine;
+
+        override val value
+            get() = name
+    }
 }
