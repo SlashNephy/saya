@@ -45,7 +45,7 @@ object FFMpegWrapper {
                 "-dual_mono_mode", "main",
                 "-user-agent", SayaUserAgent,
                 "-i", "${MirakurunApi.ApiBaseUri}/services/${service.id}/stream?decode=1",
-                "-max_muxing_queue_size", "2048"
+                // "-max_muxing_queue_size", "2048"
             )
 
             // HLS
@@ -57,7 +57,8 @@ object FFMpegWrapper {
                 "-g", Env.SAYA_HLS_SEGMENT_SEC * 30,
                 "-hls_list_size", Env.SAYA_HLS_SEGMENT_SIZE,
                 "-hls_allow_cache", "0",
-                "-hls_flags", "delete_segments",
+                "-hls_flags", "+delete_segments+omit_endlist",
+                "-hls_delete_threshold", "8",
                 "-hls_segment_filename", "live_${service.id}_${preset.name}_%09d.ts"
             )
 
@@ -107,7 +108,7 @@ object FFMpegWrapper {
     }
 
     sealed class Preset(val name: String, val width: Int, val height: Int, val vb: String, val ab: String, val ar: Int) {
-        object High: Preset("1080p", 1920, 1080, "6000k", "192k", 48000)
+        object High: Preset("1080p", 1920, 1080, "5700k", "192k", 48000)
         object Medium: Preset("720p", 1280, 720, "4000k", "192k", 48000)
         object Low: Preset("360p", 640, 360, "1500k", "128k", 48000)
     }
