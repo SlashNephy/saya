@@ -1,6 +1,6 @@
 package blue.starry.saya.endpoints
 
-import blue.starry.saya.respondOrNotFound
+import blue.starry.saya.common.respondOrNotFound
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import io.ktor.application.*
 import io.ktor.http.*

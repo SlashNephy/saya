@@ -1,6 +1,6 @@
 package blue.starry.saya.services.ffmpeg
 
-import blue.starry.saya.addAllFuzzy
+import blue.starry.saya.common.addAllFuzzy
 import blue.starry.saya.common.Env
 import blue.starry.saya.models.Service
 import blue.starry.saya.services.SayaUserAgent

@@ -1,6 +1,5 @@
 package blue.starry.saya.common
 
-import blue.starry.saya.toBooleanFuzzy
 import kotlin.properties.ReadOnlyProperty
 
 object Env {

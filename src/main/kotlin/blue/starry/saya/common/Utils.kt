@@ -1,4 +1,4 @@
-package blue.starry.saya
+package blue.starry.saya.common
 
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import io.ktor.application.*

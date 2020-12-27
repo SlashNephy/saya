@@ -10,6 +10,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.jsonPrimitive
 import org.apache.commons.codec.binary.Base64
+import java.text.Normalizer
 import java.util.*
 import kotlin.time.hours
 
@@ -19,7 +20,7 @@ object MirakurunDataManager {
             Service(
                 internalId = mirakurun.id,
                 id = mirakurun.serviceId,
-                name = mirakurun.name,
+                name = Normalizer.normalize(mirakurun.name, Normalizer.Form.NFKC),
                 logoId = if (mirakurun.hasLogoData) mirakurun.logoId else null,
                 channel = mirakurun.channel.channel
             )
@@ -31,7 +32,7 @@ object MirakurunDataManager {
             Channel(
                 type = Channel.Type.values().firstOrNull { it.name == mirakurun.type } ?: return@mapNotNull null,
                 group = mirakurun.channel,
-                name = mirakurun.name.orEmpty(),
+                name = Normalizer.normalize(mirakurun.name.orEmpty(), Normalizer.Form.NFKC),
                 serviceIds = Services.filter {
                     it.channel == mirakurun.channel
                 }.map {
@@ -42,29 +43,31 @@ object MirakurunDataManager {
     }
 
     val Programs = ReadOnlyContainer {
-        val flagRegex = "[【\\[(](新|終|再|字|デ|解|無|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
+        val flagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
 
         MirakurunApi.getPrograms().map { mirakurun ->
+            val name = Normalizer.normalize(mirakurun.name, Normalizer.Form.NFKC)
+
             Program(
                 id = mirakurun.id,
                 serviceId = mirakurun.serviceId,
                 startAt = mirakurun.startAt / 1000,
                 endAt = (mirakurun.startAt + mirakurun.duration) / 1000,
                 duration = mirakurun.duration / 1000,
-                name = mirakurun.name,
+                name = name.replace(flagRegex, " "),
                 description = buildString {
                     appendLine(mirakurun.description)
                     appendLine()
 
                     mirakurun.extended?.forEach {
-                        append("\n◇ ${it.key}\n${it.value.jsonPrimitive.content}")
+                        appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
                     }
+                }.let {
+                    Normalizer.normalize(it, Normalizer.Form.NFKC)
                 }.trim(),
-                flags = mirakurun.name.replace("[無料]", "[無]").let {
-                    flagRegex.findAll(it).map { match ->
-                        match.groupValues[1]
-                    }.toList()
-                },
+                flags = flagRegex.findAll(name).map { match ->
+                    match.groupValues[1]
+                }.toList(),
                 genres = mirakurun.genres.map {
                     Program.Genre.values().elementAtOrElse(it.lv1) {
                         Program.Genre.Etc

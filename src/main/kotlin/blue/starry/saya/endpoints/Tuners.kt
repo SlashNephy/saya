@@ -1,7 +1,7 @@
 package blue.starry.saya.endpoints
 
 import blue.starry.saya.models.TunerProcess
-import blue.starry.saya.respondOrNotFound
+import blue.starry.saya.common.respondOrNotFound
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import io.ktor.application.*
