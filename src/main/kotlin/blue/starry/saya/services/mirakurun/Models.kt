@@ -37,6 +37,21 @@ data class Tuner(override val json: JsonObject): JsonModel {
         val id by string
         val priority by int
         val agent by nullableString
+        val url by string
+        val disableDecoder by boolean { false }
+        val streamSetting by nullableModel { StreamSetting(it) }
+        val streamInfo by nullableJsonObject
+
+        data class StreamSetting(override val json: JsonObject): JsonModel {
+            val channel by model { Service.Channel(it) }
+            val networkId by nullableInt
+            val serviceId by nullableInt
+            val eventId by nullableInt
+            val noProvide by boolean { false }
+            val parseNIT by boolean { false }
+            val parseSDT by boolean { false }
+            val parseEIT by boolean { false }
+        }
     }
 }
 
