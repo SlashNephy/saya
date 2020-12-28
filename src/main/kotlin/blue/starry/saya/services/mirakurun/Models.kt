@@ -180,16 +180,16 @@ data class Event(override val json: JsonObject): JsonModel {
     val time by long
 
     enum class Resource: StringJsonEnum {
-        program, service, tuner;
+        Program, Service, Tuner;
 
         override val value
-            get() = name
+            get() = name.decapitalize()
     }
 
     enum class Type: StringJsonEnum {
-        create, update, redefine;
+        Create, Update, Redefine;
 
         override val value
-            get() = name
+            get() = name.decapitalize()
     }
 }

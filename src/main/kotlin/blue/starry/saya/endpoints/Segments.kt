@@ -10,7 +10,7 @@ import io.ktor.util.*
 import java.nio.file.Files
 import java.nio.file.Paths
 
-fun Route.getSegment() {
+fun Route.getSegmentByFilename() {
     get {
         val filename: String by call.parameters
 

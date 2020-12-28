@@ -14,9 +14,9 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-fun Route.wsCommentsStream() {
+fun Route.wsCommentStream() {
     webSocket {
-        val target = call.parameters.getOrFail("target")
+        val target: String by call.parameters
         val stream = CommentStreamManager.findBy(target)
         val nicoLive = stream?.getOrCreateNicoLiveProvider() ?: return@webSocket call.respond(HttpStatusCode.NotFound)
 
@@ -43,9 +43,9 @@ fun Route.wsCommentsStream() {
     }
 }
 
-fun Route.getCommentsStats() {
+fun Route.getCommentStats() {
     get {
-        val target = call.parameters.getOrFail("target")
+        val target: String by call.parameters
         val stream = CommentStreamManager.findBy(target)
 
         call.respond(

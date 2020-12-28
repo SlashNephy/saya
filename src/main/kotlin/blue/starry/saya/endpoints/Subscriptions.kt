@@ -15,7 +15,7 @@ fun Route.getSubscriptions() {
     }
 }
 
-fun Route.getSubscriptionsHLS() {
+fun Route.getHLSSubscriptions() {
     get {
         call.respond(
             MirakurunStreamManager.getSubscriptions()
@@ -23,7 +23,7 @@ fun Route.getSubscriptionsHLS() {
     }
 }
 
-fun Route.getSubscriptionsComments() {
+fun Route.getCommentSubscriptions() {
     get {
         call.respond(
             CommentStreamManager.getSubscriptions()
@@ -31,7 +31,7 @@ fun Route.getSubscriptionsComments() {
     }
 }
 
-fun Route.getSubscriptionsEvents() {
+fun Route.getEventSubscriptions() {
     get {
 
     }

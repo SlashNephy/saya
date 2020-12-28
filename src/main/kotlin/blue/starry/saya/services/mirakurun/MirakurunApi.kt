@@ -98,7 +98,7 @@ object MirakurunApi {
         Program(it)
     }
 
-    suspend fun getProgramStream(id: Int, priority: Int? = null, decode: Boolean? = null) = SayaHttpClient.get<HttpStatement>("$ApiBaseUri/programs/$id/stream") {
+    suspend fun getProgramStream(id: Long, priority: Int? = null, decode: Boolean? = null) = SayaHttpClient.get<HttpStatement>("$ApiBaseUri/programs/$id/stream") {
         header("X-Mirakurun-Priority", priority)
         parameter("decode", when (decode) {
             true -> 1
@@ -107,7 +107,7 @@ object MirakurunApi {
         })
     }
 
-    suspend fun getPrograms(id: Int) = SayaHttpClient.get<String>("$ApiBaseUri/programs/$id").parseObject {
+    suspend fun getPrograms(id: Long) = SayaHttpClient.get<String>("$ApiBaseUri/programs/$id").parseObject {
         Program(it)
     }
 

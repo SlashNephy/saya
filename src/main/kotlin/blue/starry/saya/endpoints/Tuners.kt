@@ -18,7 +18,7 @@ fun Route.getTuners() {
     }
 }
 
-fun Route.getTuner() {
+fun Route.getTunerByIndex() {
     get {
         val index: Int by call.parameters
 
@@ -28,7 +28,7 @@ fun Route.getTuner() {
     }
 }
 
-fun Route.getTunerProcess() {
+fun Route.getTunerProcessByIndex() {
     get {
         val index: Int by call.parameters
 
@@ -40,7 +40,7 @@ fun Route.getTunerProcess() {
     }
 }
 
-fun Route.deleteTunerProcess() {
+fun Route.deleteTunerProcessByIndex() {
     delete {
         val index: Int by call.parameters
 

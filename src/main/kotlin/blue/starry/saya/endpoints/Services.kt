@@ -22,7 +22,7 @@ import java.nio.file.Files
 
 private val m3u8 = ContentType("application", "x-mpegURL")
 
-fun Route.getServicesHLS() {
+fun Route.getServiceHLSById() {
     get {
         val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
@@ -56,7 +56,7 @@ fun Route.getServices() {
     }
 }
 
-fun Route.getService() {
+fun Route.getServiceById() {
     get {
         val id: Int by call.parameters
 
@@ -66,7 +66,7 @@ fun Route.getService() {
     }
 }
 
-fun Route.getServicePrograms() {
+fun Route.getServiceProgramsById() {
     get {
         val id: Int by call.parameters
 
@@ -83,7 +83,7 @@ fun Route.putServices() {
     }
 }
 
-fun Route.getServicesM2TS() {
+fun Route.getServiceM2TSById() {
     get {
         val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
@@ -100,7 +100,7 @@ fun Route.getServicesM2TS() {
     }
 }
 
-fun Route.getServicesXspf() {
+fun Route.getServiceXspfById() {
     get {
         val id: Int by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)

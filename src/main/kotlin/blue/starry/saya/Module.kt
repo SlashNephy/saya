@@ -9,7 +9,6 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
-import io.ktor.sessions.*
 import io.ktor.websocket.*
 import mu.KotlinLogging
 import org.apache.commons.codec.digest.DigestUtils
@@ -29,7 +28,6 @@ fun Application.module() {
     install(ContentNegotiation) {
         json()
     }
-    install(Sessions)
     install(CORS) {
         anyHost()
     }
@@ -61,11 +59,11 @@ fun Application.module() {
             route("comments") {
                 route("{target}") {
                     route("stream") {
-                        wsCommentsStream()
+                        wsCommentStream()
                     }
 
                     route("stats") {
-                        getCommentsStats()
+                        getCommentStats()
                     }
                 }
             }
@@ -75,29 +73,29 @@ fun Application.module() {
                 putServices()
 
                 route("{id}") {
-                    getService()
+                    getServiceById()
 
                     route("hls") {
-                        getServicesHLS()
+                        getServiceHLSById()
                     }
 
                     route("programs") {
-                        getServicePrograms()
+                        getServiceProgramsById()
                     }
 
                     route("m2ts") {
-                        getServicesM2TS()
+                        getServiceM2TSById()
                     }
 
                     route("xspf") {
-                        getServicesXspf()
+                        getServiceXspfById()
                     }
                 }
             }
 
             route("segments") {
                 route("{filename}") {
-                    getSegment()
+                    getSegmentByFilename()
                 }
             }
 
@@ -105,21 +103,21 @@ fun Application.module() {
                 getSubscriptions()
 
                 route("hls") {
-                    getSubscriptionsHLS()
+                    getHLSSubscriptions()
                 }
 
                 route("comments") {
-                    getSubscriptionsComments()
+                    getCommentSubscriptions()
                 }
 
                 route("events") {
-                    getSubscriptionsEvents()
+                    getEventSubscriptions()
                 }
             }
 
             route("events") {
                 route("stream") {
-                    getEventsStream()
+                    wsEventStream()
                 }
             }
 
@@ -128,7 +126,11 @@ fun Application.module() {
                 putPrograms()
 
                 route("{id}") {
-                    getProgram()
+                    getProgramById()
+
+                    route("m2ts") {
+                        getProgramM2TSById()
+                    }
                 }
             }
 
@@ -138,6 +140,10 @@ fun Application.module() {
 
                 route("{group}") {
                     getChannelsByGroup()
+
+                    route("m2ts") {
+                        getChannelsM2TSByGroup()
+                    }
                 }
             }
 
@@ -146,11 +152,11 @@ fun Application.module() {
                 putTuners()
 
                 route("{index}") {
-                    getTuner()
+                    getTunerByIndex()
 
                     route("process") {
-                        getTunerProcess()
-                        deleteTunerProcess()
+                        getTunerProcessByIndex()
+                        deleteTunerProcessByIndex()
                     }
                 }
             }
@@ -160,7 +166,11 @@ fun Application.module() {
                 putLogos()
 
                 route("{id}") {
-                    getLogo()
+                    getLogoById()
+
+                    route("png") {
+                        getLogoPngById()
+                    }
                 }
             }
         }
