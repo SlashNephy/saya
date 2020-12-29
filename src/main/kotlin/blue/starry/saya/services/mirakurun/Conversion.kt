@@ -39,9 +39,9 @@ fun Program.toSayaProgram(): SayaProgram {
         serviceId = serviceId,
         startAt = startAt / 1000,
         duration = duration / 1000,
-        name = name.replace(programFlagRegex, " "),
+        name = name.replace(programFlagRegex, " ").trim(),
         description = buildString {
-            appendLine(description)
+            appendLine(description.replace(programFlagRegex, " ").trim())
             appendLine()
 
             extended?.forEach {
@@ -50,9 +50,9 @@ fun Program.toSayaProgram(): SayaProgram {
         }.let {
             Normalizer.normalize(it, Normalizer.Form.NFKC)
         }.trim(),
-        flags = programFlagRegex.findAll(name).map { match ->
+        flags = (programFlagRegex.findAll(name) + programFlagRegex.findAll(description)).map { match ->
             match.groupValues[1]
-        }.toList(),
+        }.distinct().toList(),
         genres = genres.mapNotNull {
             it.toSayaGenre()
         }.distinct(),
