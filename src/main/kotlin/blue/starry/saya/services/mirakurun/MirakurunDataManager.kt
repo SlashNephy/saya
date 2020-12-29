@@ -2,6 +2,7 @@ package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.*
 import blue.starry.saya.common.ReadOnlyContainer
+import blue.starry.saya.models.Genre
 import blue.starry.saya.models.Logo
 import io.ktor.utils.io.*
 import kotlinx.coroutines.GlobalScope
@@ -13,7 +14,7 @@ import org.apache.commons.codec.binary.Base64
 import kotlin.time.seconds
 
 object MirakurunDataManager {
-    private val logger = KotlinLogging.logger("saya.MirakurunDataManager")
+    private val logger = KotlinLogging.logger("saya.mirakurun")
 
     val Services = ReadOnlyContainer {
         MirakurunApi.getServices().map { mirakurun ->
@@ -52,6 +53,23 @@ object MirakurunDataManager {
             )
         }.sortedBy {
             it.id
+        }
+    }
+
+    val Genres = ReadOnlyContainer {
+        mainGenres.flatMap { (lv1, main) ->
+            subGenres[lv1]!!.filterValues { it != null }.map { (lv2, sub) ->
+                val id = lv1 * 16 + lv2
+
+                Genre(
+                    id = id,
+                    main = main,
+                    sub = sub!!,
+                    count = Programs.filter { program ->
+                        program.genres.contains(id)
+                    }.count()
+                )
+            }
         }
     }
 

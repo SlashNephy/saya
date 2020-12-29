@@ -226,6 +226,18 @@ fun Application.module() {
             route("storage") {
                 getStorage()
             }
+
+            route("genres") {
+                getGenres()
+
+                route("{id}") {
+                    getGenre()
+
+                    route("programs") {
+                        getGenrePrograms()
+                    }
+                }
+            }
         }
     }
 }

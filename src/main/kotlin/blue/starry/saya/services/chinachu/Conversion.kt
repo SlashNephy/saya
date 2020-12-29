@@ -3,6 +3,7 @@ package blue.starry.saya.services.chinachu
 import blue.starry.saya.models.RecordedProgram
 import blue.starry.saya.models.RecordingProgram
 import blue.starry.saya.models.ReservedProgram
+import blue.starry.saya.models.User
 import blue.starry.saya.services.mirakurun.programFlagRegex
 import kotlinx.serialization.json.jsonPrimitive
 import java.text.Normalizer
@@ -30,7 +31,7 @@ fun Program.toSayaProgram(): SayaProgram {
               Normalizer.normalize(it, Normalizer.Form.NFKC)
         }.trim(),
         flags = flags,
-        genres = listOf(SayaProgram.Genre.valueOf(category.capitalize())),
+        genres = listOf(category.toSayaGenre()),
         meta = SayaProgram.Meta(
             null, null, null
         )
@@ -44,6 +45,7 @@ fun Recorded.toSayaRecordedProgram(): RecordedProgram {
         priority = priority,
         tuner = null,
         rule = null,
+        user = User(0, "Chinachu"),
         isManual = false,
         isConflict = isConflict
     )
@@ -64,7 +66,30 @@ fun Recording.toSayaRecordingProgram(): RecordingProgram {
 fun Rule.toSayaRule(index: Int): SayaRule {
     return SayaRule(
         id = index.toLong(),
+        isEnabled = !isDisabled,
         name = "#$index",
-        description = "Chinachu からインポートされました。"
+        description = "Chinachu からインポートされました。",
+        user = User(0, "Chinachu")
     )
+}
+
+private val chinachuGenres = mapOf(
+    "news" to 0x0,
+    "sports" to 0x1,
+    "information" to 0x2,
+    "drama" to 0x3,
+    "music" to 0x4,
+    "variety" to 0x5,
+    "cinema" to 0x6,
+    "anime" to 0x7,
+    "documentary" to 0x8,
+    "theater" to 0x9,
+    "hobby" to 0xA,
+    "welfare" to 0xB
+)
+private fun String.toSayaGenre(): Int {
+    val lv1 = chinachuGenres[this] ?: 0xF
+    val lv2 = 0xF
+
+    return lv1 * 16 + lv2
 }

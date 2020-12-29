@@ -6,7 +6,7 @@ import kotlinx.serialization.Transient
 @Serializable
 data class Service(
     /**
-     * 内部 ID
+     * Mirakurun API 用 ID (非公開)
      */
     @Transient internal val internalId: Long = 0,
 
@@ -119,9 +119,9 @@ data class Program(
     val flags: List<String>,
 
     /**
-     * 番組のジャンル
+     * 番組のジャンル ID のリスト
      */
-    val genres: List<Genre>,
+    val genres: List<Int>,
 
     val meta: Meta
 ) {
@@ -131,22 +131,6 @@ data class Program(
         val videoResolution: String?,
         val audioSamplingRate: Int?
     )
-
-    enum class Genre {
-        News,
-        Sports,
-        Information,
-        Drama,
-        Music,
-        Variety,
-        Cinema,
-        Anime,
-        Documentary,
-        Theater,
-        Hobby,
-        Welfare,
-        Etc
-    }
 }
 
 @Serializable
