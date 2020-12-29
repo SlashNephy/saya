@@ -11,7 +11,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 object FFMpegWrapper {
-    private val logger = KotlinLogging.logger("saya.FFMpegWrapper")
+    private val logger = KotlinLogging.logger("saya.ffmpeg")
     val TmpDir: Path = Paths.get(Env.SAYA_TMP_DIR)
 
     /**

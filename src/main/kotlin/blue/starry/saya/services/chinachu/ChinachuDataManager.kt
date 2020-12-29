@@ -4,7 +4,7 @@ import blue.starry.saya.common.ReadOnlyContainer
 import mu.KotlinLogging
 
 object ChinachuDataManager {
-    private val logger = KotlinLogging.logger("saya.ChinachuDataManager")
+    private val logger = KotlinLogging.logger("saya.chinachu")
 
     val Recorded = ReadOnlyContainer {
         ChinachuApi.getRecorded().map { chinachu ->

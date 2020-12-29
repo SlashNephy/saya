@@ -15,7 +15,7 @@ import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
 object MirakurunStreamManager {
-    private val logger = KotlinLogging.logger("saya.MirakurunStreamManager")
+    private val logger = KotlinLogging.logger("saya.mirakurun")
     private val mutex = Mutex()
     private val streams = mutableListOf<Session>()
 
