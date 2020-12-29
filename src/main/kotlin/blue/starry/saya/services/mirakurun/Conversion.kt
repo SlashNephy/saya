@@ -55,7 +55,7 @@ fun Program.toSayaProgram(): SayaProgram {
         }.toList(),
         genres = genres.mapNotNull {
             it.toSayaGenre()
-        },
+        }.distinct(),
         meta = SayaProgram.Meta(
             video?.type,
             video?.resolution,
