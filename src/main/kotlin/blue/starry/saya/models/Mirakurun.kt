@@ -94,11 +94,6 @@ data class Program(
     val startAt: Long,
 
     /**
-     * 終了時刻 (エポック秒)
-     */
-    val endAt: Long,
-
-    /**
      * 番組の長さ (秒)
      */
     val duration: Int,

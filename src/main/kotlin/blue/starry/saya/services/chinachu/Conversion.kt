@@ -15,7 +15,6 @@ fun Program.toSayaProgram(): SayaProgram {
         id = id.toLong(36),
         serviceId = channel.sid,
         startAt = start / 1000,
-        endAt = end / 1000,
         duration = seconds,
         name = fullTitle.replace(programFlagRegex, " ").let {
             Normalizer.normalize(it, Normalizer.Form.NFKC)

@@ -38,7 +38,6 @@ fun Program.toSayaProgram(): SayaProgram {
         id = id,
         serviceId = serviceId,
         startAt = startAt / 1000,
-        endAt = (startAt + duration) / 1000,
         duration = duration / 1000,
         name = name.replace(programFlagRegex, " "),
         description = buildString {
