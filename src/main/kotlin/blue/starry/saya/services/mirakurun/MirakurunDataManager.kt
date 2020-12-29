@@ -1,17 +1,15 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.*
+import blue.starry.saya.common.ReadOnlyContainer
 import blue.starry.saya.models.Logo
 import io.ktor.utils.io.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import org.apache.commons.codec.binary.Base64
-import kotlin.time.hours
 import kotlin.time.seconds
 
 object MirakurunDataManager {
@@ -67,7 +65,7 @@ object MirakurunDataManager {
                         readEventStream(channel)
                     }
                 } catch (e: Throwable) {
-                    logger.error(e) { "Error in connectEventStream" }
+                    logger.error(e) { "Error in /event/stream" }
                 }
             }
         }
@@ -98,94 +96,35 @@ object MirakurunDataManager {
 
     private suspend fun handleEvent(event: Event) {
         when (event.resource) {
-            Event.Resource.program -> {
+            Event.Resource.Program -> {
                 val program = Program(event.data).toSayaProgram()
 
                 when (event.type) {
-                    Event.Type.create -> Programs.add(program)
-                    Event.Type.update,
-                    Event.Type.redefine -> Programs.replace(program) { it.id == program.id }
+                    Event.Type.Create -> Programs.add(program)
+                    Event.Type.Update,
+                    Event.Type.Redefine -> Programs.replace(program) { it.id == program.id }
                 }
             }
-            Event.Resource.service -> {
+            Event.Resource.Service -> {
                 val service = Service(event.data).toSayaService()
 
                 when (event.type) {
-                    Event.Type.create -> Services.add(service)
-                    Event.Type.update,
-                    Event.Type.redefine -> Services.replace(service) { it.id == service.id }
+                    Event.Type.Create -> Services.add(service)
+                    Event.Type.Update,
+                    Event.Type.Redefine -> Services.replace(service) { it.id == service.id }
                 }
             }
-            Event.Resource.tuner -> {
+            Event.Resource.Tuner -> {
                 val tuner = Tuner(event.data).toSayaTuner()
 
                 when (event.type) {
-                    Event.Type.create -> Tuners.add(tuner)
-                    Event.Type.update,
-                    Event.Type.redefine -> Tuners.replace(tuner) { it.index == tuner.index }
+                    Event.Type.Create -> Tuners.add(tuner)
+                    Event.Type.Update,
+                    Event.Type.Redefine -> Tuners.replace(tuner) { it.index == tuner.index }
                 }
             }
         }
 
         logger.trace { event }
-    }
-
-    class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>) {
-        private val mutex = Mutex()
-        private val collection = mutableListOf<T>()
-
-        init {
-            GlobalScope.launch {
-                while (isActive) {
-                    update()
-                    delay(1.hours)
-                }
-            }
-        }
-
-        suspend fun update() {
-            mutex.withLock {
-                val new = block()
-
-                collection.clear()
-                collection.addAll(new)
-            }
-        }
-
-        suspend fun add(new: T) {
-            mutex.withLock {
-                collection.add(new)
-            }
-        }
-
-        suspend fun replace(new: T, predicate: (T) -> Boolean) {
-            mutex.withLock {
-                val index = collection.indexOfFirst(predicate)
-
-                if (index < 0) {
-                    add(new)
-                } else {
-                    collection[index] = new
-                }
-            }
-        }
-
-        suspend fun find(predicate: (T) -> Boolean): T? {
-            return mutex.withLock {
-                collection.find(predicate)
-            }
-        }
-
-        suspend fun filter(predicate: (T) -> Boolean): List<T> {
-            return mutex.withLock {
-                collection.filter(predicate)
-            }
-        }
-
-        suspend fun toList(): List<T> {
-            return mutex.withLock {
-                collection.toList()
-            }
-        }
     }
 }

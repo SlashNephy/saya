@@ -4,6 +4,7 @@ import blue.starry.saya.common.Env
 import blue.starry.saya.endpoints.*
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.locations.*
 import io.ktor.request.*
@@ -50,6 +51,13 @@ fun Application.module() {
     }
     install(CallLogging) {
         logger = KotlinLogging.logger("saya.server")
+        format { call ->
+            when (val status = call.response.status()) {
+                HttpStatusCode.Found -> "$status: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
+                null -> ""
+                else -> "$status: ${call.request.httpMethod.value} ${call.request.uri}"
+            }
+        }
     }
 
     routing {
@@ -172,6 +180,51 @@ fun Application.module() {
                         getLogoPngById()
                     }
                 }
+            }
+
+            route("records") {
+                getRecords()
+
+                route("{id}") {
+                    getRecord()
+                    deleteRecord()
+
+                    route("file") {
+                        getRecordFile()
+                        deleteRecordFile()
+                    }
+                }
+            }
+
+            route("reserves") {
+                getReserves()
+
+                route("{id}") {
+                    getReserve()
+                    deleteReserve()
+                }
+            }
+
+            route("recording") {
+                getRecordings()
+
+                route("{id}") {
+                    getRecording()
+                    deleteRecording()
+                }
+            }
+
+            route("rules") {
+                getRules()
+
+                route("{id}") {
+                    getRule()
+                    deleteRule()
+                }
+            }
+
+            route("storage") {
+                getStorage()
             }
         }
     }

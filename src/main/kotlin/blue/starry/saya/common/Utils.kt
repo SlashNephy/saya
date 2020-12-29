@@ -38,5 +38,5 @@ internal fun MutableCollection<String>.addAllFuzzy(vararg elements: Any) {
 }
 
 internal suspend fun ApplicationCall.respondOrNotFound(message: Any?) {
-    respond(message ?: respond(HttpStatusCode.NotFound))
+    respond(message ?: return respond(HttpStatusCode.NotFound))
 }

@@ -45,8 +45,8 @@ open class Program(override val json: JsonObject): JsonModel {
     val start by long
     val end by long
     val seconds by int
-    val description by string
-    val extra by jsonObject
+    val description by string { "" }
+    val extra by nullableJsonObject
     val channel by model { Channel(it) }
     val subTitle by string
     val episode by nullableInt
@@ -58,8 +58,8 @@ open class Channel(override val json: JsonObject): JsonModel {
     val channel by string
     val name by string
     val id by string
-    val sid by string
-    val nid by string
+    val sid by int
+    val nid by int
     val hasLogoData by boolean
     val n by int
 }
@@ -82,7 +82,7 @@ data class Recording(override val json: JsonObject): JsonModel, Program(json) {
     val recorded by string
 }
 
-open class Recorded(override val json: JsonObject): JsonModel {
+open class Recorded(override val json: JsonObject): JsonModel, Program(json) {
     val isConflict by boolean
     val recordedFormat by string
     val priority by int

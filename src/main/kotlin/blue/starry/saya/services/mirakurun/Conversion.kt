@@ -30,7 +30,7 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
     )
 }
 
-private val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
+internal val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
 fun Program.toSayaProgram(): SayaProgram {
     val name = Normalizer.normalize(name, Normalizer.Form.NFKC)
 
@@ -55,11 +55,11 @@ fun Program.toSayaProgram(): SayaProgram {
             match.groupValues[1]
         }.toList(),
         genres = genres.map {
-            blue.starry.saya.models.Program.Genre.values().elementAtOrElse(it.lv1) {
-                blue.starry.saya.models.Program.Genre.Etc
+            SayaProgram.Genre.values().elementAtOrElse(it.lv1) {
+                SayaProgram.Genre.Etc
             }
         }.distinct(),
-        meta = blue.starry.saya.models.Program.Meta(
+        meta = SayaProgram.Meta(
             video?.type,
             video?.resolution,
             audio?.samplingRate
@@ -72,12 +72,12 @@ fun Tuner.toSayaTuner(): SayaTuner {
         index = index,
         name = name,
         types = types.mapNotNull { type ->
-            blue.starry.saya.models.Channel.Type.values().firstOrNull { it.name == type }
+            SayaChannel.Type.values().firstOrNull { it.name == type }
         },
         command = command,
         pid = pid,
         users = users.map {
-            blue.starry.saya.models.Tuner.User(
+            SayaTuner.User(
                 it.id,
                 it.priority,
                 it.agent
