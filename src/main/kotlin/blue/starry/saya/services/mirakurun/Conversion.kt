@@ -66,10 +66,15 @@ fun Program.toSayaProgram(): SayaProgram {
             number = null,
             title = null
         ),
-        meta = SayaProgram.Meta(
-            video?.type,
-            video?.resolution,
-            audio?.samplingRate
+        video = SayaProgram.Video(
+            type = video?.type,
+            resolution = video?.resolution,
+            streamContent = video?.streamContent,
+            componentType = video?.componentType
+        ),
+        audio = SayaProgram.Audio(
+            samplingRate = audio?.samplingRate,
+            componentType = audio?.componentType
         )
     )
 }

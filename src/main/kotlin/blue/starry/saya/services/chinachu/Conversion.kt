@@ -31,8 +31,21 @@ fun Program.toSayaProgram(): SayaProgram {
         }.trim(),
         flags = flags,
         genres = listOf(category.toSayaGenre()),
-        meta = SayaProgram.Meta(
-            null, null, null
+        episode = SayaProgram.Episode(
+            number = episode,
+            title = subTitle.let {
+                if (it.isBlank()) {
+                    null
+                } else {
+                    it
+                }
+            }
+        ),
+        video = SayaProgram.Video(
+            null, null, null, null
+        ),
+        audio = SayaProgram.Audio(
+            null, null
         )
     )
 }

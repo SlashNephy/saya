@@ -134,9 +134,20 @@ data class Program(
      */
     val genres: List<Int>,
 
+    /**
+     * 話数情報
+     */
     val episode: Episode,
 
-    val meta: Meta
+    /**
+     * コンテナのビデオフォーマット情報
+     */
+    val video: Video,
+
+    /**
+     * コンテナのオーディオフォーマット情報
+     */
+    val audio: Audio
 ) {
     @Serializable
     data class Episode(
@@ -145,10 +156,17 @@ data class Program(
     )
 
     @Serializable
-    data class Meta(
-        val videoContainer: String?,
-        val videoResolution: String?,
-        val audioSamplingRate: Int?
+    data class Video(
+        val type: String?,
+        val resolution: String?,
+        val streamContent: Int?,
+        val componentType: Int?
+    )
+
+    @Serializable
+    data class Audio(
+        val samplingRate: Int?,
+        val componentType: Int?
     )
 }
 
