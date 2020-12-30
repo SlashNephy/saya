@@ -160,13 +160,13 @@ data class Program(
         val type: String?,
         val resolution: String?,
         val content: Int?,
-        val component: String?
+        val component: Int?
     )
 
     @Serializable
     data class Audio(
-        val samplingRate: String?,
-        val component: String?
+        val samplingRate: Int?,
+        val component: Int?
     )
 }
 

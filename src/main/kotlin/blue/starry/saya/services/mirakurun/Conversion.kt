@@ -48,8 +48,20 @@ fun Program.toSayaProgram(): SayaProgram {
         appendLine(description)
         appendLine()
 
-        extended?.forEach {
-            appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
+        val sections = extended?.map {
+            it.key to it.value.jsonPrimitive.content
+        }.orEmpty().plus(
+            "ストリーム情報" to buildString {
+                appendLine("【映像】")
+                appendLine("コーデック: ${video?.type ?: "不明"}")
+                appendLine("コンポーネント: ${video?.componentType?.let { videoComponentTypes[it] } ?: "不明"}")
+                appendLine("【音声】")
+                appendLine("サンプリング周波数: ${audio?.samplingRate?.let { audioSamplingRates[it] } ?: "不明"}")
+                appendLine("コンポーネント: ${audio?.componentType?.let { audioComponentTypes[it] } ?: "不明"}")
+            }
+        )
+        sections.forEach {
+            appendLine("◇ ${it.first}\n${it.second}")
         }
     }.normalize().replace(programFlagRegex, " ").trim()
 
@@ -73,11 +85,11 @@ fun Program.toSayaProgram(): SayaProgram {
             type = video?.type,
             resolution = video?.resolution,
             content = video?.streamContent,
-            component = video?.componentType?.let { videoComponentTypes[it] }
+            component = video?.componentType
         ),
         audio = SayaProgram.Audio(
-            samplingRate = audio?.samplingRate?.let { audioSamplingRates[it] },
-            component = audio?.componentType?.let { audioComponentTypes[it] }
+            samplingRate = audio?.samplingRate,
+            component = audio?.componentType
         )
     )
 }
