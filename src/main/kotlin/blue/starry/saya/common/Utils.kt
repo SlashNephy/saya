@@ -44,6 +44,6 @@ internal suspend fun ApplicationCall.respondOrNotFound(message: Any?) {
     respond(message ?: return respond(HttpStatusCode.NotFound))
 }
 
-internal suspend fun WebSocketSession.send(content: Any) {
+internal suspend inline fun <reified T: Any> WebSocketSession.send(content: T) {
     send(Frame.Text(Json.encodeToString(content)))
 }

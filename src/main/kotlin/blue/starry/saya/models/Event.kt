@@ -1,6 +1,5 @@
 package blue.starry.saya.models
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,7 +7,7 @@ data class Event(
     val type: Type,
     val resource: Resource,
     val action: Action,
-    @Contextual val data: Any
+    val data: String
 ) {
     enum class Type {
         Data
