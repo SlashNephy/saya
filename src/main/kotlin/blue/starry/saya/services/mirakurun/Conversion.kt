@@ -1,5 +1,7 @@
 package blue.starry.saya.services.mirakurun
 
+import blue.starry.jsonkt.jsonObjectOf
+import blue.starry.saya.models.TunerProcess
 import kotlinx.serialization.json.jsonPrimitive
 import java.text.Normalizer
 import blue.starry.saya.models.Channel as SayaChannel
@@ -9,6 +11,7 @@ import blue.starry.saya.models.Tuner as SayaTuner
 
 fun Service.toSayaService(): SayaService {
     return SayaService(
+        json = json,
         internalId = id,
         id = serviceId,
         name = Normalizer.normalize(name, Normalizer.Form.NFKC),
@@ -19,6 +22,7 @@ fun Service.toSayaService(): SayaService {
 
 suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
     return SayaChannel(
+        json = json,
         type = SayaChannel.Type.values().firstOrNull { it.name == type } ?: return null,
         group = channel,
         name = Normalizer.normalize(name.orEmpty(), Normalizer.Form.NFKC),
@@ -31,10 +35,12 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
 }
 
 internal val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
+
 fun Program.toSayaProgram(): SayaProgram {
     val name = Normalizer.normalize(name, Normalizer.Form.NFKC)
 
     return SayaProgram(
+        json = json,
         id = id,
         serviceId = serviceId,
         startAt = startAt / 1000,
@@ -53,9 +59,13 @@ fun Program.toSayaProgram(): SayaProgram {
         flags = (programFlagRegex.findAll(name) + programFlagRegex.findAll(description)).map { match ->
             match.groupValues[1]
         }.distinct().toList(),
-        genres = genres.mapNotNull {
+        genres = genres.map {
             it.toSayaGenre()
         }.distinct(),
+        episode = SayaProgram.Episode(
+            number = null,
+            title = null
+        ),
         meta = SayaProgram.Meta(
             video?.type,
             video?.resolution,
@@ -66,6 +76,7 @@ fun Program.toSayaProgram(): SayaProgram {
 
 fun Tuner.toSayaTuner(): SayaTuner {
     return SayaTuner(
+        json = json,
         index = index,
         name = name,
         types = types.mapNotNull { type ->
@@ -397,6 +408,15 @@ internal val subGenres = mapOf(
         0xF to "その他",
     )
 )
-fun Program.Genre.toSayaGenre(): Int? {
+fun Program.Genre.toSayaGenre(): Int {
     return lv1 * 16 + lv2
+}
+
+fun SayaTuner.toSayaTunerProcess(): TunerProcess? {
+    return TunerProcess(
+        json = jsonObjectOf(
+            "pid" to pid
+        ),
+        pid = pid ?: return null
+    )
 }

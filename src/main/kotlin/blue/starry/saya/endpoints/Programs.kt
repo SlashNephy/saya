@@ -51,3 +51,13 @@ fun Route.getProgramM2TSById() {
         }
     }
 }
+
+fun Route.getMirakurunProgramById() {
+    get {
+        val id: Long by call.parameters
+
+        call.respondOrNotFound(
+            MirakurunDataManager.Programs.find { it.id == id }?.json
+        )
+    }
+}

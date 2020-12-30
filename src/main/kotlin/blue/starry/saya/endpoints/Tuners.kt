@@ -1,9 +1,9 @@
 package blue.starry.saya.endpoints
 
 import blue.starry.saya.common.respondOrNotFound
-import blue.starry.saya.models.TunerProcess
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
+import blue.starry.saya.services.mirakurun.toSayaTunerProcess
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -32,10 +32,8 @@ fun Route.getTunerProcessByIndex() {
     get {
         val index: Int by call.parameters
 
-        call.respond(
-            TunerProcess(
-                pid = MirakurunApi.getTunerProcess(index).pid
-            )
+        call.respondOrNotFound(
+            MirakurunDataManager.Tuners.find { it.index == index }?.toSayaTunerProcess()
         )
     }
 }
@@ -53,5 +51,25 @@ fun Route.putTuners() {
     put {
         MirakurunDataManager.Tuners.update()
         call.respond(HttpStatusCode.OK)
+    }
+}
+
+fun Route.getMirakurunTunerByIndex() {
+    get {
+        val index: Int by call.parameters
+
+        call.respondOrNotFound(
+            MirakurunDataManager.Tuners.find { it.index == index }?.json
+        )
+    }
+}
+
+fun Route.getMirakurunTunerProcessByIndex() {
+    get {
+        val index: Int by call.parameters
+
+        call.respondOrNotFound(
+            MirakurunDataManager.Tuners.find { it.index == index }?.toSayaTunerProcess()?.json
+        )
     }
 }

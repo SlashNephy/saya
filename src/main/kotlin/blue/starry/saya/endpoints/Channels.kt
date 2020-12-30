@@ -52,3 +52,17 @@ fun Route.getChannelsM2TSByGroup() {
         }
     }
 }
+
+fun Route.getMirakurunChannelsByGroup() {
+    get {
+        val group: String by call.parameters
+
+        call.respond(
+            MirakurunDataManager.Channels.filter {
+                it.group == group
+            }.map {
+                it.json
+            }
+        )
+    }
+}

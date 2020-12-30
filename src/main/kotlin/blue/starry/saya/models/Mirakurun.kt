@@ -1,10 +1,16 @@
 package blue.starry.saya.models
 
+import blue.starry.jsonkt.JsonObject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
 data class Service(
+    /**
+     * Mirakurun オブジェクト (非公開)
+     */
+    @Transient internal val json: JsonObject? = null,
+
     /**
      * Mirakurun API 用 ID (非公開)
      */
@@ -33,6 +39,11 @@ data class Service(
 
 @Serializable
 data class Channel(
+    /**
+     * Mirakurun オブジェクト (非公開)
+     */
+    @Transient internal val json: JsonObject? = null,
+
     /**
      * チャンネルタイプ
      */
@@ -79,6 +90,11 @@ data class Logo(
 @Serializable
 data class Program(
     /**
+     * Mirakurun オブジェクト (非公開)
+     */
+    @Transient internal val json: JsonObject? = null,
+
+    /**
      * 番組 ID
      */
     val id: Long,
@@ -118,8 +134,16 @@ data class Program(
      */
     val genres: List<Int>,
 
+    val episode: Episode,
+
     val meta: Meta
 ) {
+    @Serializable
+    data class Episode(
+        val number: Int?,
+        val title: String?
+    )
+
     @Serializable
     data class Meta(
         val videoContainer: String?,
@@ -130,6 +154,11 @@ data class Program(
 
 @Serializable
 data class Tuner(
+    /**
+     * Mirakurun オブジェクト (非公開)
+     */
+    @Transient internal val json: JsonObject? = null,
+
     val index: Int,
     val name: String,
     val types: List<Channel.Type>,
@@ -152,5 +181,10 @@ data class Tuner(
 
 @Serializable
 data class TunerProcess(
+    /**
+     * Mirakurun オブジェクト (非公開)
+     */
+    @Transient internal val json: JsonObject? = null,
+
     val pid: Int
 )

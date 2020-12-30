@@ -98,6 +98,10 @@ fun Application.module() {
                     route("xspf") {
                         getServiceXspfById()
                     }
+
+                    route("mirakurun") {
+                        getMirakurunServiceById()
+                    }
                 }
             }
 
@@ -139,6 +143,10 @@ fun Application.module() {
                     route("m2ts") {
                         getProgramM2TSById()
                     }
+
+                    route("mirakurun") {
+                        getMirakurunProgramById()
+                    }
                 }
             }
 
@@ -151,6 +159,10 @@ fun Application.module() {
 
                     route("m2ts") {
                         getChannelsM2TSByGroup()
+                    }
+
+                    route("mirakurun") {
+                        getMirakurunChannelsByGroup()
                     }
                 }
             }
@@ -165,6 +177,14 @@ fun Application.module() {
                     route("process") {
                         getTunerProcessByIndex()
                         deleteTunerProcessByIndex()
+
+                        route("mirakurun") {
+                            getMirakurunTunerProcessByIndex()
+                        }
+                    }
+
+                    route("mirakurun") {
+                        getMirakurunTunerByIndex()
                     }
                 }
             }

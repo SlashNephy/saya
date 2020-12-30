@@ -123,3 +123,13 @@ fun Route.getServiceXspfById() {
         }
     }
 }
+
+fun Route.getMirakurunServiceById() {
+    get {
+        val id: Int by call.parameters
+
+        call.respondOrNotFound(
+            MirakurunDataManager.Services.find { it.id == id }?.json
+        )
+    }
+}
