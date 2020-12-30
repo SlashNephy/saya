@@ -19,7 +19,7 @@ object MirakurunDataManager {
     }
 
     val Programs = ReadOnlyContainer {
-        MirakurunApi.getPrograms().map { mirakurun ->
+        MirakurunApi.getPrograms().mapNotNull { mirakurun ->
             mirakurun.toSayaProgram()
         }
     }

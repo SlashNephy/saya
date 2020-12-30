@@ -100,7 +100,7 @@ object EventStreamManager {
     private suspend fun handleEvent(event: MirakurunEvent) {
         when (event.resource) {
             MirakurunEvent.Resource.Program -> {
-                val program = Program(event.data).toSayaProgram()
+                val program = Program(event.data).toSayaProgram() ?: return
 
                 when (event.type) {
                     MirakurunEvent.Type.Create -> MirakurunDataManager.Programs.add(program)

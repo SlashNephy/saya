@@ -42,24 +42,34 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
 }
 
 
-fun Program.toSayaProgram(): SayaProgram {
-    val name = name.normalize().replace(programFlagRegex, " ").trim()
+fun Program.toSayaProgram(): SayaProgram? {
+    val name = name?.normalize()?.replace(programFlagRegex, " ")?.trim() ?: return null
     val description = buildString {
-        appendLine(description)
+        appendLine(description ?: return null)
         appendLine()
 
         val sections = extended?.map {
             it.key to it.value.jsonPrimitive.content
-        }.orEmpty().plus(
-            "ストリーム情報" to buildString {
-                appendLine("【映像】")
-                appendLine("コーデック: ${video?.type ?: "不明"}")
-                appendLine("コンポーネント: ${video?.componentType?.let { videoComponentTypes[it] } ?: "不明"}")
-                appendLine("【音声】")
-                appendLine("サンプリング周波数: ${audio?.samplingRate?.let { audioSamplingRates[it] } ?: "不明"}")
-                appendLine("コンポーネント: ${audio?.componentType?.let { audioComponentTypes[it] } ?: "不明"}")
+        }.orEmpty().run {
+            if (video == null && audio == null) {
+                return@run this
             }
-        )
+
+            plus(
+                "ストリーム情報" to buildString {
+                    if (video != null) {
+                        appendLine("【映像】")
+                        appendLine("コーデック: ${video!!.type}")
+                        appendLine("コンポーネント: ${video!!.componentType.let { videoComponentTypes[it] } ?: "不明"}")
+                    }
+                    if (audio == null) {
+                        appendLine("【音声】")
+                        appendLine("サンプリング周波数: ${audio!!.samplingRate.let { audioSamplingRates[it] } ?: "不明"}")
+                        appendLine("コンポーネント: ${audio!!.componentType.let { audioComponentTypes[it] } ?: "不明"}")
+                    }
+                }
+            )
+        }
         sections.forEach {
             appendLine("◇ ${it.first}\n${it.second}")
         }
@@ -73,13 +83,13 @@ fun Program.toSayaProgram(): SayaProgram {
         duration = duration / 1000,
         name = name,
         description = description,
-        flags = (this.name.toSayaFlags() + this.description.toSayaFlags()).distinct().toList(),
+        flags = (this.name!!.toSayaFlags() + this.description!!.toSayaFlags()).distinct().toList(),
         genres = genres.map {
             it.toSayaGenre()
         }.distinct(),
         episode = SayaProgram.Episode(
             number = name.toSayaEpisodeNumber(),
-            title = name.toSayaEpisodeTitle() ?: description.toSayaEpisodeTitle()
+            title = name.toSayaEpisodeTitle() ?: this.description!!.toSayaEpisodeTitle()
         ),
         video = SayaProgram.Video(
             type = video?.type,

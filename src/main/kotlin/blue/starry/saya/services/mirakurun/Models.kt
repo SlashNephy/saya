@@ -129,8 +129,8 @@ data class Program(override val json: JsonObject): JsonModel {
     val startAt by long
     val duration by int
     val isFree by boolean
-    val name by string { "" }
-    val description by string { "" }
+    val name by nullableString
+    val description by nullableString
     val video by nullableModel { Video(it) }
     val audio by nullableModel { Audio(it) }
     val genres by modelList { Genre(it) }
