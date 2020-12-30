@@ -9,8 +9,8 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import mu.KotlinLogging
 import kotlin.time.seconds
 import blue.starry.saya.services.mirakurun.Event as MirakurunEvent
@@ -25,37 +25,37 @@ object EventStreamManager {
                 type = Event.Type.Data,
                 resource = Event.Resource.Service,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Services.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Services.toList())
             ),
             Event(
                 type = Event.Type.Data,
                 resource = Event.Resource.Channel,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Channels.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Channels.toList())
             ),
             Event(
                 type = Event.Type.Data,
                 resource = Event.Resource.Program,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Programs.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Programs.toList())
             ),
             Event(
                 type = Event.Type.Data,
                 resource = Event.Resource.Tuner,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Tuners.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Tuners.toList())
             ),
             Event(
                 type = Event.Type.Data,
                 resource = Event.Resource.Logo,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Logos.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Logos.toList())
             ),
             Event(
                 type = Event.Type.Data,
                 resource = Event.Resource.Genre,
                 action = Event.Action.Enumerate,
-                data = Json.encodeToString(MirakurunDataManager.Genres.toList())
+                data = Json.encodeToJsonElement(MirakurunDataManager.Genres.toList())
             )
         )
     }
@@ -114,7 +114,7 @@ object EventStreamManager {
                     type = Event.Type.Data,
                     resource = Event.Resource.Program,
                     action = if (event.type == MirakurunEvent.Type.Create) Event.Action.Create else Event.Action.Update,
-                    data = Json.encodeToString(program)
+                    data = Json.encodeToJsonElement(program)
                 ))
             }
             MirakurunEvent.Resource.Service -> {
@@ -130,7 +130,7 @@ object EventStreamManager {
                     type = Event.Type.Data,
                     resource = Event.Resource.Service,
                     action = if (event.type == MirakurunEvent.Type.Create) Event.Action.Create else Event.Action.Update,
-                    data = Json.encodeToString(service)
+                    data = Json.encodeToJsonElement(service)
                 ))
             }
             MirakurunEvent.Resource.Tuner -> {
@@ -146,7 +146,7 @@ object EventStreamManager {
                     type = Event.Type.Data,
                     resource = Event.Resource.Tuner,
                     action = if (event.type == MirakurunEvent.Type.Create) Event.Action.Create else Event.Action.Update,
-                    data = Json.encodeToString(tuner)
+                    data = Json.encodeToJsonElement(tuner)
                 ))
             }
         }
