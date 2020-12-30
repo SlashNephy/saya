@@ -32,6 +32,11 @@ data class Service(
     val logoId: Int?,
 
     /**
+     * リモコン キー ID
+     */
+    val keyId: Int?,
+
+    /**
      * チャンネル
      */
     val channel: String

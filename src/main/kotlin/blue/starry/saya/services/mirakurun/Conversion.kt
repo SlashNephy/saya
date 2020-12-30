@@ -19,6 +19,7 @@ fun Service.toSayaService(): SayaService {
         id = serviceId,
         name = name.normalize(),
         logoId = if (hasLogoData) logoId else null,
+        keyId = remoteControlKeyId,
         channel = channel.channel
     )
 }

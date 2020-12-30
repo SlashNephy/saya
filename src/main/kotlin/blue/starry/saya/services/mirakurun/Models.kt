@@ -107,7 +107,7 @@ data class Service(override val json: JsonObject): JsonModel {
     val name by string
     val type by int
     val logoId by int
-    val remoteControlKeyId by int
+    val remoteControlKeyId by nullableInt
     val channel by model { Channel(it) }
     val hasLogoData by boolean
 
