@@ -73,3 +73,11 @@ fun Route.getMirakurunTunerProcessByIndex() {
         )
     }
 }
+
+fun Route.getMirakurunTuners() {
+    get {
+        call.respondOrNotFound(
+            MirakurunDataManager.Tuners.toList().map { it.json }
+        )
+    }
+}

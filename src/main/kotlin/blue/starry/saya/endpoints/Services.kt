@@ -133,3 +133,11 @@ fun Route.getMirakurunServiceById() {
         )
     }
 }
+
+fun Route.getMirakurunServices() {
+    get {
+        call.respond(
+            MirakurunDataManager.Services.toList().map { it.json }
+        )
+    }
+}

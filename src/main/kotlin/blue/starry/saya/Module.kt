@@ -103,6 +103,10 @@ fun Application.module() {
                         getMirakurunServiceById()
                     }
                 }
+
+                route("mirakurun") {
+                    getMirakurunServices()
+                }
             }
 
             route("segments") {
@@ -148,6 +152,10 @@ fun Application.module() {
                         getMirakurunProgramById()
                     }
                 }
+
+                route("mirakurun") {
+                    getMirakurunPrograms()
+                }
             }
 
             route("channels") {
@@ -164,6 +172,10 @@ fun Application.module() {
                     route("mirakurun") {
                         getMirakurunChannelsByGroup()
                     }
+                }
+
+                route("mirakurun") {
+                    getMirakurunChannels()
                 }
             }
 
@@ -186,6 +198,10 @@ fun Application.module() {
                     route("mirakurun") {
                         getMirakurunTunerByIndex()
                     }
+                }
+
+                route("mirakurun") {
+                    getMirakurunTuners()
                 }
             }
 

@@ -61,3 +61,12 @@ fun Route.getMirakurunProgramById() {
         )
     }
 }
+
+fun Route.getMirakurunPrograms() {
+    get {
+        call.respond(
+            MirakurunDataManager.Programs.toList().map { it.json }
+        )
+    }
+}
+

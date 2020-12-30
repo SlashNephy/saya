@@ -66,3 +66,11 @@ fun Route.getMirakurunChannelsByGroup() {
         )
     }
 }
+
+fun Route.getMirakurunChannels() {
+    get {
+        call.respond(
+            MirakurunDataManager.Channels.toList().map { it.json }
+        )
+    }
+}
