@@ -3,7 +3,10 @@ package blue.starry.saya.common
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
 import io.ktor.response.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /**
  * 文字列を ffmpeg のプリセット定義に変換する
@@ -39,4 +42,8 @@ internal fun MutableCollection<String>.addAllFuzzy(vararg elements: Any) {
 
 internal suspend fun ApplicationCall.respondOrNotFound(message: Any?) {
     respond(message ?: return respond(HttpStatusCode.NotFound))
+}
+
+internal suspend fun WebSocketSession.send(content: Any) {
+    send(Frame.Text(Json.encodeToString(content)))
 }

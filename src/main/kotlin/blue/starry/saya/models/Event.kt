@@ -1,0 +1,24 @@
+package blue.starry.saya.models
+
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Event(
+    val type: Type,
+    val resource: Resource,
+    val action: Action,
+    @Contextual val data: Any
+) {
+    enum class Type {
+        Data
+    }
+
+    enum class Resource {
+        Service, Channel, Program, Tuner, Logo, Genre
+    }
+
+    enum class Action {
+        Enumerate, Create, Update
+    }
+}

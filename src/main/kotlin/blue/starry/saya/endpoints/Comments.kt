@@ -1,5 +1,6 @@
 package blue.starry.saya.endpoints
 
+import blue.starry.saya.common.send
 import blue.starry.saya.models.CommentStatsResponse
 import blue.starry.saya.services.comments.CommentStreamManager
 import blue.starry.saya.services.comments.withSession
@@ -11,8 +12,6 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 fun Route.wsCommentStream() {
     webSocket {
@@ -30,7 +29,7 @@ fun Route.wsCommentStream() {
 
         nicoLive.withSession {
             nicoLive.comments.openSubscription().consumeEach {
-                send(Json.encodeToString(it))
+                send(it)
             }
 
 //            twitter.withSession {
