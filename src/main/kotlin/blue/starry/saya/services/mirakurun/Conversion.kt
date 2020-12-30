@@ -3,21 +3,28 @@ package blue.starry.saya.services.mirakurun
 import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.saya.models.TunerProcess
 import kotlinx.serialization.json.jsonPrimitive
+import mu.KotlinLogging
 import java.text.Normalizer
 import blue.starry.saya.models.Channel as SayaChannel
 import blue.starry.saya.models.Program as SayaProgram
 import blue.starry.saya.models.Service as SayaService
 import blue.starry.saya.models.Tuner as SayaTuner
 
+private val logger = KotlinLogging.logger("saya.")
+
 fun Service.toSayaService(): SayaService {
     return SayaService(
         json = json,
         internalId = id,
         id = serviceId,
-        name = Normalizer.normalize(name, Normalizer.Form.NFKC),
+        name = name.normalize(),
         logoId = if (hasLogoData) logoId else null,
         channel = channel.channel
     )
+}
+
+internal fun String.normalize(): String {
+    return Normalizer.normalize(this, Normalizer.Form.NFKC)
 }
 
 suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
@@ -25,7 +32,7 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
         json = json,
         type = SayaChannel.Type.values().firstOrNull { it.name == type } ?: return null,
         group = channel,
-        name = Normalizer.normalize(name.orEmpty(), Normalizer.Form.NFKC),
+        name = name.orEmpty().normalize(),
         serviceIds = MirakurunDataManager.Services.filter {
             it.channel == channel
         }.map {
@@ -34,10 +41,17 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
     )
 }
 
-internal val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|無料|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
 
 fun Program.toSayaProgram(): SayaProgram {
-    val name = Normalizer.normalize(name, Normalizer.Form.NFKC)
+    val name = name.normalize().replace(programFlagRegex, " ").trim()
+    val description = buildString {
+        appendLine(description)
+        appendLine()
+
+        extended?.forEach {
+            appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
+        }
+    }.normalize().replace(programFlagRegex, " ").trim()
 
     return SayaProgram(
         json = json,
@@ -45,26 +59,15 @@ fun Program.toSayaProgram(): SayaProgram {
         serviceId = serviceId,
         startAt = startAt / 1000,
         duration = duration / 1000,
-        name = name.replace(programFlagRegex, " ").trim(),
-        description = buildString {
-            appendLine(description.replace(programFlagRegex, " ").trim())
-            appendLine()
-
-            extended?.forEach {
-                appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
-            }
-        }.let {
-            Normalizer.normalize(it, Normalizer.Form.NFKC)
-        }.trim(),
-        flags = (programFlagRegex.findAll(name) + programFlagRegex.findAll(description)).map { match ->
-            match.groupValues[1]
-        }.distinct().toList(),
+        name = name,
+        description = description,
+        flags = (this.name.toSayaFlags() + this.description.toSayaFlags()).distinct().toList(),
         genres = genres.map {
             it.toSayaGenre()
         }.distinct(),
         episode = SayaProgram.Episode(
-            number = null,
-            title = null
+            number = name.toSayaEpisodeNumber(),
+            title = name.toSayaEpisodeTitle() ?: description.toSayaEpisodeTitle()
         ),
         video = SayaProgram.Video(
             type = video?.type,
@@ -77,6 +80,52 @@ fun Program.toSayaProgram(): SayaProgram {
             componentType = audio?.componentType
         )
     )
+}
+
+internal val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
+private fun String.toSayaFlags(): Sequence<String> {
+    return programFlagRegex.findAll(this).map {
+        it.groupValues[1]
+    }
+}
+
+private val programEpisodeNumberRegex = "(.)([\\d一二三四五六七八九十〇]+)(.)".toRegex()
+internal fun String.toSayaEpisodeNumber(): Int? {
+    val match = programEpisodeNumberRegex.findAll(this).find {
+        val (prefix, _, suffix) = it.destructured
+
+        when {
+            prefix == "#" || prefix == "♯" -> true
+            prefix == "第" && (suffix == "話" || suffix == "回") -> true
+            prefix == "(" && suffix == ")" -> true
+            else -> false
+        }
+    } ?: return null
+    val text = match.groupValues[2]
+
+    return text
+        .replace("一", "1")
+        .replace("二", "2")
+        .replace("三", "3")
+        .replace("四", "4")
+        .replace("五", "5")
+        .replace("六", "6")
+        .replace("七", "7")
+        .replace("八", "8")
+        .replace("九", "9")
+        .replace("十", "1")
+        .replace("〇", "0")
+        .removePrefix("0")
+        .toIntOrNull()
+        ?: run {
+            logger.warn { "Failed to parse episode number: $text" }
+            null
+        }
+}
+
+private val programEpisodeTitleRegex = "[「【]([^」】]+)[」】]".toRegex()
+internal fun String.toSayaEpisodeTitle(): String? {
+    return programEpisodeTitleRegex.find(this)?.groupValues?.get(1)
 }
 
 fun Tuner.toSayaTuner(): SayaTuner {

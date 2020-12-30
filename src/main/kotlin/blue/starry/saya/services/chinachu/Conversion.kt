@@ -4,9 +4,9 @@ import blue.starry.saya.models.RecordedProgram
 import blue.starry.saya.models.RecordingProgram
 import blue.starry.saya.models.ReservedProgram
 import blue.starry.saya.models.User
+import blue.starry.saya.services.mirakurun.normalize
 import blue.starry.saya.services.mirakurun.programFlagRegex
 import kotlinx.serialization.json.jsonPrimitive
-import java.text.Normalizer
 import blue.starry.saya.models.Program as SayaProgram
 import blue.starry.saya.models.Rule as SayaRule
 
@@ -16,9 +16,7 @@ fun Program.toSayaProgram(): SayaProgram {
         serviceId = channel.sid,
         startAt = start / 1000,
         duration = seconds,
-        name = fullTitle.replace(programFlagRegex, " ").let {
-            Normalizer.normalize(it, Normalizer.Form.NFKC)
-        },
+        name = fullTitle.normalize().replace(programFlagRegex, " ").trim(),
         description = buildString {
             appendLine(description)
             appendLine()
@@ -26,9 +24,7 @@ fun Program.toSayaProgram(): SayaProgram {
             extra?.forEach {
                 appendLine("◇ ${it.key}\n${it.value.jsonPrimitive.content}")
             }
-        }.let {
-              Normalizer.normalize(it, Normalizer.Form.NFKC)
-        }.trim(),
+        }.normalize().replace(programFlagRegex, " ").trim(),
         flags = flags,
         genres = listOf(category.toSayaGenre()),
         episode = SayaProgram.Episode(
