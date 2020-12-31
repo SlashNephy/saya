@@ -41,9 +41,11 @@ internal fun MutableCollection<String>.addAllFuzzy(vararg elements: Any) {
 }
 
 internal suspend fun ApplicationCall.respondOrNotFound(message: Any?) {
-    respond(message ?: return respond(HttpStatusCode.NotFound))
+    respond(message ?: HttpStatusCode.NotFound)
 }
 
 internal suspend inline fun <reified T: Any> WebSocketSession.send(content: T) {
-    send(Frame.Text(Json.encodeToString(content)))
+    send(Frame.Text(
+        Json.encodeToString(content)
+    ))
 }
