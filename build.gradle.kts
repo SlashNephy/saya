@@ -16,7 +16,7 @@ object ThirdpartyVersion {
     const val Jsoup = "1.13.1"
     const val Exposed = "0.28.1"
     const val SQLiteJDBC = "3.30.1"
-    const val AnnictKt = "1.1.3"
+    const val AnnictKt = "2.2.0"
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
     const val KtorSwagger = "0.7.0"
@@ -35,6 +35,7 @@ repositories {
     jcenter()
     maven(url = "https://kotlin.bintray.com/kotlinx")
     maven(url = "https://jitpack.io")
+    maven(url = "https://dl.bintray.com/riptakagi/maven")
     maven(url = "https://dl.bintray.com/starry-blue-sky/stable")
 }
 
