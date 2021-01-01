@@ -50,6 +50,7 @@ dependencies {
 
     // Ktor Client
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-client-serialization:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
 
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
