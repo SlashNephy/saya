@@ -20,6 +20,7 @@ object ThirdpartyVersion {
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
     const val KtorSwagger = "0.7.0"
+    const val Clikt = "3.1.0"
 
     // logging
     const val KotlinLogging = "2.0.4"
@@ -66,6 +67,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:${ThirdpartyVersion.Exposed}")
     implementation("org.jetbrains.exposed:exposed-java-time:${ThirdpartyVersion.Exposed}")
     implementation("org.xerial:sqlite-jdbc:${ThirdpartyVersion.SQLiteJDBC}")
+
+    // CLI
+    implementation("com.github.ajalt.clikt:clikt:${ThirdpartyVersion.Clikt}")
 
     // logging
     implementation("io.github.microutils:kotlin-logging:${ThirdpartyVersion.KotlinLogging}")
