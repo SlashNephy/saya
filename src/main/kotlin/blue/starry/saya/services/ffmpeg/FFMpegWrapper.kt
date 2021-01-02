@@ -1,7 +1,7 @@
 package blue.starry.saya.services.ffmpeg
 
-import blue.starry.saya.common.addAllFuzzy
 import blue.starry.saya.common.Env
+import blue.starry.saya.common.addAllFuzzy
 import blue.starry.saya.models.Service
 import blue.starry.saya.services.SayaUserAgent
 import blue.starry.saya.services.mirakurun.MirakurunApi
@@ -9,13 +9,14 @@ import mu.KotlinLogging
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.math.roundToInt
 
 object FFMpegWrapper {
     private val logger = KotlinLogging.logger("saya.ffmpeg")
     val TmpDir: Path = Paths.get(Env.SAYA_TMP_DIR)
 
     /**
-     * Mirakurun の M2TS ストリームを HLS に変換する
+     * Mirakurun の Service TS ストリームを HLS に変換する
      */
     @ExperimentalStdlibApi
     fun startliveHLS(service: Service, preset: Preset, subTitle: Boolean): Pair<Process, Path> {
@@ -37,7 +38,11 @@ object FFMpegWrapper {
             add("ffmpeg")
 
             // ハードウェアアクセラレーション
-            // "-hwaccel", "vaapi",
+//                addAllFuzzy(
+//                    "-vaapi_device", "/dev/dri/renderD128",
+//                    "-hwaccel", "vaapi",
+//                    "-hwaccel_output_format", "vaapi"
+//                )
 
             // 入力
             addAllFuzzy(
@@ -45,20 +50,21 @@ object FFMpegWrapper {
                 "-dual_mono_mode", "main",
                 "-user-agent", SayaUserAgent,
                 "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1",
-                // "-max_muxing_queue_size", "2048"
+                "-max_muxing_queue_size", "1024"
             )
 
             // HLS
             addAllFuzzy(
                 "-f", "hls",
+                // "-strict", "experimental", "-lhls", "1",
                 "-hls_segment_type", "mpegts",
                 "-hls_base_url", "${Env.SAYA_BASE_URI.removeSuffix("/")}/segments/",
                 "-hls_time", Env.SAYA_HLS_SEGMENT_SEC,
-                "-g", Env.SAYA_HLS_SEGMENT_SEC * 30,
+                "-g", (Env.SAYA_HLS_SEGMENT_SEC * 30).roundToInt(),
                 "-hls_list_size", Env.SAYA_HLS_SEGMENT_SIZE,
                 "-hls_allow_cache", "0",
-                "-hls_flags", "+delete_segments+omit_endlist",
-                "-hls_delete_threshold", "8",
+                "-hls_flags", "+delete_segments+omit_endlist+program_date_time",
+                "-hls_delete_threshold", "5",
                 "-hls_segment_filename", "live_${service.id}_${preset.name}_%09d.ts"
             )
 
@@ -66,7 +72,7 @@ object FFMpegWrapper {
             addAllFuzzy(
                 "-c:v", "libx264",
                 "-vb", preset.vb,
-                "-vf", "yadif=0:-1:1",
+                "-vf", "yadif=0:-1:1,scale=-2:${preset.height}",
                 "-aspect", "${preset.width}:${preset.height}",
                 "-preset", "ultrafast",
                 "-r", "30000/1001"
@@ -105,6 +111,13 @@ object FFMpegWrapper {
         }
 
         return builder.start() to output
+    }
+
+    /**
+     * Mirakurun の Service TS ストリームを MPEG-Dash に変換する
+     */
+    fun startLiveDash(service: Service, preset: Preset) {
+
     }
 
     sealed class Preset(val name: String, val width: Int, val height: Int, val vb: String, val ab: String, val ar: Int) {
