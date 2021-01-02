@@ -38,11 +38,11 @@ object FFMpegWrapper {
             add("ffmpeg")
 
             // ハードウェアアクセラレーション
-//                addAllFuzzy(
-//                    "-vaapi_device", "/dev/dri/renderD128",
-//                    "-hwaccel", "vaapi",
-//                    "-hwaccel_output_format", "vaapi"
-//                )
+            // addAllFuzzy(
+            //     "-vaapi_device", "/dev/dri/renderD128",
+            //     "-hwaccel", "vaapi",
+            //     "-hwaccel_output_format", "vaapi"
+            // )
 
             // 入力
             addAllFuzzy(
@@ -116,8 +116,8 @@ object FFMpegWrapper {
     /**
      * Mirakurun の Service TS ストリームを MPEG-Dash に変換する
      */
-    fun startLiveDash(service: Service, preset: Preset) {
-
+    fun startLiveDash(service: Service, preset: Preset): Pair<Process, Path> {
+        TODO()
     }
 
     sealed class Preset(val name: String, val width: Int, val height: Int, val vb: String, val ab: String, val ar: Int) {
