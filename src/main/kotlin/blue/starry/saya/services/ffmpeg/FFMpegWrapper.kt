@@ -38,19 +38,31 @@ object FFMpegWrapper {
             add("ffmpeg")
 
             // ハードウェアアクセラレーション
-            // addAllFuzzy(
-            //     "-vaapi_device", "/dev/dri/renderD128",
-            //     "-hwaccel", "vaapi",
-            //     "-hwaccel_output_format", "vaapi"
-            // )
+            when (Env.SAYA_HWACCEL) {
+                "vaapi" -> {
+                    addAllFuzzy(
+                        "-hwaccel", "vaapi",
+                        "-hwaccel_output_format", "vaapi",
+                        "-hwaccel_device", "/dev/dri/renderD128",
+                        "-vaapi_device", "/dev/dri/renderD128"
+                    )
+                }
+                "qsv" -> {
+                    addAllFuzzy(
+                        "-hwaccel", "qsv",
+                        "-init_hw_device", "qsv=hw",
+                        "-filter_hw_device", "hw",
+                    )
+                }
+            }
 
             // 入力
             addAllFuzzy(
                 // "-re",
                 "-dual_mono_mode", "main",
                 "-user-agent", SayaUserAgent,
-                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1",
-                "-max_muxing_queue_size", "1024"
+                "-max_muxing_queue_size", "1024",
+                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1"
             )
 
             // HLS
@@ -69,10 +81,29 @@ object FFMpegWrapper {
             )
 
             // 映像
+            val vf = "yadif=0:-1:1,scale=-2:${preset.height}"
+            when (Env.SAYA_HWACCEL) {
+                "vaapi" -> {
+                    addAllFuzzy(
+                        "-c:v", "h264_vaapi",
+                        "-vf", "$vf,format=nv12|vaapi,hwupload"
+                    )
+                }
+                "qsv" -> {
+                    addAllFuzzy(
+                        "-c:v", "h264_qsv",
+                        "-vf", "$vf,hwupload=extra_hw_frames=64,format=qsv"
+                    )
+                }
+                else -> {
+                    addAllFuzzy(
+                        "-c:v", "libx264",
+                        "-vf", vf
+                    )
+                }
+            }
             addAllFuzzy(
-                "-c:v", "libx264",
                 "-vb", preset.vb,
-                "-vf", "yadif=0:-1:1,scale=-2:${preset.height}",
                 "-aspect", "${preset.width}:${preset.height}",
                 "-preset", "ultrafast",
                 "-r", "30000/1001"
@@ -116,7 +147,7 @@ object FFMpegWrapper {
     /**
      * Mirakurun の Service TS ストリームを MPEG-Dash に変換する
      */
-    fun startLiveDash(service: Service, preset: Preset): Pair<Process, Path> {
+    fun startLiveDash(): Pair<Process, Path> {
         TODO()
     }
 

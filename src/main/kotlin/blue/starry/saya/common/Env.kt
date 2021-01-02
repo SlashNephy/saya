@@ -11,6 +11,7 @@ object Env {
     val SAYA_HLS_SEGMENT_SIZE by int { 4 }
     val SAYA_MAX_FFMPEG_PROCESSES by int { 2 }
     val SAYA_URL_PREFIX by stringOrNull
+    val SAYA_HWACCEL by stringOrNull
 
     val ANNICT_TOKEN by string
     val TWITTER_CK by string
@@ -44,11 +45,6 @@ private fun string(default: () -> String): ReadOnlyProperty<Env, String> = ReadO
 private val stringOrNull: ReadOnlyProperty<Env, String?>
     get() = ReadOnlyProperty { _, property ->
         System.getenv(property.name)
-    }
-
-private val int: ReadOnlyProperty<Env, Int>
-    get() = ReadOnlyProperty { _, property ->
-        System.getenv(property.name)?.toIntOrNull() ?: error("Env: ${property.name} is not set.")
     }
 
 private fun int(default: () -> Int): ReadOnlyProperty<Env, Int> = ReadOnlyProperty { _, property ->

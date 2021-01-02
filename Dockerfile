@@ -45,6 +45,8 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         fdk-aac \
         libva \
         libva-intel-driver \
+        # libmfx \
+        intel-media-driver \
     # build
     && mkdir /tmp/ffmpeg \
     && cd /tmp/ffmpeg \
@@ -65,10 +67,13 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         --enable-nonfree \
         # vaapi
         --enable-vaapi \
+        # Intel QSV
+        # --enable-libmfx \
     && make -j${CPUCORE} \
     && make install \
     && make distclean \
     && ffmpeg -buildconf \
+    && ffmpeg -encoders \
     \
     # cleaning
     && apk del --purge .build-deps \
