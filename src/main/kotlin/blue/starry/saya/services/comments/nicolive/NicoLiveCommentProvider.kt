@@ -2,11 +2,11 @@ package blue.starry.saya.services.comments.nicolive
 
 import blue.starry.jsonkt.*
 import blue.starry.saya.models.Comment
+import blue.starry.saya.services.SayaHttpClient
 import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
-import blue.starry.saya.services.SayaHttpClient
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
@@ -200,7 +200,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
                 createComment(it)
             }
 
-            if (comment != null) {
+            if (comment != null && !comment.text.startsWith("/")) {
                 provider.comments.send(comment)
                 provider.stats.update(comment)
             }
