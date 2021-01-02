@@ -158,9 +158,9 @@ data class Program(override val json: JsonObject): JsonModel {
     }
 
     data class RelatedItem(override val json: JsonObject): JsonModel {
-        val networkId by int
-        val serviceId by int
-        val eventId by int
+        val networkId by long
+        val serviceId by long
+        val eventId by long
     }
 
     data class Series(override val json: JsonObject): JsonModel {
