@@ -36,37 +36,39 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         coreutils \
         x264-dev \
         fdk-aac-dev \
+        libva-dev \
     \
     # runtime
     && apk add --no-cache \
         x264 \
         x264-libs \
         fdk-aac \
+        libva \
+        libva-intel-driver \
     # build
     && mkdir /tmp/ffmpeg \
     && cd /tmp/ffmpeg \
     && curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 \
     && tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 \
     && ./configure \
+        --extra-libs="-lpthread -lm" \
         --enable-small \
         --disable-debug \
         --disable-doc \
         --disable-ffplay \
         --disable-x86asm \
-        # static build
-        --disable-shared \
-        --enable-static \
-        --pkg-config-flags=--static \
-        --extra-libs="-lpthread -lm" \
         # libx264
         --enable-libx264 \
         # aac
         --enable-libfdk-aac \
         --enable-gpl \
         --enable-nonfree \
+        # vaapi
+        --enable-vaapi \
     && make -j${CPUCORE} \
     && make install \
     && make distclean \
+    && ffmpeg -buildconf \
     \
     # cleaning
     && apk del --purge .build-deps \
