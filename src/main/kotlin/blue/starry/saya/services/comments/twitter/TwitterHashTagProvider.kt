@@ -8,11 +8,10 @@ import blue.starry.penicillin.endpoints.stream.sample
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.Comment
+import blue.starry.saya.services.SayaTwitterClient
 import blue.starry.saya.services.comments.CommentProvider
 import blue.starry.saya.services.comments.CommentStream
-import blue.starry.saya.services.SayaTwitterClient
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.time.Instant
@@ -27,7 +26,6 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
     private val logger = KotlinLogging.logger("saya.services.twitter#${tag}")
 
-    override val comments = BroadcastChannel<Comment>(1)
     override val subscriptions = AtomicInteger(0)
     override val stats = TwitterHashTagStatisticsProvider("#${tag}")
     override val job = GlobalScope.launch {
@@ -39,7 +37,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
                 override suspend fun onStatus(status: Status) {
                     val comment = createComment(status)
-                    comments.send(comment)
+                    stream.comments.send(comment)
                     stats.add(status)
 
                     logger.trace { status }
@@ -57,7 +55,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
                 override suspend fun onStatus(status: Status) {
                     val comment = createComment(status)
-                    comments.send(comment)
+                    stream.comments.send(comment)
                     stats.add(status)
 
                     logger.trace { status }

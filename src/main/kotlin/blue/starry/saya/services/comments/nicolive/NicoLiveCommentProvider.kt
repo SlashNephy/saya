@@ -10,7 +10,6 @@ import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSyste
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -21,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger
 class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, val source: String): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
 
-    override val comments = BroadcastChannel<Comment>(1)
     override val subscriptions = AtomicInteger(0)
     override val stats = NicoLiveStatisticsProvider(source)
     override val job = GlobalScope.launch {
@@ -201,7 +199,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
             }
 
             if (comment != null && !comment.text.startsWith("/")) {
-                provider.comments.send(comment)
+                provider.stream.comments.send(comment)
                 provider.stats.update(comment)
             }
 

@@ -1,6 +1,5 @@
 package blue.starry.saya.endpoints
 
-import blue.starry.saya.common.send
 import blue.starry.saya.models.CommentStatsResponse
 import blue.starry.saya.services.comments.CommentStreamManager
 import blue.starry.saya.services.comments.withSession
@@ -12,12 +11,13 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 fun Route.wsCommentStream() {
     webSocket {
         val target: String by call.parameters
-        val stream = CommentStreamManager.findBy(target)
-        val nicoLive = stream?.getOrCreateNicoLiveProvider() ?: return@webSocket call.respond(HttpStatusCode.NotFound)
+        val stream = CommentStreamManager.findBy(target) ?: return@webSocket call.respond(HttpStatusCode.NotFound)
 
 //        val hashtag = call.parameters["hashtag"]
 //        val sample = call.parameters["sample"] == "1"
@@ -27,9 +27,9 @@ fun Route.wsCommentStream() {
 //            hashtag?.let { stream.getOrCreateTwitterProvider(it) }
 //        }
 
-        nicoLive.withSession {
-            nicoLive.comments.openSubscription().consumeEach {
-                send(it)
+        stream.getOrCreateNicoLiveProvider().withSession {
+            stream.comments.openSubscription().consumeEach {
+                send(Json.encodeToString(it))
             }
 
 //            twitter.withSession {

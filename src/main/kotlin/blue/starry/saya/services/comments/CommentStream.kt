@@ -1,11 +1,18 @@
 package blue.starry.saya.services.comments
 
+import blue.starry.saya.models.Comment
 import blue.starry.saya.services.comments.nicolive.NicoLiveApi
 import blue.starry.saya.services.comments.nicolive.NicoLiveCommentProvider
 import blue.starry.saya.services.comments.nicolive.models.Channel
 import blue.starry.saya.services.comments.twitter.TwitterHashTagProvider
+import kotlinx.coroutines.channels.BroadcastChannel
 
 data class CommentStream(val id: String, val channel: Channel) {
+    /**
+     * コメントを配信する [BroadcastChannel]
+     */
+    val comments = BroadcastChannel<Comment>(1)
+
     var nico: NicoLiveCommentProvider? = null
         get() {
             val provider = field

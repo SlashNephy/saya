@@ -1,8 +1,6 @@
 package blue.starry.saya.services.comments
 
-import blue.starry.saya.models.Comment
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BroadcastChannel
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -13,11 +11,6 @@ interface CommentProvider {
      * [CommentProvider] を管理するストリーム
      */
     val stream: CommentStream
-
-    /**
-     * コメントを配信する [BroadcastChannel]
-     */
-    val comments: BroadcastChannel<Comment>
 
     /**
      * 現在の購読数
@@ -38,11 +31,11 @@ interface CommentProvider {
 /**
  * ストリームの購読数をチェックし自動で [CommentProvider] を閉じる
  */
-suspend fun CommentProvider?.withSession(block: suspend () -> Unit) {
+suspend fun <T: CommentProvider> T?.withSession(block: suspend (T?) -> Unit) {
     try {
         this?.subscriptions?.getAndIncrement()
 
-        block()
+        block(this)
     } finally {
         if (this != null && subscriptions.decrementAndGet() <= 0) {
             subscriptions.set(0)
