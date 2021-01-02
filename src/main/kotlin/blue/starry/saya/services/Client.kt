@@ -6,6 +6,7 @@ import blue.starry.penicillin.core.session.config.application
 import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
+import blue.starry.saya.services.miyoutv.MiyouTVApi
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
@@ -15,6 +16,7 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import jp.annict.client.AnnictClient
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 
 const val SayaUserAgent = "saya/1.0 (+https://github.com/SlashNephy/saya)"
@@ -58,4 +60,12 @@ val SayaTwitterClient by lazy {
 
 val SayaAnnictClient by lazy {
     AnnictClient(Env.ANNICT_TOKEN)
+}
+
+val SayaMiyouTVApi by lazy {
+    val login = runBlocking {
+        MiyouTVApi.login(Env.MORITAPO_EMAIL, Env.MORITAPO_PASSWORD)
+    }
+
+    MiyouTVApi(login.token)
 }

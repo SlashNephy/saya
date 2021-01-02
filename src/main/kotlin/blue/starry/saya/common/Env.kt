@@ -23,6 +23,8 @@ object Env {
     val CHINACHU_PORT by int { 20772 }
     val EPGSTATION_HOST by string { "epgstation" }
     val EPGSTATION_PORT by int { 8888 }
+    val MORITAPO_EMAIL by string
+    val MORITAPO_PASSWORD by string
 }
 
 private val boolean: ReadOnlyProperty<Env, Boolean>
