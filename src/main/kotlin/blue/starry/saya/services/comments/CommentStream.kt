@@ -2,9 +2,7 @@ package blue.starry.saya.services.comments
 
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
-import blue.starry.saya.services.comments.nicolive.NicoLiveApi
-import blue.starry.saya.services.comments.nicolive.NicoLiveCommentProvider
-import blue.starry.saya.services.comments.twitter.TwitterHashTagProvider
+import blue.starry.saya.services.nicolive.NicoLiveApi
 import kotlinx.coroutines.channels.BroadcastChannel
 
 data class CommentStream(val channel: JikkyoChannel) {
@@ -29,13 +27,7 @@ data class CommentStream(val channel: JikkyoChannel) {
     }
 
     private suspend fun createNicoLiveCommentProvider(): NicoLiveCommentProvider? {
-        // タグなし
-        // TODO
-        if (channel.tags.isEmpty()) {
-            return null
-        }
-
-        val (source, data) = channel.tags.flatMap { tag ->
+        val (source, data) = channel.tags.plus(channel.name).flatMap { tag ->
             NicoLiveApi.getLivePrograms(tag).data
                 .filter { data ->
                     // 公式番組優先
