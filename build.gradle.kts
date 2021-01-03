@@ -14,8 +14,6 @@ object ThirdpartyVersion {
     const val Ktor = "1.5.0"
     const val JsonKt = "6.0.0"
     const val Jsoup = "1.13.1"
-    const val Exposed = "0.28.1"
-    const val SQLiteJDBC = "3.30.1"
     const val AnnictKt = "2.2.0"
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
@@ -61,12 +59,6 @@ dependencies {
 
     // HTML parsing
     implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")
-
-    // sqlite
-    implementation("org.jetbrains.exposed:exposed-core:${ThirdpartyVersion.Exposed}")
-    implementation("org.jetbrains.exposed:exposed-jdbc:${ThirdpartyVersion.Exposed}")
-    implementation("org.jetbrains.exposed:exposed-java-time:${ThirdpartyVersion.Exposed}")
-    implementation("org.xerial:sqlite-jdbc:${ThirdpartyVersion.SQLiteJDBC}")
 
     // CLI
     implementation("com.github.ajalt.clikt:clikt:${ThirdpartyVersion.Clikt}")
