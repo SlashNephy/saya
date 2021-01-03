@@ -61,8 +61,8 @@ object FFMpegWrapper {
                 // "-re",
                 "-dual_mono_mode", "main",
                 "-user-agent", SayaUserAgent,
-                "-max_muxing_queue_size", "1024",
-                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1"
+                "-i", "${MirakurunApi.ApiBaseUri}/services/${service.internalId}/stream?decode=1",
+                "-max_muxing_queue_size", "1024"
             )
 
             // HLS
@@ -106,6 +106,7 @@ object FFMpegWrapper {
                 "-vb", preset.vb,
                 "-aspect", "${preset.width}:${preset.height}",
                 "-preset", "ultrafast",
+                "-crf", "28",
                 "-r", "30000/1001"
             )
 
@@ -152,8 +153,8 @@ object FFMpegWrapper {
     }
 
     sealed class Preset(val name: String, val width: Int, val height: Int, val vb: String, val ab: String, val ar: Int) {
-        object High: Preset("1080p", 1920, 1080, "5700k", "192k", 48000)
-        object Medium: Preset("720p", 1280, 720, "4000k", "192k", 48000)
+        object High: Preset("1080p", 1920, 1080, "5500k", "192k", 48000)
+        object Medium: Preset("720p", 1280, 720, "3000k", "192k", 48000)
         object Low: Preset("360p", 640, 360, "1500k", "128k", 48000)
     }
 }
