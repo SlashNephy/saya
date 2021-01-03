@@ -8,6 +8,7 @@ import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
@@ -18,17 +19,21 @@ import io.ktor.http.*
 import jp.annict.client.AnnictClient
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import kotlin.time.minutes
 
 const val SayaUserAgent = "saya/1.0 (+https://github.com/SlashNephy/saya)"
 
 val SayaHttpClient by lazy {
-    HttpClient {
+    HttpClient(CIO) {
         install(WebSockets)
         install(HttpCookies) {
             storage = AcceptAllCookiesStorage()
         }
         install(JsonFeature) {
             serializer = KotlinxSerializer()
+        }
+        engine {
+            requestTimeout = 1.minutes.toLongMilliseconds()
         }
 
         Logging {
