@@ -38,4 +38,14 @@ class MiyouTVApi(private val token: String) {
     }.parseObject {
         Intervals(it)
     }
+
+    suspend fun getComments(channel: String, startMs: Long, endMs: Long) = SayaHttpClient.get<String>("$BaseUri/miyou/comments") {
+        parameter("channel", channel)
+        parameter("start", startMs)
+        parameter("end", endMs)
+        header("x-miteyou-auth-token", token)
+        userAgent(UserAgent)
+    }.parseObject {
+        Comments(it)
+    }
 }
