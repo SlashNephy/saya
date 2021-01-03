@@ -10,7 +10,7 @@ import blue.starry.saya.models.Program as SayaProgram
 import blue.starry.saya.models.Service as SayaService
 import blue.starry.saya.models.Tuner as SayaTuner
 
-private val logger = KotlinLogging.logger("saya.")
+private val logger = KotlinLogging.logger("saya.mirakurun")
 
 fun Service.toSayaService(): SayaService {
     return SayaService(
@@ -135,7 +135,13 @@ internal fun String.toSayaEpisodeNumber(): Int? {
         .replace('九', '9')
         .replace('十', '1')
         .replace('〇', '0')
-        .removePrefix("0")
+        .run {
+            if (length > 1) {
+                removePrefix("0")
+            } else {
+                this
+            }
+        }
         .toIntOrNull()
         ?: run {
             logger.warn { "Failed to parse episode number: $text" }
