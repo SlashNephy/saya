@@ -64,18 +64,6 @@ fun Application.module() {
         route(Env.SAYA_BASE_URI) {
             getIndex()
 
-            route("comments") {
-                route("{id}") {
-                    route("stream") {
-                        wsCommentStream()
-                    }
-
-                    route("stats") {
-                        getCommentStats()
-                    }
-                }
-            }
-
             route("services") {
                 getServices()
                 putServices()
@@ -101,6 +89,10 @@ fun Application.module() {
 
                     route("mirakurun") {
                         getMirakurunServiceById()
+                    }
+
+                    route("comments") {
+                        wsServiceCommentsById()
                     }
                 }
 
@@ -148,6 +140,10 @@ fun Application.module() {
                         getProgramM2TSById()
                     }
 
+                    route("xspf") {
+                        getProgramXspfById()
+                    }
+
                     route("mirakurun") {
                         getMirakurunProgramById()
                     }
@@ -167,6 +163,10 @@ fun Application.module() {
 
                     route("m2ts") {
                         getChannelsM2TSByGroup()
+                    }
+
+                    route("xspf") {
+                        getChannelsXspfById()
                     }
 
                     route("mirakurun") {
@@ -220,6 +220,7 @@ fun Application.module() {
 
             route("records") {
                 getRecords()
+                putRecords()
 
                 route("{id}") {
                     getRecord()
@@ -229,11 +230,28 @@ fun Application.module() {
                         getRecordFile()
                         deleteRecordFile()
                     }
+
+                    route("hls") {
+                        getRecordHLSById()
+                    }
+
+                    route("m2ts") {
+                        getRecordM2TSById()
+                    }
+
+                    route("xspf") {
+                        getRecordXspfById()
+                    }
+
+                    route("comments") {
+                        wsRecordCommentsById()
+                    }
                 }
             }
 
             route("reserves") {
                 getReserves()
+                putReserves()
 
                 route("{id}") {
                     getReserve()
@@ -243,6 +261,7 @@ fun Application.module() {
 
             route("recording") {
                 getRecordings()
+                putRecordings()
 
                 route("{id}") {
                     getRecording()
@@ -252,15 +271,12 @@ fun Application.module() {
 
             route("rules") {
                 getRules()
+                putRules()
 
                 route("{id}") {
                     getRule()
                     deleteRule()
                 }
-            }
-
-            route("storage") {
-                getStorage()
             }
 
             route("genres") {
@@ -272,6 +288,16 @@ fun Application.module() {
                     route("programs") {
                         getGenrePrograms()
                     }
+                }
+            }
+
+            route("status") {
+                route("storage") {
+                    getStorageStatus()
+                }
+
+                route("comments") {
+                    getCommentStatus()
                 }
             }
         }

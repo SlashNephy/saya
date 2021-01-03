@@ -1,4 +1,4 @@
-package blue.starry.saya.services.comments.nicolive
+package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.services.SayaHttpClient

@@ -1,6 +1,7 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.saya.common.Env
+import blue.starry.saya.models.RecordedProgram
 import blue.starry.saya.models.Service
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import kotlinx.coroutines.*
@@ -23,7 +24,7 @@ object MirakurunStreamManager {
             // 終了したストリームを掃除
             streams.removeIf { it.job.isCompleted || !it.process.isAlive }
 
-            val previous = streams.find { it.service.id == service.id && it.preset == preset }
+            val previous = streams.find { it.id == service.internalId && it.preset == preset }
             if (previous != null) {
                 previous.mark()
                 return previous.path
@@ -33,14 +34,36 @@ object MirakurunStreamManager {
                 error("Too many ffmpeg processes are running. So we cannot create new one.")
             }
 
-            val (process, path) = FFMpegWrapper.startliveHLS(service, preset, subTitle)
+            val (process, path) = FFMpegWrapper.startLiveHLS(service, preset, subTitle)
 
-            streams += Session(service, preset, path, process)
+            streams += Session(service.internalId, preset, path, process)
             return path
         }
     }
 
-    private data class Session(val service: Service, val preset: FFMpegWrapper.Preset, val path: Path, val process: Process) {
+    suspend fun openRecordHLS(record: RecordedProgram, preset: FFMpegWrapper.Preset, subTitle: Boolean): Path {
+        mutex.withLock {
+            // 終了したストリームを掃除
+            streams.removeIf { it.job.isCompleted || !it.process.isAlive }
+
+            val previous = streams.find { it.id == record.program.id && it.preset == preset }
+            if (previous != null) {
+                previous.mark()
+                return previous.path
+            }
+
+            if (streams.size >= Env.SAYA_MAX_FFMPEG_PROCESSES) {
+                error("Too many ffmpeg processes are running. So we cannot create new one.")
+            }
+
+            val (process, path) = FFMpegWrapper.startRecordHLS(record, preset, subTitle)
+
+            streams += Session(record.program.id, preset, path, process)
+            return path
+        }
+    }
+
+    private data class Session(val id: Long, val preset: FFMpegWrapper.Preset, val path: Path, val process: Process) {
         private val mutex = Mutex()
         private var lastAccess = Instant.now()
 
@@ -65,7 +88,7 @@ object MirakurunStreamManager {
                     // 既定の時間以上アクセスがなかったら自動でストリームを停止
                     if (limit < duration) {
                         process.destroy()
-                        logger.trace { "Killed $process (Service: ${service.id}, Preset: ${preset.name})" }
+                        logger.trace { "Killed $process (ID: $id, Preset: ${preset.name})" }
 
                         cancel()
                     }

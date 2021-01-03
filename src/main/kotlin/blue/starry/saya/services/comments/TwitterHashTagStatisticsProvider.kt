@@ -1,10 +1,9 @@
-package blue.starry.saya.services.comments.twitter
+package blue.starry.saya.services.comments
 
 import blue.starry.penicillin.extensions.createdAt
 import blue.starry.penicillin.extensions.instant
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.TwitterHashTagStatistics
-import blue.starry.saya.services.comments.CommentStatisticsProvider
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 

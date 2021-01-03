@@ -17,6 +17,13 @@ fun Route.getRules() {
     }
 }
 
+fun Route.putRules() {
+    get {
+        ChinachuDataManager.Rules.update()
+        call.respond(HttpStatusCode.OK)
+    }
+}
+
 fun Route.getRule() {
     get {
         val id: Long by call.parameters

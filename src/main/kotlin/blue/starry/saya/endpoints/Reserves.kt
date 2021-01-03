@@ -17,6 +17,13 @@ fun Route.getReserves() {
     }
 }
 
+fun Route.putReserves() {
+    get {
+        ChinachuDataManager.Reserves.update()
+        call.respond(HttpStatusCode.OK)
+    }
+}
+
 fun Route.getReserve() {
     get {
         val id: Long by call.parameters

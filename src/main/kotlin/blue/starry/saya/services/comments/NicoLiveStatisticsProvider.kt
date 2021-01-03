@@ -1,23 +1,21 @@
-package blue.starry.saya.services.comments.nicolive
+package blue.starry.saya.services.comments
 
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.NicoCommentStatistics
-import blue.starry.saya.services.comments.CommentStatisticsProvider
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 
 class NicoLiveStatisticsProvider(private val source: String): CommentStatisticsProvider {
     private val comments = AtomicInteger()
-    private val commentsTime = AtomicLong()
+    @Volatile private var commentsTime = 0.0
     private val firstComments = AtomicInteger()
-    private val firstCommentsTime = AtomicLong()
+    @Volatile private var firstCommentsTime = 0.0
     private val commentsPerMinute: Int
         get() {
             val c = comments.get()
             val fc = firstComments.get()
-            val ct = commentsTime.get()
-            val fct = firstCommentsTime.get()
+            val ct = commentsTime
+            val fct = firstCommentsTime
             if (ct == fct) {
                 return 0
             }
@@ -50,11 +48,11 @@ class NicoLiveStatisticsProvider(private val source: String): CommentStatisticsP
         if (firstComments.get() == 0) {
             firstComments.set(comment.no)
         }
-        if (firstCommentsTime.get() == 0L) {
-            firstCommentsTime.set(comment.time)
+        if (firstCommentsTime == 0.0) {
+            firstCommentsTime = comment.time
         }
 
         comments.set(comment.no)
-        commentsTime.set(comment.time)
+        commentsTime = comment.time
     }
 }

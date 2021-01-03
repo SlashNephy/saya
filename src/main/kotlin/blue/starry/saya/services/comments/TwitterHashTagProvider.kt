@@ -1,4 +1,4 @@
-package blue.starry.saya.services.comments.twitter
+package blue.starry.saya.services.comments
 
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.core.streaming.listener.SampleStreamListener
@@ -9,8 +9,6 @@ import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.Comment
 import blue.starry.saya.services.SayaTwitterClient
-import blue.starry.saya.services.comments.CommentProvider
-import blue.starry.saya.services.comments.CommentStream
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -74,7 +72,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
             stats.provide().comments,
             Instant.from(
                 DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(status.createdAtRaw)
-            ).epochSecond,
+            ).epochSecond.toDouble(),
             status.user.name,
             status.text.replace("#$tag", ""),
             "#ffffff",

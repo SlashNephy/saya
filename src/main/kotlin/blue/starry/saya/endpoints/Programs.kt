@@ -1,5 +1,6 @@
 package blue.starry.saya.endpoints
 
+import blue.starry.saya.common.Env
 import blue.starry.saya.common.respondOrNotFound
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
@@ -48,6 +49,30 @@ fun Route.getProgramM2TSById() {
                     writeByte(byte)
                 }
             }
+        }
+    }
+}
+
+fun Route.getProgramXspfById() {
+    get {
+        val id: Long by call.parameters
+        val program = MirakurunDataManager.Programs.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+
+        call.response.header(HttpHeaders.ContentDisposition, ContentDisposition.Attachment.withParameter(
+            ContentDisposition.Parameters.FileName, "watch.xspf"
+        ).toString())
+
+        call.respondTextWriter(ContentType("application", "xspf+xml")) {
+            appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+            appendLine("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">")
+            appendLine("<trackList>")
+            appendLine("<track>")
+            val url = (Env.SAYA_URL_PREFIX ?: "http://${Env.SAYA_HOST}:${Env.SAYA_PORT}") + "${Env.SAYA_BASE_URI.removeSuffix("/")}/programs/${program.id}/m2ts"
+            appendLine("<location>$url</location>")
+            appendLine("<title>${program.name}</title>")
+            appendLine("</track>")
+            appendLine("</trackList>")
+            appendLine("</playlist>")
         }
     }
 }

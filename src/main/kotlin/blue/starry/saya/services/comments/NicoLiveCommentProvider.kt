@@ -1,12 +1,10 @@
-package blue.starry.saya.services.comments.nicolive
+package blue.starry.saya.services.comments
 
 import blue.starry.jsonkt.*
-import blue.starry.saya.models.Comment
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.comments.CommentProvider
-import blue.starry.saya.services.comments.CommentStream
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
+import blue.starry.saya.services.nicolive.toSayaComment
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
@@ -194,9 +192,7 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
             val message = frame.readText().parseObject {
                 NicoLiveWebSocketMessageJson(it)
             }
-            val comment = message.chat?.let {
-                createComment(it)
-            }
+            val comment = message.chat?.toSayaComment(provider.source)
 
             if (comment != null && !comment.text.startsWith("/")) {
                 provider.stream.comments.send(comment)
@@ -205,89 +201,6 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
 
             logger.trace { message }
         }
-    }
-
-    private fun createComment(chat: NicoLiveWebSocketMessageJson.Chat): Comment {
-        val (commands, parsed) = parseMail(chat.mail)
-        val (color, type, size) = parsed
-
-        return Comment(provider.source, chat.no, chat.date, chat.userId, chat.content, color, type, size, commands)
-    }
-
-    private fun parseMail(mail: String): Pair<List<String>, Triple<String, String, String>> {
-        val commands = mail.split(' ').filterNot { it == "184" }.filterNot { it.isBlank() }
-
-        var color = "#ffffff"
-        var position = "right"
-        var size = "normal"
-        commands.forEach { command ->
-            val c = parseColor(command)
-            if (c != null) {
-                color = c
-            }
-
-            val p = parsePosition(command)
-            if (p != null) {
-                position = p
-            }
-
-            val s = parseSize(command)
-            if (s != null) {
-                size = s
-            }
-        }
-
-        return commands to Triple(color, position, size)
-    }
-
-    private fun parseColor(command: String): String? {
-        return when (command) {
-            "red" -> "#e54256"
-            "pink" -> "#ff8080"
-            "orange" -> "#ffc000"
-            "yellow" -> "#ffe133"
-            "green" -> "#64dd17"
-            "cyan" -> "#39ccff"
-            "blue" -> "#0000ff"
-            "purple" -> "#d500f9"
-            "black" -> "#000000"
-            "white" -> "#ffffff"
-            "white2" -> "#cccc99"
-            "niconicowhite" -> "#cccc99"
-            "red2" -> "#cc0033"
-            "truered" -> "#cc0033"
-            "pink2" -> "#ff33cc"
-            "orange2" -> "#ff6600"
-            "passionorange" -> "#ff6600"
-            "yellow2" -> "#999900"
-            "madyellow" -> "#999900"
-            "green2" -> "#00cc66"
-            "elementalgreen" -> "#00cc66"
-            "cyan2" -> "#00cccc"
-            "blue2" -> "#3399ff"
-            "marineblue" -> "#3399ff"
-            "purple2" -> "#6633cc"
-            "nobleviolet" -> "#6633cc"
-            "black2" -> "#666666"
-            else -> null
-        }
-    }
-
-    private fun parsePosition(command: String): String? {
-        return when (command) {
-            "ue" -> "top"
-            "naka" -> "right"
-            "shita" -> "bottom"
-            else -> null
-        }
-    }
-
-    private fun parseSize(command: String): String? {
-        if (command == "small" || command == "medium" || command == "big") {
-            return command
-        }
-
-        return null
     }
 }
 

@@ -20,7 +20,7 @@ data class Comment(
     /**
      * コメントの投稿時間 (エポック秒)
      */
-    val time: Long,
+    val time: Double,
 
     /**
      * コメントの投稿者名 / ユーザ ID

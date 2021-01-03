@@ -17,6 +17,13 @@ fun Route.getRecordings() {
     }
 }
 
+fun Route.putRecordings() {
+    get {
+        ChinachuDataManager.Recordings.update()
+        call.respond(HttpStatusCode.OK)
+    }
+}
+
 fun Route.getRecording() {
     get {
         val id: Long by call.parameters
