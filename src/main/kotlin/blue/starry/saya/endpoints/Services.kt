@@ -4,7 +4,7 @@ import blue.starry.saya.common.Env
 import blue.starry.saya.common.respondOrNotFound
 import blue.starry.saya.common.toBooleanFuzzy
 import blue.starry.saya.common.toFFMpegPreset
-import blue.starry.saya.services.CommentStreamManager
+import blue.starry.saya.services.CommentStreamManager.Streams
 import blue.starry.saya.services.comments.withSession
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
@@ -152,7 +152,9 @@ fun Route.getMirakurunServices() {
 fun Route.wsServiceCommentsById() {
     webSocket {
         val id: Int by call.parameters
-        val stream = CommentStreamManager.findByServiceId(id)
+        val stream = Streams.find {
+            it.channel.serviceIds.contains(id)
+        }
             ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Service $id is not found."))
 
 //        val hashtag = call.parameters["hashtag"]

@@ -7,7 +7,7 @@ import blue.starry.saya.common.toFFMpegPreset
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentControl
 import blue.starry.saya.models.RecordedFile
-import blue.starry.saya.services.CommentStreamManager
+import blue.starry.saya.services.CommentStreamManager.Streams
 import blue.starry.saya.services.SayaMiyouTVApi
 import blue.starry.saya.services.chinachu.ChinachuApi
 import blue.starry.saya.services.chinachu.ChinachuDataManager
@@ -112,9 +112,18 @@ fun Route.wsRecordCommentsById() {
 
         val record = ChinachuDataManager.Recorded.find { it.program.id == id }
             ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
-        val stream = CommentStreamManager.findByServiceId(record.program.serviceId)
+        val stream = Streams.find {
+            it.channel.serviceIds.contains(record.program.serviceId)
+        }
             ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
-        val jkId = "jk${stream.channel.jk ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))}"
+        val jkId = "jk${
+            stream.channel.jk ?: return@webSocket this.close(
+                CloseReason(
+                    CloseReason.Codes.CANNOT_ACCEPT,
+                    "Record $id is not found."
+                )
+            )
+        }"
         val broadcaster = BroadcastChannel<Comment>(1)
         var time = record.program.startAt.toDouble()
 
@@ -129,7 +138,10 @@ fun Route.wsRecordCommentsById() {
                     SayaMiyouTVApi.getComments(
                         stream.channel.miyouId!!,
                         (record.program.startAt + unit * i) * 1000,
-                        minOf(record.program.startAt + unit * (i + 1), record.program.startAt + record.program.duration) * 1000
+                        minOf(
+                            record.program.startAt + unit * (i + 1),
+                            record.program.startAt + record.program.duration
+                        ) * 1000
                     ).data.comments.mapIndexed { index, it ->
                         it.toSayaComment(index)
                     }.forEach {

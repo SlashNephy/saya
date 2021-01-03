@@ -1,13 +1,8 @@
 package blue.starry.saya.services
 
 import blue.starry.saya.models.Channel
-import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
-import blue.starry.saya.models.Program
 import blue.starry.saya.services.comments.CommentStream
-import blue.starry.saya.services.miyoutv.toSayaComment
-import blue.starry.saya.services.nicojk.NicoJkApi
-import blue.starry.saya.services.nicolive.toSayaComment
 
 object CommentStreamManager {
     val Streams = listOf(
@@ -1100,11 +1095,5 @@ object CommentStreamManager {
         )
     ).map {
         CommentStream(it)
-    }
-
-    fun findByServiceId(serviceId: Int): CommentStream? {
-        return Streams.find {
-            it.channel.serviceIds.contains(serviceId)
-        }
     }
 }

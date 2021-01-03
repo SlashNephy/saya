@@ -298,6 +298,10 @@ fun Application.module() {
 
                 route("comments") {
                     getCommentStatus()
+
+                    route("{id}") {
+                        getCommentStatusById()
+                    }
                 }
             }
         }
