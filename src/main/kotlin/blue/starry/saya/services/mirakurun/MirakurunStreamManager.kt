@@ -1,7 +1,6 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.saya.common.Env
-import blue.starry.saya.endpoints.Subscription
 import blue.starry.saya.models.Service
 import blue.starry.saya.services.ffmpeg.FFMpegWrapper
 import kotlinx.coroutines.*
@@ -38,15 +37,6 @@ object MirakurunStreamManager {
 
             streams += Session(service, preset, path, process)
             return path
-        }
-    }
-
-    suspend fun getSubscriptions(): List<Subscription> {
-        return mutex.withLock {
-            streams.map {
-                // how to determine `count`?
-                Subscription(it.service.id.toString(), Subscription.Type.HLS, 1)
-            }
         }
     }
 

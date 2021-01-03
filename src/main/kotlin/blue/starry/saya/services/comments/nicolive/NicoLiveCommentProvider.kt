@@ -18,7 +18,7 @@ import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 
 class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, val source: String): CommentProvider {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.id}")
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.channel.name}")
 
     override val subscriptions = AtomicInteger(0)
     override val stats = NicoLiveStatisticsProvider(source)
@@ -120,7 +120,7 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
 }
 
 private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProvider, private val room: NicoLiveWebSocketSystemJson.Data) {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${provider.stream.id}")
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${provider.stream.channel.name}")
 
     val job = GlobalScope.launch(provider.job) {
         connect()

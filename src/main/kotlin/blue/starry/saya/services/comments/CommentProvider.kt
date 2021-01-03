@@ -29,6 +29,12 @@ interface CommentProvider {
 }
 
 /**
+ * アクティブな [CommentProvider] であるかどうか
+ */
+val CommentProvider?.isActive: Boolean
+    get() = this?.job?.isActive == true
+
+/**
  * ストリームの購読数をチェックし自動で [CommentProvider] を閉じる
  */
 suspend fun <T: CommentProvider> T?.withSession(block: suspend (T?) -> Unit) {
