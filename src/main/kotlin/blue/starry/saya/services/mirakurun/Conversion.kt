@@ -59,20 +59,16 @@ fun Program.toSayaProgram(): SayaProgram? {
             plus(
                 "ストリーム情報" to buildString {
                     if (video != null) {
-                        appendLine("【映像】")
-                        appendLine("コーデック: ${video!!.type}")
-                        appendLine("コンポーネント: ${video!!.componentType.let { videoComponentTypes[it] } ?: "不明"}")
+                        appendLine("【映像】${video!!.type.toUpperCase()} ${video!!.componentType.let { videoComponentTypes[it] }}")
                     }
-                    if (audio == null) {
-                        appendLine("【音声】")
-                        appendLine("サンプリング周波数: ${audio!!.samplingRate.let { audioSamplingRates[it] } ?: "不明"}")
-                        appendLine("コンポーネント: ${audio!!.componentType.let { audioComponentTypes[it] } ?: "不明"}")
+                    if (audio != null) {
+                        appendLine("【音声】${audio!!.samplingRate.let { audioSamplingRates[it] }} ${audio!!.componentType.let { audioComponentTypes[it] }}")
                     }
                 }
             )
         }
         sections.forEach {
-            appendLine("◇ ${it.first}\n${it.second}")
+            appendLine("◇ ${it.first.removePrefix("◇")}\n${it.second}")
         }
     }.normalize().replace(programFlagRegex, " ").trim()
 
@@ -112,7 +108,7 @@ private fun String.toSayaFlags(): Sequence<String> {
     }
 }
 
-private val programEpisodeNumberRegex = "(.)([\\d一二三四五六七八九十〇]+)(.)".toRegex()
+private val programEpisodeNumberRegex = "(.)([\\d一壱二三四五六七八九十〇]+)(.)".toRegex()
 internal fun String.toSayaEpisodeNumber(): Int? {
     val match = programEpisodeNumberRegex.findAll(this).find {
         val (prefix, _, suffix) = it.destructured
@@ -127,17 +123,18 @@ internal fun String.toSayaEpisodeNumber(): Int? {
     val text = match.groupValues[2]
 
     return text
-        .replace("一", "1")
-        .replace("二", "2")
-        .replace("三", "3")
-        .replace("四", "4")
-        .replace("五", "5")
-        .replace("六", "6")
-        .replace("七", "7")
-        .replace("八", "8")
-        .replace("九", "9")
-        .replace("十", "1")
-        .replace("〇", "0")
+        .replace('一', '1')
+        .replace('壱', '1')
+        .replace('二', '2')
+        .replace('三', '3')
+        .replace('四', '4')
+        .replace('五', '5')
+        .replace('六', '6')
+        .replace('七', '7')
+        .replace('八', '8')
+        .replace('九', '9')
+        .replace('十', '1')
+        .replace('〇', '0')
         .removePrefix("0")
         .toIntOrNull()
         ?: run {
