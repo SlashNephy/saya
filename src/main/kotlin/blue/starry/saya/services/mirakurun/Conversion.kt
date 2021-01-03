@@ -143,7 +143,7 @@ internal fun String.toSayaEpisodeNumber(): Int? {
         }
 }
 
-private val programEpisodeTitleRegex = "[「【]([^」】]+)[」】]".toRegex()
+private val programEpisodeTitleRegex = "[「『【]([^」】]+)[」』】]".toRegex()
 internal fun String.toSayaEpisodeTitle(): String? {
     return programEpisodeTitleRegex.find(this)?.groupValues?.get(1)
 }
