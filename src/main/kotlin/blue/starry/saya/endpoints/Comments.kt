@@ -1,7 +1,7 @@
 package blue.starry.saya.endpoints
 
 import blue.starry.saya.models.CommentStatsResponse
-import blue.starry.saya.services.comments.CommentStreamManager
+import blue.starry.saya.services.CommentStreamManager
 import blue.starry.saya.services.comments.withSession
 import io.ktor.application.*
 import io.ktor.http.*
@@ -16,8 +16,9 @@ import kotlinx.serialization.json.Json
 
 fun Route.wsCommentStream() {
     webSocket {
-        val target: String by call.parameters
-        val stream = CommentStreamManager.findBy(target) ?: return@webSocket call.respond(HttpStatusCode.NotFound)
+        val id: Int by call.parameters
+        val stream = CommentStreamManager.findByServiceId(id)
+            ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Service $id is not found."))
 
 //        val hashtag = call.parameters["hashtag"]
 //        val sample = call.parameters["sample"] == "1"
@@ -44,11 +45,14 @@ fun Route.wsCommentStream() {
 
 fun Route.getCommentStats() {
     get {
-        val target: String by call.parameters
-        val stream = CommentStreamManager.findBy(target)
+        val id: Int by call.parameters
+        val stream = CommentStreamManager.findByServiceId(id) ?: return@get call.respond(HttpStatusCode.NotFound)
 
         call.respond(
-            CommentStatsResponse(stream?.nico?.stats?.provide(), stream?.twitter?.mapNotNull { it.value?.stats?.provide() }?.toList().orEmpty())
+            CommentStatsResponse(
+                stream.nico?.stats?.provide(),
+                stream.twitter.mapNotNull { it.value?.stats?.provide() }.toList()
+            )
         )
     }
 }

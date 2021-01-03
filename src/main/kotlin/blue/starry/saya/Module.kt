@@ -65,7 +65,7 @@ fun Application.module() {
             getIndex()
 
             route("comments") {
-                route("{target}") {
+                route("{id}") {
                     route("stream") {
                         wsCommentStream()
                     }
