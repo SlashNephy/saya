@@ -348,6 +348,7 @@ object CommentStreamManager {
             serviceIds = setOf(
                 29752  // 埼玉: テレ玉
             ),
+            tags = setOf("テレ玉"),
             miyouId = "テレ玉"
         ),
         JikkyoChannel(
@@ -357,6 +358,7 @@ object CommentStreamManager {
             serviceIds = setOf(
                 24632  // 神奈川: tvk
             ),
+            tags = setOf("tvk"),
             miyouId = "tvk"
         ),
         JikkyoChannel(
@@ -366,6 +368,7 @@ object CommentStreamManager {
             serviceIds = setOf(
                 27704  // 千葉: チバテレビ
             ),
+            tags = setOf("チバテレビ"),
             miyouId = "チバテレ"
         ),
         JikkyoChannel(
@@ -700,7 +703,7 @@ object CommentStreamManager {
         JikkyoChannel(
             type = Channel.Type.BS,
             jk = 910,
-            name = "WNI・910",
+            name = "SOLiVE24",
             serviceIds = setOf(910)
         ),
 
