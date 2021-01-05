@@ -168,7 +168,7 @@ fun Route.wsRecordCommentsById() {
                         jkId,
                         record.program.startAt + unit * i,
                         minOf(record.program.startAt + unit * (i + 1), record.program.startAt + record.program.duration)
-                    ).packets.mapIndexed { index, it ->
+                    ).packets.map {
                         it.chat.toSayaComment(record.program.serviceId.toString())
                     }.forEach {
                         comments.send(it)
