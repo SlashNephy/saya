@@ -38,8 +38,8 @@ object MirakurunDataManager {
         }.map { service ->
             Logo(
                 id = service.logoId!!,
-                serviceId = service.id,
-                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(service.internalId))
+                service = service,
+                data = Base64.encodeBase64String(MirakurunApi.getServiceLogo(service.id))
             )
         }.sortedBy {
             it.id

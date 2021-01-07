@@ -31,7 +31,7 @@ internal val m3u8 = ContentType("application", "x-mpegURL")
 
 fun Route.getServiceHLSById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         val preset = call.parameters["preset"].toFFMpegPreset() ?: FFMpegWrapper.Preset.High
@@ -65,7 +65,7 @@ fun Route.getServices() {
 
 fun Route.getServiceById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
 
         call.respondOrNotFound(
             MirakurunDataManager.Services.find { it.id == id }
@@ -75,10 +75,10 @@ fun Route.getServiceById() {
 
 fun Route.getServiceProgramsById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
 
         call.respond(
-            MirakurunDataManager.Programs.filter { it.serviceId == id }
+            MirakurunDataManager.Programs.filter { it.id == id }
         )
     }
 }
@@ -92,11 +92,11 @@ fun Route.putServices() {
 
 fun Route.getServiceM2TSById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getServiceStream(service.internalId, decode = true, priority = priority).receive { channel: ByteReadChannel ->
+        MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
             call.respondBytesWriter {
                 while (!channel.isClosedForRead) {
                     val byte = channel.readByte()
@@ -109,7 +109,7 @@ fun Route.getServiceM2TSById() {
 
 fun Route.getServiceXspfById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
 
         call.response.header(HttpHeaders.ContentDisposition, ContentDisposition.Attachment.withParameter(
@@ -133,7 +133,7 @@ fun Route.getServiceXspfById() {
 
 fun Route.getMirakurunServiceById() {
     get {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
 
         call.respondOrNotFound(
             MirakurunDataManager.Services.find { it.id == id }?.json
@@ -151,11 +151,13 @@ fun Route.getMirakurunServices() {
 
 fun Route.wsServiceCommentsById() {
     webSocket {
-        val id: Int by call.parameters
+        val id: Long by call.parameters
+        val service = MirakurunDataManager.Services.find {
+            it.id == id
+        } ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Service $id is not found."))
         val stream = Streams.find {
-            it.channel.serviceIds.contains(id)
-        }
-            ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Service $id is not found."))
+            it.channel.serviceIds.contains(service.actualId)
+        } ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Service $id is not found."))
 
 //        val hashtag = call.parameters["hashtag"]
 //        val sample = call.parameters["sample"] == "1"

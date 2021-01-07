@@ -24,7 +24,7 @@ object MirakurunStreamManager {
             // 終了したストリームを掃除
             streams.removeIf { it.job.isCompleted || !it.process.isAlive }
 
-            val previous = streams.find { it.id == service.internalId && it.preset == preset }
+            val previous = streams.find { it.id == service.id && it.preset == preset }
             if (previous != null) {
                 previous.mark()
                 return previous.path
@@ -36,7 +36,7 @@ object MirakurunStreamManager {
 
             val (process, path) = FFMpegWrapper.startLiveHLS(service, preset, subTitle)
 
-            streams += Session(service.internalId, preset, path, process)
+            streams += Session(service.id, preset, path, process)
             return path
         }
     }

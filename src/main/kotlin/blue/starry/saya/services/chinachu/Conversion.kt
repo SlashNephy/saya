@@ -4,16 +4,26 @@ import blue.starry.saya.models.RecordedProgram
 import blue.starry.saya.models.RecordingProgram
 import blue.starry.saya.models.ReservedProgram
 import blue.starry.saya.models.User
+import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.mirakurun.normalize
 import blue.starry.saya.services.mirakurun.programFlagRegex
 import kotlinx.serialization.json.jsonPrimitive
+import mu.KotlinLogging
 import blue.starry.saya.models.Program as SayaProgram
 import blue.starry.saya.models.Rule as SayaRule
 
-fun Program.toSayaProgram(): SayaProgram {
+private val logger = KotlinLogging.logger("saya.chinachu")
+
+suspend fun Program.toSayaProgram(): SayaProgram? {
+    val service = MirakurunDataManager.Services.find { it.actualId == channel.sid }
+    if (service == null) {
+        logger.warn { "Service is not found. ($this)" }
+        return null
+    }
+
     return SayaProgram(
         id = id.toLong(36),
-        serviceId = channel.sid,
+        service = service,
         startAt = start / 1000,
         duration = seconds,
         name = fullTitle.normalize().replace(programFlagRegex, " ").trim(),
@@ -46,9 +56,9 @@ fun Program.toSayaProgram(): SayaProgram {
     )
 }
 
-fun Recorded.toSayaRecordedProgram(): RecordedProgram {
+suspend fun Recorded.toSayaRecordedProgram(): RecordedProgram? {
     return RecordedProgram(
-        program = toSayaProgram(),
+        program = toSayaProgram() ?: return null,
         path = recorded,
         priority = priority,
         tuner = null,
@@ -59,15 +69,15 @@ fun Recorded.toSayaRecordedProgram(): RecordedProgram {
     )
 }
 
-fun Reserve.toSayaReservedProgram(): ReservedProgram {
+suspend fun Reserve.toSayaReservedProgram(): ReservedProgram? {
     return ReservedProgram(
-        program = toSayaProgram()
+        program = toSayaProgram() ?: return null
     )
 }
 
-fun Recording.toSayaRecordingProgram(): RecordingProgram {
+suspend fun Recording.toSayaRecordingProgram(): RecordingProgram? {
     return RecordingProgram(
-        program = toSayaProgram()
+        program = toSayaProgram() ?: return null
     )
 }
 

@@ -12,14 +12,14 @@ data class Service(
     @Transient internal val json: JsonObject? = null,
 
     /**
-     * Mirakurun API 用 ID (非公開)
+     * サービス ID
      */
-    @Transient internal val internalId: Long = 0,
+    val id: Long,
 
     /**
-     * DTV サービス ID
+     * 実際の DTV サービス ID (非公開)
      */
-    val id: Int,
+    @Transient internal val actualId: Int = 0,
 
     /**
      * DTV サービス名
@@ -65,9 +65,9 @@ data class Channel(
     val name: String,
 
     /**
-     * DTV サービス ID のリスト
+     * サービスのリスト
      */
-    val serviceIds: List<Int>
+    val services: List<Service>
 ) {
     enum class Type {
         GR, BS, CS, SKY
@@ -82,9 +82,9 @@ data class Logo(
     val id: Int,
 
     /**
-     * DTV サービス ID
+     * サービス
      */
-    val serviceId: Int,
+    val service: Service,
 
     /**
      * ロゴデータ (PNG, base64)
@@ -105,9 +105,9 @@ data class Program(
     val id: Long,
 
     /**
-     * DTV サービス ID
+     * サービス
      */
-    val serviceId: Int,
+    val service: Service,
 
     /**
      * 開始時刻 (エポック秒)

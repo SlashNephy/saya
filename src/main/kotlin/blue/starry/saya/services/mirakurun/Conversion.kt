@@ -15,8 +15,8 @@ private val logger = KotlinLogging.logger("saya.mirakurun")
 fun Service.toSayaService(): SayaService {
     return SayaService(
         json = json,
-        internalId = id,
-        id = serviceId,
+        id = id,
+        actualId = serviceId,
         name = name.normalize(),
         logoId = if (hasLogoData) logoId else null,
         keyId = remoteControlKeyId,
@@ -34,16 +34,14 @@ suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
         type = SayaChannel.Type.values().firstOrNull { it.name == type } ?: return null,
         group = channel,
         name = name.orEmpty().normalize(),
-        serviceIds = MirakurunDataManager.Services.filter {
+        services = MirakurunDataManager.Services.filter {
             it.channel == channel
-        }.map {
-            it.id
         }
     )
 }
 
 
-fun Program.toSayaProgram(): SayaProgram? {
+suspend fun Program.toSayaProgram(): SayaProgram? {
     val name = name?.normalize()?.replace(programFlagRegex, " ")?.trim() ?: return null
     val description = buildString {
         appendLine(description ?: return null)
@@ -71,11 +69,16 @@ fun Program.toSayaProgram(): SayaProgram? {
             appendLine("◇ ${it.first.removePrefix("◇")}\n${it.second}")
         }
     }.normalize().replace(programFlagRegex, " ").trim()
+    val service = MirakurunDataManager.Services.find { it.actualId == serviceId }
+    if (service == null) {
+        logger.warn { "Service is not found. ($this)" }
+        return null
+    }
 
     return SayaProgram(
         json = json,
         id = id,
-        serviceId = serviceId,
+        service = service,
         startAt = startAt / 1000,
         duration = duration / 1000,
         name = name,

@@ -1,25 +1,22 @@
 package blue.starry.saya.services.chinachu
 
 import blue.starry.saya.common.ReadOnlyContainer
-import mu.KotlinLogging
 
 object ChinachuDataManager {
-    private val logger = KotlinLogging.logger("saya.chinachu")
-
     val Recorded = ReadOnlyContainer {
-        ChinachuApi.getRecorded().map { chinachu ->
+        ChinachuApi.getRecorded().mapNotNull { chinachu ->
             chinachu.toSayaRecordedProgram()
         }.reversed()
     }
 
     val Reserves = ReadOnlyContainer {
-        ChinachuApi.getReserves().map { chinachu ->
+        ChinachuApi.getReserves().mapNotNull { chinachu ->
             chinachu.toSayaReservedProgram()
         }.reversed()
     }
 
     val Recordings = ReadOnlyContainer {
-        ChinachuApi.getRecordings().map { chinachu ->
+        ChinachuApi.getRecordings().mapNotNull { chinachu ->
             chinachu.toSayaRecordingProgram()
         }.reversed()
     }

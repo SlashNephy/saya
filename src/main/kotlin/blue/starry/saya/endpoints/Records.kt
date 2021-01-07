@@ -7,7 +7,7 @@ import blue.starry.saya.common.toFFMpegPreset
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentControl
 import blue.starry.saya.models.RecordedFile
-import blue.starry.saya.services.CommentStreamManager.Streams
+import blue.starry.saya.services.CommentStreamManager
 import blue.starry.saya.services.SayaMiyouTVApi
 import blue.starry.saya.services.chinachu.ChinachuApi
 import blue.starry.saya.services.chinachu.ChinachuDataManager
@@ -110,14 +110,14 @@ fun Route.wsRecordCommentsById() {
     webSocket {
         val id: Long by call.parameters
 
-        val record = ChinachuDataManager.Recorded.find { it.program.id == id }
-            ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
-        val stream = Streams.find {
-            it.channel.serviceIds.contains(record.program.serviceId)
-        }
-            ?: return@webSocket this.close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
+        val record = ChinachuDataManager.Recorded.find {
+            it.program.id == id
+        } ?: return@webSocket close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
+        val stream = CommentStreamManager.Streams.find {
+            it.channel.serviceIds.contains(record.program.service.actualId)
+        } ?: return@webSocket close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Record $id is not found."))
         val jkId = "jk${
-            stream.channel.jk ?: return@webSocket this.close(
+            stream.channel.jk ?: return@webSocket close(
                 CloseReason(
                     CloseReason.Codes.CANNOT_ACCEPT,
                     "Record $id is not found."
@@ -169,7 +169,7 @@ fun Route.wsRecordCommentsById() {
                         record.program.startAt + unit * i,
                         minOf(record.program.startAt + unit * (i + 1), record.program.startAt + record.program.duration)
                     ).packets.map {
-                        it.chat.toSayaComment(record.program.serviceId.toString())
+                        it.chat.toSayaComment(record.program.service.name)
                     }.forEach {
                         comments.send(it)
                     }
