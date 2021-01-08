@@ -118,7 +118,7 @@ object EventStreamManager {
                 ))
             }
             MirakurunEvent.Resource.Service -> {
-                val service = Service(event.data).toSayaService()
+                val service = Service(event.data).toSayaService() ?: return
 
                 when (event.type) {
                     MirakurunEvent.Type.Create -> MirakurunDataManager.Services.add(service)

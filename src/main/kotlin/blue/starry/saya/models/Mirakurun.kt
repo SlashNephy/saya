@@ -39,7 +39,12 @@ data class Service(
     /**
      * チャンネル
      */
-    val channel: String
+    val channel: String,
+
+    /**
+     * タイプ
+     */
+    val type: Channel.Type
 )
 
 @Serializable

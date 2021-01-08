@@ -12,7 +12,7 @@ import blue.starry.saya.models.Tuner as SayaTuner
 
 private val logger = KotlinLogging.logger("saya.mirakurun")
 
-fun Service.toSayaService(): SayaService {
+fun Service.toSayaService(): SayaService? {
     return SayaService(
         json = json,
         id = id,
@@ -20,7 +20,8 @@ fun Service.toSayaService(): SayaService {
         name = name.normalize(),
         logoId = if (hasLogoData) logoId else null,
         keyId = remoteControlKeyId,
-        channel = channel.channel
+        channel = channel.channel,
+        type = SayaChannel.Type.values().firstOrNull { it.name == channel.type } ?: return null
     )
 }
 

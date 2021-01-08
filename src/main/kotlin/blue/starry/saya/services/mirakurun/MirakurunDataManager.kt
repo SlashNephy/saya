@@ -7,7 +7,7 @@ import org.apache.commons.codec.binary.Base64
 
 object MirakurunDataManager {
     val Services = ReadOnlyContainer {
-        MirakurunApi.getServices().map { mirakurun ->
+        MirakurunApi.getServices().mapNotNull { mirakurun ->
             mirakurun.toSayaService()
         }
     }
