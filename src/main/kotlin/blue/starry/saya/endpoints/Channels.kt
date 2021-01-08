@@ -9,6 +9,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
+import io.ktor.utils.io.core.*
 
 fun Route.getChannels() {
     get {
@@ -46,8 +47,8 @@ fun Route.getChannelsM2TSByGroup() {
         MirakurunApi.getChannelStream(channel.type.name, channel.group, decode = true, priority = priority).receive { stream: ByteReadChannel ->
             call.respondBytesWriter {
                 while (!stream.isClosedForRead) {
-                    val byte = stream.readByte()
-                    writeByte(byte)
+                    val packet = stream.readRemaining(Env.SAYA_M2TS_BUFFERSIZE)
+                    writePacket(packet)
                 }
             }
         }

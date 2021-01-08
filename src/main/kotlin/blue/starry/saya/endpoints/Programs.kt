@@ -45,8 +45,8 @@ fun Route.getProgramM2TSById() {
         MirakurunApi.getProgramStream(program.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
             call.respondBytesWriter {
                 while (!channel.isClosedForRead) {
-                    val byte = channel.readByte()
-                    writeByte(byte)
+                    val packet = channel.readRemaining(Env.SAYA_M2TS_BUFFERSIZE)
+                    writePacket(packet)
                 }
             }
         }

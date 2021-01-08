@@ -12,6 +12,7 @@ object Env {
     val SAYA_MAX_FFMPEG_PROCESSES by int { 2 }
     val SAYA_URL_PREFIX by stringOrNull
     val SAYA_HWACCEL by stringOrNull
+    val SAYA_M2TS_BUFFERSIZE by long { 1024 }
 
     val ANNICT_TOKEN by string
     val TWITTER_CK by string
@@ -49,6 +50,10 @@ private val stringOrNull: ReadOnlyProperty<Env, String?>
 
 private fun int(default: () -> Int): ReadOnlyProperty<Env, Int> = ReadOnlyProperty { _, property ->
     System.getenv(property.name)?.toIntOrNull() ?: default()
+}
+
+private fun long(default: () -> Long): ReadOnlyProperty<Env, Long> = ReadOnlyProperty { _, property ->
+    System.getenv(property.name)?.toLongOrNull() ?: default()
 }
 
 private fun float(default: () -> Float): ReadOnlyProperty<Env, Float> = ReadOnlyProperty { _, property ->
