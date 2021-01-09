@@ -21,6 +21,7 @@ import io.ktor.sessions.*
 import io.ktor.util.*
 import io.ktor.util.cio.*
 import io.ktor.utils.io.*
+import io.ktor.utils.io.jvm.nio.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.encodeToString
@@ -96,12 +97,9 @@ fun Route.getServiceM2TSById() {
         val service = MirakurunDataManager.Services.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
-            call.respondBytesWriter {
-                while (!channel.isClosedForRead) {
-                    val packet = channel.readRemaining(Env.SAYA_M2TS_BUFFERSIZE)
-                    writePacket(packet)
-                }
+        call.respondBytesWriter {
+            MirakurunApi.getServiceStream(service.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
+                channel.copyTo(this)
             }
         }
     }

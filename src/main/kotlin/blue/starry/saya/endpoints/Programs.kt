@@ -42,12 +42,9 @@ fun Route.getProgramM2TSById() {
         val program = MirakurunDataManager.Programs.find { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getProgramStream(program.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
-            call.respondBytesWriter {
-                while (!channel.isClosedForRead) {
-                    val packet = channel.readRemaining(Env.SAYA_M2TS_BUFFERSIZE)
-                    writePacket(packet)
-                }
+        call.respondBytesWriter {
+            MirakurunApi.getProgramStream(program.id, decode = true, priority = priority).receive { channel: ByteReadChannel ->
+                channel.copyTo(this)
             }
         }
     }

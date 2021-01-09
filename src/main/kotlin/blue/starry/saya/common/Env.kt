@@ -12,7 +12,6 @@ object Env {
     val SAYA_MAX_FFMPEG_PROCESSES by int { 2 }
     val SAYA_URL_PREFIX by stringOrNull
     val SAYA_HWACCEL by stringOrNull
-    val SAYA_M2TS_BUFFERSIZE by long { 1024 }
 
     val ANNICT_TOKEN by string
     val TWITTER_CK by string

@@ -44,12 +44,9 @@ fun Route.getChannelsM2TSByGroup() {
         val channel = MirakurunDataManager.Channels.find { it.group == group } ?: return@get call.respond(HttpStatusCode.NotFound)
         val priority = call.parameters["priority"]?.toIntOrNull()
 
-        MirakurunApi.getChannelStream(channel.type.name, channel.group, decode = true, priority = priority).receive { stream: ByteReadChannel ->
-            call.respondBytesWriter {
-                while (!stream.isClosedForRead) {
-                    val packet = stream.readRemaining(Env.SAYA_M2TS_BUFFERSIZE)
-                    writePacket(packet)
-                }
+        call.respondBytesWriter {
+            MirakurunApi.getChannelStream(channel.type.name, channel.group, decode = true, priority = priority).receive { stream: ByteReadChannel ->
+                stream.copyTo(this)
             }
         }
     }
