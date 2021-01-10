@@ -18,7 +18,7 @@ fun Route.getRecordings() {
 }
 
 fun Route.putRecordings() {
-    get {
+    put {
         ChinachuDataManager.Recordings.update()
         call.respond(HttpStatusCode.OK)
     }

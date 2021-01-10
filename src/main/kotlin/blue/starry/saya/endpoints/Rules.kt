@@ -18,7 +18,7 @@ fun Route.getRules() {
 }
 
 fun Route.putRules() {
-    get {
+    put {
         ChinachuDataManager.Rules.update()
         call.respond(HttpStatusCode.OK)
     }

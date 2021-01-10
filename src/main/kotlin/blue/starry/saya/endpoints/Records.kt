@@ -49,7 +49,7 @@ fun Route.getRecords() {
 }
 
 fun Route.putRecords() {
-    get {
+    put {
         ChinachuDataManager.Recorded.update()
         call.respond(HttpStatusCode.OK)
     }

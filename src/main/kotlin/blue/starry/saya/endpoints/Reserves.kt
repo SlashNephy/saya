@@ -18,7 +18,7 @@ fun Route.getReserves() {
 }
 
 fun Route.putReserves() {
-    get {
+    put {
         ChinachuDataManager.Reserves.update()
         call.respond(HttpStatusCode.OK)
     }
