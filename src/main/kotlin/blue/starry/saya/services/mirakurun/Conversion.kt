@@ -107,7 +107,7 @@ suspend fun Program.toSayaProgram(): SayaProgram? {
 
 internal val programFlagRegex = "[【\\[(](新|終|再|字|デ|解|無|二|S|SS|初|生|Ｎ|映|多|双)[】\\])]".toRegex()
 private fun String.toSayaFlags(): Sequence<String> {
-    return programFlagRegex.findAll(this).map {
+    return programFlagRegex.findAll(replace("無料", "無")).map {
         it.groupValues[1]
     }
 }
