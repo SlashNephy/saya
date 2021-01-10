@@ -499,6 +499,7 @@ object CommentStreamManager {
             jk = 191,
             name = "WOWOWプライム",
             serviceIds = setOf(191),
+            tags = setOf("WOWOW_PRIME"),
             miyouId = "WOWOWプライム"
         ),
         JikkyoChannel(
@@ -506,6 +507,7 @@ object CommentStreamManager {
             jk = 192,
             name = "WOWOWライブ",
             serviceIds = setOf(192),
+            tags = setOf("WOWOW_LIVE"),
             miyouId = "WOWOWライブ"
         ),
         JikkyoChannel(
@@ -513,6 +515,7 @@ object CommentStreamManager {
             jk = 193,
             name = "WOWOWシネマ",
             serviceIds = setOf(193),
+            tags = setOf("WOWOW_CINEMA"),
             miyouId = "WOWOWシネマ"
         ),
         JikkyoChannel(
