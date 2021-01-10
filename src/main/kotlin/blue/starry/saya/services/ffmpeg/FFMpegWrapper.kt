@@ -134,7 +134,7 @@ object FFMpegWrapper {
 
             // その他
             addAllFuzzy(
-                "-threads", "1",
+                "-threads", "0",
                 "-flags", "+loop+global_header",
                 "-movflags", "+faststart",
                 "-hide_banner",
