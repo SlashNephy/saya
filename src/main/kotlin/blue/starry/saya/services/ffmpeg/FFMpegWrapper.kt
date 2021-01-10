@@ -96,17 +96,23 @@ object FFMpegWrapper {
                         "-vf", "$vf,hwupload=extra_hw_frames=64,format=qsv"
                     )
                 }
+                "nvenc" -> {
+                    addAllFuzzy(
+                        "-c:v", "h264_nvenc",
+                        "-vf", vf
+                    )
+                }
                 else -> {
                     addAllFuzzy(
                         "-c:v", "libx264",
-                        "-vf", vf
+                        "-vf", vf,
+                        "-preset", "ultrafast",
                     )
                 }
             }
             addAllFuzzy(
                 "-vb", preset.vb,
                 "-aspect", "${preset.width}:${preset.height}",
-                "-preset", "ultrafast",
                 "-crf", "28",
                 "-r", "30000/1001"
             )
@@ -128,11 +134,11 @@ object FFMpegWrapper {
 
             // その他
             addAllFuzzy(
-                "-threads", "0",
+                "-threads", "1",
                 "-flags", "+loop+global_header",
                 "-movflags", "+faststart",
                 "-hide_banner",
-                "-loglevel", "fatal"
+                "-loglevel", "error"
             )
 
             // 出力
