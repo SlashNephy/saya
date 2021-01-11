@@ -3,7 +3,6 @@ package blue.starry.saya.services.chinachu
 import blue.starry.saya.models.RecordedProgram
 import blue.starry.saya.models.RecordingProgram
 import blue.starry.saya.models.ReservedProgram
-import blue.starry.saya.models.User
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.mirakurun.normalize
 import blue.starry.saya.services.mirakurun.programFlagRegex
@@ -63,8 +62,6 @@ suspend fun Recorded.toSayaRecordedProgram(): RecordedProgram? {
         priority = priority,
         tuner = null,
         rule = null,
-        user = User(0, "Chinachu"),
-        isManual = false,
         isConflict = isConflict
     )
 }
@@ -86,8 +83,7 @@ fun Rule.toSayaRule(index: Int): SayaRule {
         id = index.toLong(),
         isEnabled = !isDisabled,
         name = "#$index",
-        description = "Chinachu からインポートされました。",
-        user = User(0, "Chinachu")
+        description = "Chinachu からインポートされました。"
     )
 }
 

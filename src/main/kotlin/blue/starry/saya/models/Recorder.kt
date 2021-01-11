@@ -18,8 +18,6 @@ data class RecordedProgram(
     val priority: Int,
     val tuner: Tuner?,
     val rule: Rule?,
-    val user: User?,
-    val isManual: Boolean,
     val isConflict: Boolean
 )
 
@@ -34,19 +32,16 @@ data class ReservedProgram(
 )
 
 @Serializable
-data class User(
-    val id: Long,
-    val name: String
-)
-
-@Serializable
 data class Rule(
     val id: Long,
     val isEnabled: Boolean,
     val name: String,
-    val description: String,
-    val user: User?
-)
+    val description: String
+) {
+    enum class Day {
+        Sun, Mon, Tue, Wed, Thu, Fri, Sat
+    }
+}
 
 @Serializable
 data class RecordedFile(
