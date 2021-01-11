@@ -160,7 +160,7 @@ object FFMpegWrapper {
     }
 
     /**
-     * Mirakurun の Service TS ストリームを HLS に変換する
+     * Mirakurun の Record TS ストリームを HLS に変換する
      */
     @ExperimentalStdlibApi
     fun startRecordHLS(record: RecordedProgram, preset: Preset, subTitle: Boolean): Pair<Process, Path> {
@@ -202,6 +202,7 @@ object FFMpegWrapper {
 
             // 入力
             addAllFuzzy(
+                "-re",
                 "-dual_mono_mode", "main",
                 "-i", record.path,
                 "-max_muxing_queue_size", "1024"
