@@ -349,7 +349,8 @@ object CommentStreamManager {
                 29752  // 埼玉: テレ玉
             ),
             tags = setOf("テレ玉"),
-            miyouId = "テレ玉"
+            miyouId = "テレ玉",
+            communities = setOf("co5253063")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -359,7 +360,8 @@ object CommentStreamManager {
                 24632  // 神奈川: tvk
             ),
             tags = setOf("tvk"),
-            miyouId = "tvk"
+            miyouId = "tvk",
+            communities = setOf("co5215296")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -444,7 +446,8 @@ object CommentStreamManager {
             name = "NHKBS1",
             serviceIds = setOf(101, 102),
             tags = setOf("NHKBS-1", "NHKBS", "NHK_BS"),
-            miyouId = "NHKBS1"
+            miyouId = "NHKBS1",
+            communities = setOf("co5214081")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -452,7 +455,8 @@ object CommentStreamManager {
             name = "NHKBSプレミアム",
             serviceIds = setOf(103, 104),
             tags = setOf("NHK_BSプレミアム", "NHKBSプレミアム", "BSプレミアム"),
-            miyouId = "NHKBSプレミアム"
+            miyouId = "NHKBSプレミアム",
+            communities = setOf("co5175227")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -460,7 +464,8 @@ object CommentStreamManager {
             name = "BS日テレ",
             serviceIds = setOf(141, 142, 143),
             tags = setOf("BS_日テレ", "BS日テレ"),
-            miyouId = "BS日テレ"
+            miyouId = "BS日テレ",
+            communities = setOf("co5175341")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -468,7 +473,8 @@ object CommentStreamManager {
             name = "BS朝日",
             serviceIds = setOf(151, 152, 153),
             tags = setOf("BS_朝日", "BS朝日"),
-            miyouId = "BS朝日"
+            miyouId = "BS朝日",
+            communities = setOf("co5175345")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -476,7 +482,8 @@ object CommentStreamManager {
             name = "BS-TBS",
             serviceIds = setOf(161, 162, 163),
             tags = setOf("BS-TBS", "BSTBS"),
-            miyouId = "BS-TBS"
+            miyouId = "BS-TBS",
+            communities = setOf("co5176119")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -484,7 +491,8 @@ object CommentStreamManager {
             name = "BSテレ東",
             serviceIds = setOf(171, 172, 173),
             tags = setOf("BSジャパン", "BSテレ東"),
-            miyouId = "BSジャパン"
+            miyouId = "BSジャパン",
+            communities = setOf("co5176122")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -492,7 +500,8 @@ object CommentStreamManager {
             name = "BSフジ",
             serviceIds = setOf(181, 182, 183),
             tags = setOf("BSフジ"),
-            miyouId = "BSフジ"
+            miyouId = "BSフジ",
+            communities = setOf("co5176125")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -500,7 +509,8 @@ object CommentStreamManager {
             name = "WOWOWプライム",
             serviceIds = setOf(191),
             tags = setOf("WOWOW_PRIME"),
-            miyouId = "WOWOWプライム"
+            miyouId = "WOWOWプライム",
+            communities = setOf("co5251972")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -508,7 +518,8 @@ object CommentStreamManager {
             name = "WOWOWライブ",
             serviceIds = setOf(192),
             tags = setOf("WOWOW_LIVE"),
-            miyouId = "WOWOWライブ"
+            miyouId = "WOWOWライブ",
+            communities = setOf("co5251976")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -516,7 +527,8 @@ object CommentStreamManager {
             name = "WOWOWシネマ",
             serviceIds = setOf(193),
             tags = setOf("WOWOW_CINEMA"),
-            miyouId = "WOWOWシネマ"
+            miyouId = "WOWOWシネマ",
+            communities = setOf("co5251983")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -552,9 +564,10 @@ object CommentStreamManager {
             type = Channel.Type.BS,
             jk = 222,
             name = "BS12トゥエルビ",
-            tags = setOf("TwellV"),
+            tags = setOf("TwellV", "BS12"),
             serviceIds = setOf(222),
-            miyouId = "BS12トゥエルビ"
+            miyouId = "BS12トゥエルビ",
+            communities = setOf("co5193029")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -573,8 +586,9 @@ object CommentStreamManager {
             jk = 234,
             name = "グリーンチャンネル",
             serviceIds = setOf(234),
-            tags = setOf("グリーンチャンネル"),
-            miyouId = "グリーンチャンネル"
+            tags = setOf("BSグリーンチャンネル", "グリーンチャンネル"),
+            miyouId = "グリーンチャンネル",
+            communities = setOf("co5217651")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -834,7 +848,8 @@ object CommentStreamManager {
             name = "AT-X",
             serviceIds = setOf(333),
             tags = setOf("AT-X"),
-            miyouId = "AT−X"
+            miyouId = "AT−X",
+            communities = setOf("co5245469")
         ),
         // 停波済み
         JikkyoChannel(
