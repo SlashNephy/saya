@@ -10,6 +10,7 @@ object Env {
     val SAYA_HLS_SEGMENT_SEC by float { 1f }
     val SAYA_HLS_SEGMENT_SIZE by int { 4 }
     val SAYA_MAX_FFMPEG_PROCESSES by int { 2 }
+    val SAYA_FFMPEG_THREADS by int { 0 }
     val SAYA_URL_PREFIX by stringOrNull
     val SAYA_HWACCEL by stringOrNull
 

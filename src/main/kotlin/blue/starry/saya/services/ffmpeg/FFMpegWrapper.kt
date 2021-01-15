@@ -134,7 +134,7 @@ object FFMpegWrapper {
 
             // その他
             addAllFuzzy(
-                "-threads", "0",
+                "-threads", Env.SAYA_FFMPEG_THREADS,
                 "-flags", "+loop+global_header",
                 "-movflags", "+faststart",
                 "-hide_banner",
@@ -276,7 +276,7 @@ object FFMpegWrapper {
 
             // その他
             addAllFuzzy(
-                "-threads", "0",
+                "-threads", Env.SAYA_FFMPEG_THREADS,
                 "-flags", "+loop+global_header",
                 "-movflags", "+faststart",
                 "-hide_banner",
