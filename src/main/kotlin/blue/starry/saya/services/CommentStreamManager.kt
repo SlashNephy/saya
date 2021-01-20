@@ -66,7 +66,8 @@ object CommentStreamManager {
             ),
             tags = setOf("NHK総合"),
             isOfficial = true,
-            miyouId = "NHK総合"
+            miyouId = "NHK総合",
+            hashtags = setOf("nhktv")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -117,7 +118,8 @@ object CommentStreamManager {
             ),
             tags = setOf("NHK_Eテレ"),
             isOfficial = true,
-            miyouId = "NHKEテレ"
+            miyouId = "NHKEテレ",
+            hashtags = setOf("Eテレ")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -163,7 +165,8 @@ object CommentStreamManager {
             ),
             tags = setOf("日本テレビ"),
             isOfficial = true,
-            miyouId = "日テレ"
+            miyouId = "日テレ",
+            hashtags = setOf("ntv")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -204,7 +207,8 @@ object CommentStreamManager {
             ),
             tags = setOf("テレビ朝日"),
             isOfficial = true,
-            miyouId = "テレビ朝日"
+            miyouId = "テレビ朝日",
+            hashtags = setOf("tvasahi")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -249,7 +253,8 @@ object CommentStreamManager {
             ),
             tags = setOf("TBSテレビ"),
             isOfficial = true,
-            miyouId = "TBS"
+            miyouId = "TBS",
+            hashtags = setOf("tbs")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -272,7 +277,8 @@ object CommentStreamManager {
             ),
             tags = setOf("テレビ東京"),
             isOfficial = true,
-            miyouId = "テレビ東京"
+            miyouId = "テレビ東京",
+            hashtags = setOf("tvtokyo")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -316,7 +322,8 @@ object CommentStreamManager {
             ),
             tags = setOf("フジテレビ"),
             isOfficial = true,
-            miyouId = "フジテレビ"
+            miyouId = "フジテレビ",
+            hashtags = setOf("fujitv")
         ),
 
         // GR (地方局)
@@ -330,7 +337,8 @@ object CommentStreamManager {
             ),
             tags = setOf("TOKYO_MX"),
             isOfficial = true,
-            miyouId = "TOKYO MX"
+            miyouId = "TOKYO MX",
+            hashtags = setOf("tokyomx")
         ),
         // 停波済み
         JikkyoChannel(
@@ -339,7 +347,8 @@ object CommentStreamManager {
             name = "放送大学",
             serviceIds = setOf(
                 1088,  // 関東広域: 放送大学
-            )
+            ),
+            hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -350,7 +359,8 @@ object CommentStreamManager {
             ),
             tags = setOf("テレ玉"),
             miyouId = "テレ玉",
-            communities = setOf("co5253063")
+            communities = setOf("co5253063"),
+            hashtags = setOf("テレ玉")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -361,7 +371,8 @@ object CommentStreamManager {
             ),
             tags = setOf("tvk"),
             miyouId = "tvk",
-            communities = setOf("co5215296")
+            communities = setOf("co5215296"),
+            hashtags = setOf("tvk")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -371,7 +382,8 @@ object CommentStreamManager {
                 27704  // 千葉: チバテレビ
             ),
             tags = setOf("チバテレビ"),
-            miyouId = "チバテレ"
+            miyouId = "チバテレ",
+            hashtags = setOf("チバテレ")
         ),
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -447,7 +459,8 @@ object CommentStreamManager {
             serviceIds = setOf(101, 102),
             tags = setOf("NHKBS-1", "NHKBS", "NHK_BS"),
             miyouId = "NHKBS1",
-            communities = setOf("co5214081")
+            communities = setOf("co5214081"),
+            hashtags = setOf("nhkbs1")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -456,7 +469,8 @@ object CommentStreamManager {
             serviceIds = setOf(103, 104),
             tags = setOf("NHK_BSプレミアム", "NHKBSプレミアム", "BSプレミアム"),
             miyouId = "NHKBSプレミアム",
-            communities = setOf("co5175227")
+            communities = setOf("co5175227"),
+            hashtags = setOf("nhkbsp")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -465,7 +479,8 @@ object CommentStreamManager {
             serviceIds = setOf(141, 142, 143),
             tags = setOf("BS_日テレ", "BS日テレ"),
             miyouId = "BS日テレ",
-            communities = setOf("co5175341")
+            communities = setOf("co5175341"),
+            hashtags = setOf("BS日テレ")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -474,7 +489,8 @@ object CommentStreamManager {
             serviceIds = setOf(151, 152, 153),
             tags = setOf("BS_朝日", "BS朝日"),
             miyouId = "BS朝日",
-            communities = setOf("co5175345")
+            communities = setOf("co5175345"),
+            hashtags = setOf("BS朝日")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -483,7 +499,8 @@ object CommentStreamManager {
             serviceIds = setOf(161, 162, 163),
             tags = setOf("BS-TBS", "BSTBS"),
             miyouId = "BS-TBS",
-            communities = setOf("co5176119")
+            communities = setOf("co5176119"),
+            hashtags = setOf("bstbs")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -492,7 +509,8 @@ object CommentStreamManager {
             serviceIds = setOf(171, 172, 173),
             tags = setOf("BSジャパン", "BSテレ東"),
             miyouId = "BSジャパン",
-            communities = setOf("co5176122")
+            communities = setOf("co5176122"),
+            hashtags = setOf("BSテレ東")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -501,7 +519,8 @@ object CommentStreamManager {
             serviceIds = setOf(181, 182, 183),
             tags = setOf("BSフジ"),
             miyouId = "BSフジ",
-            communities = setOf("co5176125")
+            communities = setOf("co5176125"),
+            hashtags = setOf("BSフジ")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -558,7 +577,8 @@ object CommentStreamManager {
             tags = setOf("BS11"),
             isOfficial = true,
             serviceIds = setOf(211),
-            miyouId = "BS11イレブン"
+            miyouId = "BS11イレブン",
+            hashtags = setOf("BS11")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -567,19 +587,22 @@ object CommentStreamManager {
             tags = setOf("TwellV", "BS12"),
             serviceIds = setOf(222),
             miyouId = "BS12トゥエルビ",
-            communities = setOf("co5193029")
+            communities = setOf("co5193029"),
+            hashtags = setOf("BS12")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
             jk = 231,
             name = "放送大学ex",
-            serviceIds = setOf(231)
+            serviceIds = setOf(231),
+            hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
             jk = 231,
             name = "放送大学on",
-            serviceIds = setOf(232)
+            serviceIds = setOf(232),
+            hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,
@@ -679,7 +702,8 @@ object CommentStreamManager {
         JikkyoChannel(
             type = Channel.Type.BS,
             name = "放送大学ラジオ",
-            serviceIds = setOf(531)
+            serviceIds = setOf(531),
+            hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
             type = Channel.Type.BS,

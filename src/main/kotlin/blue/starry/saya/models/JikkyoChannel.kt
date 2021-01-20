@@ -11,5 +11,6 @@ data class JikkyoChannel(
     val tags: Set<String> = emptySet(),
     val isOfficial: Boolean = false,
     val miyouId: String? = null,
-    val communities: Set<String> = emptySet()
+    val communities: Set<String> = emptySet(),
+    val hashtags: Set<String> = emptySet()
 )
