@@ -10,4 +10,3 @@ saya is still in heavy development.
 
 - [REST API docs](https://slashnephy.github.io/saya/)
 - [Roadmap](https://github.com/SlashNephy/saya/projects/1)
-- [BonDriver_saya](https://github.com/SlashNephy/BonDriver_saya)

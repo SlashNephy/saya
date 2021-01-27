@@ -21,7 +21,7 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.time.minutes
 
-const val SayaUserAgent = "saya/1.0 (+https://github.com/SlashNephy/saya)"
+const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
 
 val SayaHttpClient by lazy {
     HttpClient(CIO) {
