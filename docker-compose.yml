@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: nvenc.Dockerfile
       args:
-        CPUCORE=4
+        - CPUCORE=4
     runtime: nvidia
     restart: always
     ports:
