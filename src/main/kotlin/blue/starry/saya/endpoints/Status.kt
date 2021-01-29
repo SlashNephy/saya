@@ -11,36 +11,36 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 
-fun Route.getCommentStatus() {
-    get {
-        call.respond(
-            CommentStreamManager.Streams.filter {
-                it.nico.isActive
-            }.map {
-                CommentStatsResponse(
-                    it.nico?.stats?.provide(),
-                    it.twitter.mapNotNull { it.value?.stats?.provide() }.toList()
-                )
-            }
-        )
-    }
-}
-
-fun Route.getCommentStatusById() {
-    get {
-        val id: Long by call.parameters
-        val service = MirakurunDataManager.Services.find {
-            it.id == id
-        } ?: return@get call.respond(HttpStatusCode.NotFound)
-        val stream = CommentStreamManager.Streams.find {
-            it.channel.serviceIds.contains(service.actualId)
-        } ?: return@get call.respond(HttpStatusCode.NotFound)
-
-        call.respond(
-            CommentStatsResponse(
-                stream.nico?.stats?.provide(),
-                stream.twitter.mapNotNull { it.value?.stats?.provide() }.toList()
-            )
-        )
-    }
-}
+//fun Route.getCommentStatus() {
+//    get {
+//        call.respond(
+//            CommentStreamManager.Streams.filter {
+//                it.nico.isActive
+//            }.map {
+//                CommentStatsResponse(
+//                    it.nico?.stats?.provide(),
+//                    it.twitter.mapNotNull { it.value?.stats?.provide() }.toList()
+//                )
+//            }
+//        )
+//    }
+//}
+//
+//fun Route.getCommentStatusById() {
+//    get {
+//        val id: Long by call.parameters
+//        val service = MirakurunDataManager.Services.find {
+//            it.id == id
+//        } ?: return@get call.respond(HttpStatusCode.NotFound)
+//        val stream = CommentStreamManager.Streams.find {
+//            it.channel.serviceIds.contains(service.actualId)
+//        } ?: return@get call.respond(HttpStatusCode.NotFound)
+//
+//        call.respond(
+//            CommentStatsResponse(
+//                stream.nico?.stats?.provide(),
+//                stream.twitter.mapNotNull { it.value?.stats?.provide() }.toList()
+//            )
+//        )
+//    }
+//}

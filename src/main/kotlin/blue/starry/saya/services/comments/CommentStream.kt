@@ -11,7 +11,7 @@ data class CommentStream(val channel: JikkyoChannel) {
      */
     val comments = BroadcastChannel<Comment>(1)
 
-    var nico: NicoLiveCommentProvider? = null
+    private var nico: NicoLiveCommentProvider? = null
         get() {
             val provider = field
             return if (provider.isActive) {
@@ -40,11 +40,22 @@ data class CommentStream(val channel: JikkyoChannel) {
         return NicoLiveCommentProvider(this, data.site.relive.webSocketUrl, source)
     }
 
-    val twitter = mutableMapOf<String, TwitterHashTagProvider?>()
+    private var twitter: TwitterHashTagProvider? = null
+        get() {
+            val provider = field
+            return if (provider.isActive) {
+                provider
+            } else {
+                null
+            }
+        }
 
-    fun getOrCreateTwitterProvider(tag: String?): TwitterHashTagProvider? {
-        val key = tag ?: TwitterHashTagProvider.SampleStreamTag
-        twitter[key] = twitter[key] ?: TwitterHashTagProvider(this, key)
-        return twitter[key]
+    fun getOrCreateTwitterProvider(): TwitterHashTagProvider? {
+        if (channel.hashtags.isEmpty()) {
+            return null
+        }
+
+        twitter = twitter ?: TwitterHashTagProvider(this, channel.hashtags)
+        return twitter
     }
 }

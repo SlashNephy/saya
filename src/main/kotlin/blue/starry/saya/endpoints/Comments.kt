@@ -1,9 +1,42 @@
 package blue.starry.saya.endpoints
 
+import blue.starry.saya.services.CommentStreamManager
+import blue.starry.saya.services.comments.withSession
+import blue.starry.saya.services.mirakurun.MirakurunDataManager
+import io.ktor.http.cio.websocket.*
 import io.ktor.routing.*
+import io.ktor.util.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-fun Route.wsRecordCommentsById() {
+private suspend fun DefaultWebSocketSession.reject(message: () -> String) {
+    close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, message()))
+}
+
+fun Route.wsLiveComments() {
+    webSocket {
+        val serviceId: Long by call.parameters
+
+        val service = MirakurunDataManager.Services.find {
+            it.id == serviceId
+        } ?: return@webSocket reject { "Service $serviceId is not found." }
+        val stream = CommentStreamManager.Streams.find {
+            it.channel.serviceIds.contains(service.actualId)
+        } ?: return@webSocket reject { "Service $serviceId is not found." }
+
+        stream.getOrCreateNicoLiveProvider().withSession {
+            stream.getOrCreateTwitterProvider().withSession {
+                stream.comments.openSubscription().consumeEach {
+                    send(Json.encodeToString(it))
+                }
+            }
+        }
+    }
+}
+
+fun Route.wsTimeshiftComments() {
     webSocket {
 //        val id: Long by call.parameters
 //

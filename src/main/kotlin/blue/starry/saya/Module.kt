@@ -1,10 +1,8 @@
 package blue.starry.saya
 
 import blue.starry.saya.common.Env
-import blue.starry.saya.endpoints.getCommentStatus
-import blue.starry.saya.endpoints.getCommentStatusById
-import blue.starry.saya.endpoints.wsRecordCommentsById
-import blue.starry.saya.endpoints.wsServiceCommentsById
+import blue.starry.saya.endpoints.wsLiveComments
+import blue.starry.saya.endpoints.wsTimeshiftComments
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -50,24 +48,12 @@ fun Application.module() {
     routing {
         route(Env.SAYA_BASE_URI) {
             route("comments") {
-                getCommentStatus()
+                route("live") {
+                    wsLiveComments()
+                }
 
-                route("{id}") {
-                    route("live") {
-                        wsServiceCommentsById()
-
-                        route("status") {
-                            getCommentStatusById()
-                        }
-                    }
-
-                    route("timeshift") {
-                        wsRecordCommentsById()
-
-                        route("status") {
-                            getCommentStatusById()
-                        }
-                    }
+                route("timeshift") {
+                    wsTimeshiftComments()
                 }
             }
         }
