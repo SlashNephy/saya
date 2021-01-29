@@ -28,6 +28,13 @@ fun Application.module() {
     }
     install(CORS) {
         anyHost()
+        method(HttpMethod.Get)
+        header(HttpHeaders.Origin)
+        header(HttpHeaders.Authorization)
+        header(HttpHeaders.Accept)
+        header(HttpHeaders.ContentType)
+        maxAgeInSeconds = 3600
+        allowCredentials = true
     }
     install(CallLogging) {
         logger = KotlinLogging.logger("saya.server")
