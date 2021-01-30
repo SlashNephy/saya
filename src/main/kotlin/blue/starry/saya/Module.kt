@@ -1,6 +1,7 @@
 package blue.starry.saya
 
 import blue.starry.saya.common.Env
+import blue.starry.saya.endpoints.getIndex
 import blue.starry.saya.endpoints.wsLiveComments
 import blue.starry.saya.endpoints.wsTimeshiftComments
 import io.ktor.application.*
@@ -47,13 +48,17 @@ fun Application.module() {
 
     routing {
         route(Env.SAYA_BASE_URI) {
-            route("comments") {
-                route("live") {
-                    wsLiveComments()
-                }
+            getIndex()
 
-                route("timeshift") {
-                    wsTimeshiftComments()
+            route("comments") {
+                route("{target}") {
+                    route("live") {
+                        wsLiveComments()
+                    }
+
+                    route("timeshift") {
+                        wsTimeshiftComments()
+                    }
                 }
             }
         }

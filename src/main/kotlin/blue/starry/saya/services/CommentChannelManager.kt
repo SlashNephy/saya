@@ -2,10 +2,10 @@ package blue.starry.saya.services
 
 import blue.starry.saya.models.Channel
 import blue.starry.saya.models.JikkyoChannel
-import blue.starry.saya.services.comments.CommentStream
 
-object CommentStreamManager {
-    val Streams = listOf(
+object CommentChannelManager {
+    // TODO: Network ID による判定
+    val Channels = listOf(
         // GR (キー局)
         JikkyoChannel(
             type = Channel.Type.GR,
@@ -1138,7 +1138,5 @@ object CommentStreamManager {
             serviceIds = setOf(100),
             miyouId = "スカパープロモ"
         )
-    ).map {
-        CommentStream(it)
-    }
+    )
 }

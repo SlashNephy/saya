@@ -1,35 +1,40 @@
-package blue.starry.saya.services.comments
+package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.*
+import blue.starry.saya.models.Comment
+import blue.starry.saya.models.JikkyoChannel
+import blue.starry.saya.services.CommentProvider
 import blue.starry.saya.services.SayaHttpClient
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson
 import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
-import blue.starry.saya.services.nicolive.toSayaComment
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
-import java.util.concurrent.atomic.AtomicInteger
 
-class NicoLiveCommentProvider(override val stream: CommentStream, private val url: String, val source: String): CommentProvider {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${stream.channel.name}")
+class NicoLiveCommentProvider(
+    override val channel: JikkyoChannel,
+    override val comments: BroadcastChannel<Comment>,
+    private val wsUrl: String,
+    val lvName: String
+): CommentProvider {
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${channel.name}")
 
-    override val subscriptions = AtomicInteger(0)
-    override val stats = NicoLiveStatisticsProvider(source)
-    override val job = GlobalScope.launch {
-        connect()
-    }.apply {
-        invokeOnCompletion {
-            logger.trace { "cancel: NicoLiveSystemWebSocket: ${it?.stackTraceToString()}" }
+    suspend fun start() {
+        try {
+            connect()
+        } catch (t: Throwable) {
+            logger.trace(t) { "cancel: NicoLiveSystemWebSocket" }
         }
     }
 
     private suspend fun connect() {
-        SayaHttpClient.webSocket(url) {
+        SayaHttpClient.webSocket(wsUrl) {
             try {
                 logger.debug { "ws:connect" }
 
@@ -44,8 +49,6 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
                         logger.error("ws:error (${closeReason.await()}), ${t.stackTraceToString()}")
                     }
                 }
-            } finally {
-                job.cancel()
             }
         }
     }
@@ -70,7 +73,7 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
     }
 
     private suspend fun DefaultClientWebSocketSession.consumeFrames() {
-        var mws: NicoLiveMessageWebSocket? = null
+        var mwsJob: Job? = null
         var keepSeatJob: Job? = null
 
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
@@ -89,7 +92,7 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
                 }
                 "seat" -> {
                     keepSeatJob?.cancel()
-                    keepSeatJob = launch(job) {
+                    keepSeatJob = launch {
                         while (isActive) {
                             delay(message.data.keepIntervalSec * 1000)
                             send(jsonObjectOf(
@@ -99,16 +102,13 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
                     }
                 }
                 "room" -> {
-                    mws?.job?.cancel()
-                    mws = NicoLiveMessageWebSocket(this@NicoLiveCommentProvider, message.data)
-                }
-                // 1分おきに来る
-                "statistics" -> {
-                    stats.update(message.data)
-                    logger.debug { "コメント勢い: ${stats.provide().commentsPerMinute} コメ/min" }
+                    mwsJob?.cancel()
+                    mwsJob = launch {
+                        NicoLiveMessageWebSocket(this@NicoLiveCommentProvider, message.data).start()
+                    }
                 }
                 "disconnect" -> {
-                    job.cancel()
+                    close()
                 }
             }
 
@@ -118,14 +118,13 @@ class NicoLiveCommentProvider(override val stream: CommentStream, private val ur
 }
 
 private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProvider, private val room: NicoLiveWebSocketSystemJson.Data) {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${provider.stream.channel.name}")
+    private val logger = KotlinLogging.logger("saya.services.nicolive.${provider.channel.name}")
 
-    val job = GlobalScope.launch(provider.job) {
-        connect()
-    }.apply {
-        invokeOnCompletion {
-            logger.trace { "cancel: NicoLiveMessageWebSocket: ${it?.stackTraceToString()}" }
-            provider.job.cancel()
+    suspend fun start() {
+        try {
+            connect()
+        } catch (t: Throwable) {
+            logger.trace(t) { "cancel: NicoLiveMessageWebSocket" }
         }
     }
 
@@ -145,8 +144,6 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
                         logger.error("mws:error (${closeReason.await()}), ${t.stackTraceToString()}")
                     }
                 }
-            } finally {
-                job.cancel()
             }
         }
     }
@@ -192,11 +189,10 @@ private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProv
             val message = frame.readText().parseObject {
                 NicoLiveWebSocketMessageJson(it)
             }
-            val comment = message.chat?.toSayaComment(provider.source)
+            val comment = message.chat?.toSayaComment(provider.lvName)
 
             if (comment != null && !comment.text.startsWith("/")) {
-                provider.stream.comments.send(comment)
-                provider.stats.update(comment)
+                provider.comments.send(comment)
             }
 
             logger.trace { message }

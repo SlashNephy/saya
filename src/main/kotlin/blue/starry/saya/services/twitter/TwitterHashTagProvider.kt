@@ -1,4 +1,4 @@
-package blue.starry.saya.services.comments
+package blue.starry.saya.services.twitter
 
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.endpoints.stream
@@ -6,21 +6,31 @@ import blue.starry.penicillin.endpoints.stream.filter
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.Comment
+import blue.starry.saya.models.JikkyoChannel
+import blue.starry.saya.services.CommentProvider
 import blue.starry.saya.services.SayaTwitterClient
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 
-class TwitterHashTagProvider(override val stream: CommentStream, private val tags: Set<String>): CommentProvider {
+class TwitterHashTagProvider(
+    override val channel: JikkyoChannel,
+    override val comments: BroadcastChannel<Comment>,
+    private val tags: Set<String>
+): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.twitter#${tags.joinToString(",")}")
 
-    override val subscriptions = AtomicInteger(0)
-    override val stats = TwitterHashTagStatisticsProvider(tags.joinToString(",") { "#$it" })
-    override val job = GlobalScope.launch {
+    suspend fun start() {
+        try {
+            connect()
+        } catch (t: Throwable) {
+            logger.trace { "cancel: TwitterHashTagProvider: ${t.stackTraceToString()}" }
+        }
+    }
+
+    private suspend fun connect() {
         SayaTwitterClient.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
             override suspend fun onConnect() {
                 logger.debug { "twitter:connect" }
@@ -28,8 +38,7 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
 
             override suspend fun onStatus(status: Status) {
                 val comment = createComment(status)
-                stream.comments.send(comment)
-                stats.add(status)
+                comments.send(comment)
 
                 logger.trace { status }
             }
@@ -37,22 +46,20 @@ class TwitterHashTagProvider(override val stream: CommentStream, private val tag
             override suspend fun onDisconnect(cause: Throwable?) {
                 logger.debug(cause) { "twitter:disconnect" }
             }
-        }, false).join()
+        }, true).join()
     }
 
     private fun createComment(status: Status): Comment {
         return Comment(
             tags.joinToString(",") { "#$it" },
-            stats.provide().comments,
             Instant.from(
                 DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(status.createdAtRaw)
             ).epochSecond.toDouble(),
             status.user.name,
             tags.fold(status.text) { r, t -> r.replace("#$t", "") },
             "#ffffff",
-            "right",
-            "normal",
-            emptyList()
+            Comment.Position.right,
+            Comment.Size.normal
         )
     }
 }
