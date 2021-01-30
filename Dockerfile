@@ -23,6 +23,7 @@ RUN gradle -version > /dev/null \
 # Final Stage
 FROM openjdk:8-jre-alpine
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
+COPY docs/ /app/docs/
 
 WORKDIR /app
 ENTRYPOINT ["java", "-jar", "/app/saya.jar"]
