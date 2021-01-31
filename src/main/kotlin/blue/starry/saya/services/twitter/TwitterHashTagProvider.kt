@@ -54,7 +54,8 @@ class TwitterHashTagProvider(
             tags.joinToString(",") { "#$it" },
             Instant.from(
                 DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(status.createdAtRaw)
-            ).epochSecond.toDouble(),
+            ).epochSecond,
+            0,
             status.user.name,
             tags.fold(status.text) { r, t -> r.replace("#$t", "") },
             "#ffffff",

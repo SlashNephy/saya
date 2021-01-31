@@ -8,7 +8,8 @@ fun Chat.toSayaComment(source: String): Comment {
 
     return Comment(
         source = source,
-        time = date + dateUsec / 1000000.0,
+        time = date,
+        timeMs = dateUsec / 1000,
         author = userId,
         text = content,
         color = color,
