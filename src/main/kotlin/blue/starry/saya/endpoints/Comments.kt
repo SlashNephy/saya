@@ -17,6 +17,7 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -27,6 +28,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToLong
 
 private val logger = KotlinLogging.logger("saya.endpoints")
@@ -70,6 +72,7 @@ private enum class CommentSource(private vararg val aliases: String) {
     }
 }
 
+// TODO: BroadcastChannel の共有
 fun Route.wsLiveComments() {
     webSocket {
         val target: String by call.parameters
@@ -95,12 +98,8 @@ fun Route.wsLiveComments() {
             }
         }
 
-        if (CommentSource.Twitter in sources) {
+        if (CommentSource.Twitter in sources && channel.hashtags.isNotEmpty()) {
             launch {
-                if (channel.hashtags.isEmpty()) {
-                    return@launch
-                }
-
                 val twitter = TwitterHashTagProvider(channel, comments, channel.hashtags)
                 twitter.start()
             }
@@ -124,15 +123,39 @@ fun Route.wsTimeshiftComments() {
         val sources = CommentSource.from(call.parameters["sources"])
 
         val channel = findChannel(target) ?: return@webSocket rejectWs { "Parameter target is invalid." }
-        val broadcaster = BroadcastChannel<Comment>(1)
-        var time = startAt.toDouble()
+        val timeMs = AtomicLong(startAt * 1000)
+        var pause = true
 
         // unit 秒ずつ分割して取得
         val unit = 600
 
+        // コメント配信ループ
+        suspend fun Channel<Comment>.sendLoop() {
+            consumeEach { comment ->
+                val currentMs = comment.time * 1000 + comment.timeMs
+                val waitMs = currentMs - timeMs.get()
+                if (waitMs < -10000) {
+                    logger.trace { "破棄 ($waitMs) : $comment" }
+                    return@consumeEach
+                }
+
+                delay(waitMs)
+
+                while (pause) {
+                    delay(100)
+                }
+                send(Json.encodeToString(comment))
+                logger.trace { "配信: $comment" }
+
+                timeMs.getAndUpdate { prev ->
+                    maxOf(prev, currentMs)
+                }
+            }
+        }
+
         if (CommentSource.GoChan in sources && channel.miyouId != null) {
             launch {
-                val comments = BroadcastChannel<Comment>(1)
+                val queue = Channel<Comment>(Channel.UNLIMITED)
 
                 launch {
                     repeat(duration / unit) { i ->
@@ -143,24 +166,18 @@ fun Route.wsTimeshiftComments() {
                         ).data.comments.map {
                             it.toSayaComment()
                         }.forEach {
-                            comments.send(it)
+                            queue.send(it)
                         }
                     }
                 }
 
-                comments.openSubscription().consumeEach { comment ->
-                    val waitMs = (comment.time - time).times(1000).roundToLong()
-                    delay(waitMs)
-                    broadcaster.send(comment)
-
-                    time = comment.time
-                }
+                queue.sendLoop()
             }
         }
 
         if (CommentSource.Nicolive in sources && channel.jk != null) {
             launch {
-                val comments = BroadcastChannel<Comment>(1)
+                val queue = Channel<Comment>(Channel.UNLIMITED)
 
                 launch {
                     repeat(duration / unit) { i ->
@@ -169,26 +186,14 @@ fun Route.wsTimeshiftComments() {
                             startAt + unit * i,
                             minOf(startAt + unit * (i + 1), endAt)
                         ).packets.map {
-                            it.chat.toSayaComment("ニコニコ実況 過去ログ API")
+                            it.chat.toSayaComment("ニコニコ実況過去ログAPI [jk${channel.jk}]")
                         }.forEach {
-                            comments.send(it)
+                            queue.send(it)
                         }
                     }
                 }
 
-                comments.openSubscription().consumeEach { comment ->
-                    val waitMs = (comment.time - time).times(1000).roundToLong()
-                    delay(waitMs)
-                    broadcaster.send(comment)
-
-                    time = comment.time
-                }
-            }
-        }
-
-        launch {
-            broadcaster.openSubscription().consumeEach {
-                send(Json.encodeToString(it))
+                queue.sendLoop()
             }
         }
 
@@ -196,8 +201,8 @@ fun Route.wsTimeshiftComments() {
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect {
             val control = try {
                 Json.decodeFromString<TimeshiftCommentControl>(it.readText())
-            } catch (e: Throwable) {
-                logger.error(e) { "WS コントロールの処理に失敗しました。" }
+            } catch (t: Throwable) {
+                logger.error(t) { "WS コントロール命令のパースに失敗しました。" }
                 return@collect
             }
 
@@ -205,17 +210,13 @@ fun Route.wsTimeshiftComments() {
                 /**
                  * クライアントの準備ができ, コメントの配信を開始する命令
                  *   {"action": "Ready"}
-                 */
-                TimeshiftCommentControl.Action.Ready -> {
-
-                }
-
-                /**
+                 *
                  * コメントの配信を再開する命令
-                 *   {"action": "Ready"}
+                 *   {"action": "Resume"}
                  */
+                TimeshiftCommentControl.Action.Ready,
                 TimeshiftCommentControl.Action.Resume -> {
-
+                    pause = false
                 }
 
                 /**
@@ -224,15 +225,15 @@ fun Route.wsTimeshiftComments() {
                  */
                 //
                 TimeshiftCommentControl.Action.Pause -> {
-
+                    pause = true
                 }
 
                 /**
                  * コメントの位置を同期する命令
-                 *   {"action": "Ready", "seconds": 10.0}
+                 *   {"action": "Sync", "seconds": 10.0}
                  */
                 TimeshiftCommentControl.Action.Sync -> {
-                    time = startAt + control.seconds
+                    timeMs.set(((startAt + control.seconds) * 1000).roundToLong())
                 }
             }
 

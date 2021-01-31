@@ -14,7 +14,7 @@ interface CommentProvider {
     val channel: JikkyoChannel
 
     /**
-     * コメント
+     * コメントキュー
      */
     val comments: BroadcastChannel<Comment>
 }
