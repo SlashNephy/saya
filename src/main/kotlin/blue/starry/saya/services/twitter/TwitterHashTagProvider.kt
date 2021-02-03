@@ -1,5 +1,6 @@
 package blue.starry.saya.services.twitter
 
+import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
@@ -8,7 +9,6 @@ import blue.starry.penicillin.models.Status
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.services.CommentProvider
-import blue.starry.saya.services.SayaTwitterClient
 import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging
 import java.time.Instant
@@ -18,7 +18,8 @@ import java.util.*
 class TwitterHashTagProvider(
     override val channel: JikkyoChannel,
     override val comments: BroadcastChannel<Comment>,
-    private val tags: Set<String>
+    private val tags: Set<String>,
+    private val client: ApiClient
 ): CommentProvider {
     private val logger = KotlinLogging.logger("saya.services.twitter#${tags.joinToString(",")}")
 
@@ -31,7 +32,7 @@ class TwitterHashTagProvider(
     }
 
     private suspend fun connect() {
-        SayaTwitterClient.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
+        client.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
             override suspend fun onConnect() {
                 logger.debug { "twitter:connect" }
             }

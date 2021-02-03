@@ -5,6 +5,7 @@ import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.models.TimeshiftCommentControl
 import blue.starry.saya.services.CommentChannelManager
 import blue.starry.saya.services.SayaMiyouTVApi
+import blue.starry.saya.services.SayaTwitterClient
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.miyoutv.toSayaComment
 import blue.starry.saya.services.nicojk.NicoJkApi
@@ -98,9 +99,9 @@ fun Route.wsLiveComments() {
             }
         }
 
-        if (CommentSource.Twitter in sources && channel.hashtags.isNotEmpty()) {
+        if (CommentSource.Twitter in sources && channel.hashtags.isNotEmpty() && SayaTwitterClient != null) {
             launch {
-                val twitter = TwitterHashTagProvider(channel, comments, channel.hashtags)
+                val twitter = TwitterHashTagProvider(channel, comments, channel.hashtags, SayaTwitterClient)
                 twitter.start()
             }
         }
@@ -153,7 +154,7 @@ fun Route.wsTimeshiftComments() {
             }
         }
 
-        if (CommentSource.GoChan in sources && channel.miyouId != null) {
+        if (CommentSource.GoChan in sources && channel.miyouId != null && SayaMiyouTVApi != null) {
             launch {
                 val queue = Channel<Comment>(Channel.UNLIMITED)
 
