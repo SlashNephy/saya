@@ -14,7 +14,7 @@ object ThirdpartyVersion {
     const val Ktor = "1.5.1"
     const val JsonKt = "6.0.0"
     const val Jsoup = "1.13.1"
-    const val AnnictKt = "2.2.0"
+    const val AnnictKt = "2.4.2"
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
     const val KtorSwagger = "0.7.0"
