@@ -13,14 +13,14 @@ data class Comment(
     val source: String,
 
     /**
-     * コメント番号
-     */
-    val no: Int,
-
-    /**
      * コメントの投稿時間 (エポック秒)
      */
-    val time: Double,
+    val time: Long,
+
+    /**
+     * コメントの投稿時間 (ミリ秒部分)
+     */
+    val timeMs: Int,
 
     /**
      * コメントの投稿者名 / ユーザ ID
@@ -38,17 +38,43 @@ data class Comment(
     val color: String,
 
     /**
-     * コメントの位置 (e.g. "bottom")
+     * コメントの位置
      */
-    val type: String,
+    val type: Position,
 
     /**
-     * コメントのサイズ (e.g. "medium")
+     * コメントのサイズ
      */
-    val size: String,
+    val size: Size
+) {
+    enum class Position {
+        right, top, bottom
+    }
 
-    /**
-     * コメントに紐付いたコマンド (e.g. ["red"])
-     */
-    val commands: List<String>
+    enum class Size {
+        normal, small, medium, big
+    }
+}
+
+@Serializable
+data class JikkyoChannel(
+    val type: Channel.Type,
+    val jk: Int? = null,
+    val name: String,
+    val serviceIds: Set<Int>,
+    val tags: Set<String> = emptySet(),
+    val isOfficial: Boolean = false,
+    val miyouId: String? = null,
+    val communities: Set<String> = emptySet(),
+    val hashtags: Set<String> = emptySet()
 )
+
+@Serializable
+data class TimeshiftCommentControl(
+    val action: Action,
+    val seconds: Double = 0.0
+) {
+    enum class Action {
+        Ready, Resume, Pause, Sync
+    }
+}

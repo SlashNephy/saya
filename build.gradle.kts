@@ -11,7 +11,7 @@ plugins {
 }
 
 object ThirdpartyVersion {
-    const val Ktor = "1.5.0"
+    const val Ktor = "1.5.1"
     const val JsonKt = "6.0.0"
     const val Jsoup = "1.13.1"
     const val AnnictKt = "2.4.2"

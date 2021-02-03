@@ -40,8 +40,8 @@
               DTV backend service with powerful features such as...
 
               <ul class="py-8 list-none">
-                <li>Streaming comments from <a class="text-indigo-600" href="https://jk.nicovideo.jp">niconico</a></li>
-                <li>Fetching anime information from <a class="text-indigo-600" href="https://annict.jp">Annict</a></li>
+                <li>Streaming live/timeshift comments from <a class="text-indigo-600" href="https://jk.nicovideo.jp">niconico</a>, Twitter, 5ch</li>
+                <li>(WIP) Fetching anime information from <a class="text-indigo-600" href="https://annict.jp">Annict</a></li>
               </ul>
             </p>
           </div>
@@ -78,65 +78,41 @@
                       </span>
 
                       <div class="text-sm font-medium text-pink-400">
-                        /comments/<span class="text-red-900">{target}</span>/stream
+                        /comments/<span class="text-red-900">{target}</span>/live
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Streams live comments.</div>
+                    <div class="text-sm text-gray-900">リアルタイムのコメントをストリーム配信します</div>
                     <div class="text-sm text-gray-500">Response: JSON over WebSocket</div>
-                    <div class="text-sm text-gray-500">Error: 404 if {target} not found.</div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{target}</div>
-                    <div class="text-sm text-gray-500">niconico Jikkyo ID (like jk1),</div>
-                    <div class="text-sm text-gray-500">or DTV service id (like 211)</div>
+                    <div class="text-sm text-gray-500">旧ニコニコ実況 ID (e.g. jk211),</div>
+                    <div class="text-sm text-gray-500">or Mirakurun 互換の DTV サービス ID (e.g. 400211)</div>
                   </td>
                 </tr>
 
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                      <span class="px-2 m-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-300 text-gray-800">
-                        GET
+                      <span class="px-2 m-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        WS
                       </span>
 
                       <div class="text-sm font-medium text-pink-400">
-                        /comments/<span class="text-red-900">{target}</span>/stats
+                        /comments/<span class="text-red-900">{target}</span>/timeshift
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Returns comment statistics.</div>
-                    <div class="text-sm text-gray-500">Response: JSON</div>
-                    <div class="text-sm text-gray-500">Error: 404 if {target} not found.</div>
+                    <div class="text-sm text-gray-900">過去のコメントをストリーム配信します</div>
+                    <div class="text-sm text-gray-500">Response: JSON over WebSocket</div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">{target}</div>
-                    <div class="text-sm text-gray-500">Same as /comment/stream/{target}</div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <span class="px-2 m-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-300 text-gray-800">
-                        GET
-                      </span>
-
-                      <div class="text-sm font-medium text-pink-400">
-                        /services/<span class="text-red-900">{target}</span>/hls
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Returns live HLS stream.</div>
-                    <div class="text-sm text-gray-500">Response: application/X-mpegURL</div>
-                    <div class="text-sm text-gray-500">Error: 404 if {target} not found.</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{target}</div>
-                    <div class="text-sm text-gray-500">DTV service id (like 211)</div>
+                    <div class="text-sm text-gray-500">旧ニコニコ実況 ID (e.g. jk211),</div>
+                    <div class="text-sm text-gray-500">or Mirakurun 互換の DTV サービス ID (e.g. 400211)</div>
                   </td>
                 </tr>
               </tbody>

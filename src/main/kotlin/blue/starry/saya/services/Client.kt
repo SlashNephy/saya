@@ -21,9 +21,9 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.time.minutes
 
-const val SayaUserAgent = "saya/1.0 (+https://github.com/SlashNephy/saya)"
+const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
 
-val SayaHttpClient by lazy {
+val SayaHttpClient = run {
     HttpClient(CIO) {
         install(WebSockets)
         install(HttpCookies) {
@@ -53,23 +53,34 @@ val SayaHttpClient by lazy {
     }
 }
 
-val SayaTwitterClient by lazy {
+val SayaTwitterClient = run {
+    val (ck, cs) = Env.TWITTER_CK to Env.TWITTER_CS
+    val (at, ats) = Env.TWITTER_AT to Env.TWITTER_ATS
+    if (ck == null || cs == null || at == null || ats == null) {
+        return@run null
+    }
+
     PenicillinClient {
         account {
-            application(Env.TWITTER_CK, Env.TWITTER_CS)
-            token(Env.TWITTER_AT, Env.TWITTER_ATS)
+            application(ck, cs)
+            token(at, ats)
         }
         httpClient(SayaHttpClient)
     }
 }
 
-val SayaAnnictClient by lazy {
-    AnnictClient(Env.ANNICT_TOKEN)
+val SayaAnnictClient = run {
+    AnnictClient(Env.ANNICT_TOKEN ?: return@run null)
 }
 
-val SayaMiyouTVApi by lazy {
+val SayaMiyouTVApi = run {
+    val (email, pass) = Env.MORITAPO_EMAIL to Env.MORITAPO_PASSWORD
+    if (email == null || pass == null) {
+        return@run null
+    }
+
     val login = runBlocking {
-        MiyouTVApi.login(Env.MORITAPO_EMAIL, Env.MORITAPO_PASSWORD)
+        MiyouTVApi.login(email, pass)
     }
 
     MiyouTVApi(login.token)

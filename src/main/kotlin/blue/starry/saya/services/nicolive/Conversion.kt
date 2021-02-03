@@ -4,28 +4,26 @@ import blue.starry.saya.models.Comment
 import blue.starry.saya.services.comments.nicolive.models.Chat
 
 fun Chat.toSayaComment(source: String): Comment {
-    val (commands, parsed) = parseMail(mail)
-    val (color, type, size) = parsed
+    val (color, type, size) = parseMail(mail)
 
     return Comment(
         source = source,
-        no = no,
-        time = date + dateUsec / 1000000.0,
+        time = date,
+        timeMs = dateUsec / 1000,
         author = userId,
         text = content,
         color = color,
         type = type,
-        size = size,
-        commands = commands
+        size = size
     )
 }
 
-private fun parseMail(mail: String): Pair<List<String>, Triple<String, String, String>> {
+private fun parseMail(mail: String): Triple<String, Comment.Position, Comment.Size> {
     val commands = mail.split(' ').filterNot { it == "184" }.filterNot { it.isBlank() }
 
     var color = "#ffffff"
-    var position = "right"
-    var size = "normal"
+    var position = Comment.Position.right
+    var size = Comment.Size.normal
     commands.forEach { command ->
         val c = parseColor(command)
         if (c != null) {
@@ -43,7 +41,7 @@ private fun parseMail(mail: String): Pair<List<String>, Triple<String, String, S
         }
     }
 
-    return commands to Triple(color, position, size)
+    return Triple(color, position, size)
 }
 
 private fun parseColor(command: String): String? {
@@ -79,19 +77,20 @@ private fun parseColor(command: String): String? {
     }
 }
 
-private fun parsePosition(command: String): String? {
+private fun parsePosition(command: String): Comment.Position? {
     return when (command) {
-        "ue" -> "top"
-        "naka" -> "right"
-        "shita" -> "bottom"
+        "ue" -> Comment.Position.top
+        "naka" -> Comment.Position.right
+        "shita" -> Comment.Position.bottom
         else -> null
     }
 }
 
-private fun parseSize(command: String): String? {
-    if (command == "small" || command == "medium" || command == "big") {
-        return command
+private fun parseSize(command: String): Comment.Size? {
+    return when (command) {
+        "small" -> Comment.Size.small
+        "medium" -> Comment.Size.medium
+        "big" -> Comment.Size.big
+        else -> null
     }
-
-    return null
 }

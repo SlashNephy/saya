@@ -6,6 +6,6 @@ import kotlinx.coroutines.withContext
 
 object AnnictApi {
     suspend fun searchWorksByTitle(title: String) = withContext(Dispatchers.Default) {
-        SayaAnnictClient.getWorks(filter_title = title)
+        SayaAnnictClient?.getWorks(filter_title = title)
     }
 }
