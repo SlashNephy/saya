@@ -234,6 +234,8 @@ fun Route.wsTimeshiftComments() {
                  *   {"action": "Sync", "seconds": 10.0}
                  */
                 TimeshiftCommentControl.Action.Sync -> {
+                    pause = false
+
                     timeMs.set(((startAt + control.seconds) * 1000).roundToLong())
                 }
             }
