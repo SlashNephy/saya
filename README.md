@@ -84,8 +84,15 @@ services:
 
 `http://localhost:1017/` にサーバが起動しているはずです。
 
+# Acknowledgments
+
+saya および [ci7lus/elaina](https://github.com/ci7lus/elaina) は次のプロジェクトを利用 / 参考にして実装しています。
+
+- [tsukumijima/TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus)
+- [tsukumijima/jikkyo-api](https://github.com/tsukumijima/jikkyo-api)
+
+DTV 実況コミュニティの皆さまに感謝します。
+
 # License
 
 saya is provided under the MIT license.
-
-DTV 実況コミュニティの皆さまに感謝します。
