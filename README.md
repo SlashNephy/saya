@@ -53,7 +53,7 @@ services:
     image: slashnephy/saya:latest
     restart: always
     ports:
-      - 1017:1017/tcp
+      - 1017:1017/tcp # いれいな
     # 環境変数で各種設定を行います
     # () 内の値はデフォルト値を示します
     environment:
@@ -82,7 +82,25 @@ services:
     # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
 ```
 
-`http://localhost:1017/` にサーバが起動しているはずです。
+```console
+# イメージ更新
+docker pull slashnephy/saya:latest
+
+# 起動
+docker-compose up -d
+
+# ログ表示
+docker-compose logs -f
+
+# 停止
+docker-compose down
+```
+
+起動すると `http://localhost:1017/` にサーバが起動しているはずです。
+
+# Endpoints
+
+TODO...
 
 # Acknowledgments
 
