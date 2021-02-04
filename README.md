@@ -1,8 +1,10 @@
 # saya: Japanese DTV backend service with powerful features
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.21-blue)](https://kotlinlang.org)
-[![Docker Build Status](https://img.shields.io/docker/build/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/CI)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
+[![Docker Pulls](https://img.shields.io/docker/pulls/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
 [![license](https://img.shields.io/github/license/SlashNephy/saya)](https://github.com/SlashNephy/saya/blob/master/LICENSE)
 [![issues](https://img.shields.io/github/issues/SlashNephy/saya)](https://github.com/SlashNephy/saya/issues)
 [![pull requests](https://img.shields.io/github/issues-pr/SlashNephy/saya)](https://github.com/SlashNephy/saya/pulls)
@@ -40,9 +42,18 @@ saya is still in heavy development.
 - [ci7lus/elaina](https://github.com/ci7lus/elaina)
   - EPGStation を介した番組プレイヤーです。saya の API をフロントエンドで利用しています。
 
-# Setup
+# Docker
 
 環境構築が容易なので Docker で導入することをおすすめします。
+
+現在のベースイメージは `alpine` です。いくつかタグを用意しています。
+
+- `:latest`
+  master ブランチへのプッシュの際にビルドされます。安定しています。
+- `:dev`
+  dev ブランチへのプッシュの際にビルドされます。開発版のため, 不安定である可能性があります。
+- `:v<tag>`
+  GitHub 上のリリースに対応します。
 
 `docker-compose.yml`
 
