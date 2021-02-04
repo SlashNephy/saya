@@ -9,7 +9,7 @@
 
 saya is still in heavy development.  
 
-- [REST API docs](https://atmos.starry.blue/saya)
+- [REST API docs](https://slashnephy.github.io/saya)
 - [Roadmap](https://github.com/SlashNephy/saya/projects/1)
 
 ---
