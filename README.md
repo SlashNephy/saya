@@ -1,15 +1,17 @@
 # saya: Japanese DTV backend service with powerful features
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.21-blue)](https://kotlinlang.org)
-[![Docker Build Status](https://img.shields.io/docker/build/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/Docker)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
+[![Docker Pulls](https://img.shields.io/docker/pulls/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
 [![license](https://img.shields.io/github/license/SlashNephy/saya)](https://github.com/SlashNephy/saya/blob/master/LICENSE)
 [![issues](https://img.shields.io/github/issues/SlashNephy/saya)](https://github.com/SlashNephy/saya/issues)
 [![pull requests](https://img.shields.io/github/issues-pr/SlashNephy/saya)](https://github.com/SlashNephy/saya/pulls)
 
 saya is still in heavy development.  
 
-- [REST API docs](https://atmos.starry.blue/saya)
+- [REST API docs](https://slashnephy.github.io/saya)
 - [Roadmap](https://github.com/SlashNephy/saya/projects/1)
 
 ---
@@ -34,13 +36,24 @@ saya is still in heavy development.
 次のプロジェクトとの併用を想定しています。
 
 - [Chinachu/Mirakurun](https://github.com/Chinachu/Mirakurun) or [mirakc/mirakc](https://github.com/mirakc/mirakc)
-  - Mirakurun と mirakc のどちらでも動作します。
+  - Mirakurun と mirakc のどちらでも動作します。なくても動作しますが一部制約が生じます。
 - [l3tnun/EPGStation](https://github.com/l3tnun/EPGStation)
+  - saya を動作させる上では不要です。elaina 上で番組を再生する場合に必要です。
 - [ci7lus/elaina](https://github.com/ci7lus/elaina)
+  - EPGStation を介した番組プレイヤーです。saya の API をフロントエンドで利用しています。
 
-# Setup
+# Docker
 
 環境構築が容易なので Docker で導入することをおすすめします。
+
+現在のベースイメージは `alpine` です。いくつかタグを用意しています。
+
+- `:latest`
+  master ブランチへのプッシュの際にビルドされます。安定しています。
+- `:dev`
+  dev ブランチへのプッシュの際にビルドされます。開発版のため, 不安定である可能性があります。
+- `:v<tag>`
+  GitHub 上のリリースに対応します。
 
 `docker-compose.yml`
 
@@ -53,7 +66,7 @@ services:
     image: slashnephy/saya:latest
     restart: always
     ports:
-      - 1017:1017/tcp
+      - 1017:1017/tcp # いれいな
     # 環境変数で各種設定を行います
     # () 内の値はデフォルト値を示します
     environment:
@@ -64,6 +77,9 @@ services:
       # HTTP サーバのベース URI ("/")
       # リバースプロキシ時に直下以外に置きたい場合に変更します
       SAYA_BASE_URI: /
+      # ログレベル ("INFO")
+      # 利用可能な値: ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
+      SAYA_LOG: DEBUG
       # Mirakurun のホスト, ポート番号 ("mirakurun", 40772)
       MIRAKURUN_HOST: mirakurun
       MIRAKURUN_PORT: 40772
@@ -76,13 +92,38 @@ services:
       TWITTER_AT: xxx
       TWITTER_ATS: xxx
 
+  elaina:
+    container_name: elaina
+    image: ci7lus/elaina:latest
+    restart: always
+    ports:
+      - 1234:1234/tcp
+
   mirakurun:
   epgstation:
     # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
     # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
 ```
 
-`http://localhost:1017/` にサーバが起動しているはずです。
+```console
+# イメージ更新
+docker pull slashnephy/saya:latest
+
+# 起動
+docker-compose up -d
+
+# ログ表示
+docker-compose logs -f
+
+# 停止
+docker-compose down
+```
+
+up すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
+
+# Endpoints
+
+TODO...
 
 # Acknowledgments
 

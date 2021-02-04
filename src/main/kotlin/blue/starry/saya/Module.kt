@@ -1,6 +1,7 @@
 package blue.starry.saya
 
 import blue.starry.saya.common.Env
+import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.endpoints.getIndex
 import blue.starry.saya.endpoints.wsLiveComments
 import blue.starry.saya.endpoints.wsTimeshiftComments
@@ -36,7 +37,7 @@ fun Application.module() {
         allowCredentials = true
     }
     install(CallLogging) {
-        logger = KotlinLogging.logger("saya.server")
+        logger = KotlinLogging.createSayaLogger("saya.server")
         format { call ->
             when (val status = call.response.status()) {
                 HttpStatusCode.Found -> "$status: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"

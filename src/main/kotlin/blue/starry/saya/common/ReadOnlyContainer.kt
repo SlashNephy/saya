@@ -8,12 +8,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.minutes
 
-class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>) {
+class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>?) {
     private val mutex = Mutex()
     private val collection = mutableListOf<T>()
 
     private val initialJob = GlobalScope.launch {
-        collection.addAll(block())
+        collection.addAll(block() ?: return@launch)
     }
 
     init {
@@ -29,7 +29,7 @@ class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>) {
         initialJob.join()
 
         mutex.withLock {
-            val new = block()
+            val new = block() ?: return
 
             collection.clear()
             collection.addAll(new)
