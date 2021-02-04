@@ -1,6 +1,7 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.*
+import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.services.CommentProvider
@@ -23,7 +24,7 @@ class NicoLiveCommentProvider(
     private val wsUrl: String,
     val lvName: String
 ): CommentProvider {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${channel.name}")
+    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${channel.name}")
 
     suspend fun start() {
         try {
@@ -118,7 +119,7 @@ class NicoLiveCommentProvider(
 }
 
 private class NicoLiveMessageWebSocket(private val provider: NicoLiveCommentProvider, private val room: NicoLiveWebSocketSystemJson.Data) {
-    private val logger = KotlinLogging.logger("saya.services.nicolive.${provider.channel.name}")
+    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${provider.channel.name}")
 
     suspend fun start() {
         try {

@@ -6,6 +6,7 @@ import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
+import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.services.CommentProvider
@@ -21,7 +22,7 @@ class TwitterHashTagProvider(
     private val tags: Set<String>,
     private val client: ApiClient
 ): CommentProvider {
-    private val logger = KotlinLogging.logger("saya.services.twitter#${tags.joinToString(",")}")
+    private val logger = KotlinLogging.createSayaLogger("saya.services.twitter#${tags.joinToString(",")}")
 
     suspend fun start() {
         try {

@@ -1,6 +1,7 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.jsonObjectOf
+import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.TunerProcess
 import kotlinx.serialization.json.jsonPrimitive
 import mu.KotlinLogging
@@ -10,7 +11,7 @@ import blue.starry.saya.models.Program as SayaProgram
 import blue.starry.saya.models.Service as SayaService
 import blue.starry.saya.models.Tuner as SayaTuner
 
-private val logger = KotlinLogging.logger("saya.mirakurun")
+private val logger = KotlinLogging.createSayaLogger("saya.mirakurun")
 
 fun Service.toSayaService(): SayaService? {
     return SayaService(

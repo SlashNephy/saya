@@ -6,6 +6,7 @@ object Env {
     val SAYA_HOST by string { "0.0.0.0" }
     val SAYA_PORT by int { 1017 }
     val SAYA_BASE_URI by string { "/" }
+    val SAYA_LOG by string { "INFO" }
 
     val MIRAKURUN_HOST by string { "mirakurun" }
     val MIRAKURUN_PORT by int { 40772 }

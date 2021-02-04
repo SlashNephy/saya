@@ -77,6 +77,9 @@ services:
       # HTTP サーバのベース URI ("/")
       # リバースプロキシ時に直下以外に置きたい場合に変更します
       SAYA_BASE_URI: /
+      # ログレベル ("INFO")
+      # 利用可能な値: ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
+      SAYA_LOG: DEBUG
       # Mirakurun のホスト, ポート番号 ("mirakurun", 40772)
       MIRAKURUN_HOST: mirakurun
       MIRAKURUN_PORT: 40772

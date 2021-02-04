@@ -1,5 +1,6 @@
 package blue.starry.saya.endpoints
 
+import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.models.TimeshiftCommentControl
@@ -32,7 +33,7 @@ import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToLong
 
-private val logger = KotlinLogging.logger("saya.endpoints")
+private val logger = KotlinLogging.createSayaLogger("saya.endpoints")
 
 private suspend fun DefaultWebSocketSession.rejectWs(message: () -> String) {
     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, message()))
