@@ -1,4 +1,4 @@
-name: CI
+name: Build Docker image
 
 on:
   push:
@@ -8,13 +8,6 @@ on:
       - '**.md'
     branches-ignore:
       - 'releases/**'
-
-  pull_request:
-    types:
-      - opened
-      - synchronize
-    paths-ignore:
-      - '*.md'
 
   release:
     types:
@@ -43,14 +36,14 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v2
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ env.DOCKER_BASE_NAME }}:latest
 
       - name: Build & Push (dev)
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         uses: docker/build-push-action@v2
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ env.DOCKER_BASE_NAME }}:dev
 
       - name: Build & Push (Release)
