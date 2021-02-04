@@ -2,7 +2,7 @@
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.21-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/CI)](https://hub.docker.com/r/slashnephy/saya)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/Docker)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Pulls](https://img.shields.io/docker/pulls/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
 [![license](https://img.shields.io/github/license/SlashNephy/saya)](https://github.com/SlashNephy/saya/blob/master/LICENSE)
