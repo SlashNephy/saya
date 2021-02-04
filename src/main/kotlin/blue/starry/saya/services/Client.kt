@@ -6,6 +6,7 @@ import blue.starry.penicillin.core.session.config.application
 import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
+import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -84,4 +85,19 @@ val SayaMiyouTVApi = run {
     }
 
     MiyouTVApi(login.token)
+}
+
+val SayaMirakurunApi = run {
+    try {
+        val api = MirakurunApi(Env.MIRAKURUN_HOST, Env.MIRAKURUN_PORT)
+
+        // 接続テスト
+        runBlocking {
+            api.getStatus()
+        }
+
+        api
+    } catch (e: ResponseException) {
+        null
+    }
 }

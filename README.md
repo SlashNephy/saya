@@ -34,9 +34,11 @@ saya is still in heavy development.
 次のプロジェクトとの併用を想定しています。
 
 - [Chinachu/Mirakurun](https://github.com/Chinachu/Mirakurun) or [mirakc/mirakc](https://github.com/mirakc/mirakc)
-  - Mirakurun と mirakc のどちらでも動作します。
+  - Mirakurun と mirakc のどちらでも動作します。なくても動作しますが一部制約が生じます。
 - [l3tnun/EPGStation](https://github.com/l3tnun/EPGStation)
+  - saya を動作させる上では不要です。elaina 上で番組を再生する場合に必要です。
 - [ci7lus/elaina](https://github.com/ci7lus/elaina)
+  - EPGStation を介した番組プレイヤーです。saya の API をフロントエンドで利用しています。
 
 # Setup
 

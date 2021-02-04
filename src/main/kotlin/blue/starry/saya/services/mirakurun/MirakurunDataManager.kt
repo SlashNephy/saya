@@ -1,10 +1,11 @@
 package blue.starry.saya.services.mirakurun
 
 import blue.starry.saya.common.ReadOnlyContainer
+import blue.starry.saya.services.SayaMirakurunApi
 
 object MirakurunDataManager {
     val Services = ReadOnlyContainer {
-        MirakurunApi.getServices().mapNotNull { mirakurun ->
+        SayaMirakurunApi?.getServices()?.mapNotNull { mirakurun ->
             mirakurun.toSayaService()
         }
     }
