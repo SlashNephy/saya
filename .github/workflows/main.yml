@@ -5,14 +5,14 @@ on:
     paths-ignore:
       - .gitignore
       - LICENSE
-      - "**.md"
+      - '**.md'
     branches-ignore:
-      - "releases/**"
+      - 'releases/**'
 
   pull_request:
     types: [opened, synchronize]
     paths-ignore:
-      - "*.md"
+      - '*.md'
 
   release:
     types: [ published ]
@@ -37,28 +37,28 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push (master)
-        if: github.event_name == "push" && github.ref == "refs/heads/master"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v2
         with:
-          push: ${{ github.event_name != "pull_request" }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.DOCKER_BASE_NAME }}:latest
 
       - name: Build & Push (dev)
-        if: github.event_name == "push" && github.ref == "refs/heads/dev"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         uses: docker/build-push-action@v2
         with:
-          push: ${{ github.event_name != "pull_request" }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.DOCKER_BASE_NAME }}:dev
 
       - name: Build & Push (Release)
-        if: github.event_name == "release"
+        if: github.event_name == 'release'
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: ${{ env.DOCKER_BASE_NAME }}:${{ github.event.release.tag_name }}
 
       - name: Update Docker Hub description
-        if: github.event_name == "push" && github.ref == "refs/heads/master"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peter-evans/dockerhub-description@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
