@@ -89,6 +89,13 @@ services:
       TWITTER_AT: xxx
       TWITTER_ATS: xxx
 
+  elaina:
+    container_name: elaina
+    image: ci7lus/elaina:latest
+    restart: always
+    ports:
+      - 1234:1234/tcp
+
   mirakurun:
   epgstation:
     # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
@@ -109,7 +116,7 @@ docker-compose logs -f
 docker-compose down
 ```
 
-起動すると `http://localhost:1017/` にサーバが起動しているはずです。
+up すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
 
 # Endpoints
 
