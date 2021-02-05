@@ -17,8 +17,8 @@ object ThirdpartyVersion {
     const val AnnictKt = "2.4.2"
     const val Penicillin = "6.0.2"
     const val ApacheCommonsCodec = "1.15"
-    const val KtorSwagger = "0.7.0"
-    const val Clikt = "3.1.0"
+    // const val KtorSwagger = "0.7.0"
+    // const val Clikt = "3.1.0"
 
     // logging
     const val KotlinLogging = "2.0.4"
@@ -42,10 +42,10 @@ dependencies {
     // Ktor Server
     implementation("io.ktor:ktor-server-cio:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-websockets:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-html-builder:${ThirdpartyVersion.Ktor}")
+    // implementation("io.ktor:ktor-html-builder:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-serialization:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
-    implementation("com.github.nielsfalk:ktor-swagger:${ThirdpartyVersion.KtorSwagger}")
+    // implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
+    // implementation("com.github.nielsfalk:ktor-swagger:${ThirdpartyVersion.KtorSwagger}")
 
     // Ktor Client
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
@@ -61,7 +61,7 @@ dependencies {
     implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")
 
     // CLI
-    implementation("com.github.ajalt.clikt:clikt:${ThirdpartyVersion.Clikt}")
+    // implementation("com.github.ajalt.clikt:clikt:${ThirdpartyVersion.Clikt}")
 
     // logging
     implementation("io.github.microutils:kotlin-logging:${ThirdpartyVersion.KotlinLogging}")
