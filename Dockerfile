@@ -21,7 +21,7 @@ RUN gradle -version > /dev/null \
     && gradle shadowJar --parallel --no-daemon
 
 # Final Stage
-FROM openjdk:8-jre-alpine
+FROM openjdk:17-jre-alpine
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
 
