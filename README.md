@@ -1,6 +1,6 @@
 # saya: Japanese DTV backend service with powerful features
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.4.21-blue)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/Docker)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
@@ -46,13 +46,13 @@ saya is still in heavy development.
 
 環境構築が容易なので Docker で導入することをおすすめします。
 
-現在のベースイメージは `alpine` です。いくつかタグを用意しています。
+現在のベースイメージは `openjdk:17-jdk-alpine` です。いくつかフレーバーを用意しています。
 
-- `:latest`
+- `slashnephy/saya:latest`  
   master ブランチへのプッシュの際にビルドされます。安定しています。
-- `:dev`
+- `slashnephy/saya:dev`  
   dev ブランチへのプッシュの際にビルドされます。開発版のため, 不安定である可能性があります。
-- `:v<tag>`
+- `slashnephy/saya:<version>`  
   GitHub 上のリリースに対応します。
 
 `docker-compose.yml`
