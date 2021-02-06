@@ -29,6 +29,7 @@ saya is still in heavy development.
 - ライブ再生 / 録画番組再生での実況コメントの配信
   - ライブ再生時には [ニコニコ実況](https://jk.nicovideo.jp/) の公式放送およびコミュニティ放送 / Twitter ハッシュタグから取得します。
   - 録画番組再生時には [ニコニコ実況 過去ログ API](https://jikkyo.tsukumijima.net/) / 5ch 過去ログから取得します。
+- TS ファイルから EPG 情報を抽出
 - and more, coming soon...
 
 その他実装予定の機能などは [Roadmap](https://github.com/SlashNephy/saya/projects/1) をご覧ください。
@@ -132,7 +133,7 @@ up すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に
 
 # Endpoints
 
-TODO...
+saya が提供する API は [endpoints.md](https://github.com/SlashNephy/saya/blob/master/docs/endpoints.md) に一覧があります。
 
 # Acknowledgments
 
