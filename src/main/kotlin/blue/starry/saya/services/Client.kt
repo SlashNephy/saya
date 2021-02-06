@@ -6,6 +6,8 @@ import blue.starry.penicillin.core.session.config.application
 import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
+import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import io.ktor.client.*
@@ -20,10 +22,12 @@ import io.ktor.http.*
 import jp.annict.client.AnnictClient
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.time.minutes
 
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
-private val logger = KotlinLogging.logger("saya.client")
+private val logger = KotlinLogging.createSayaLogger("saya.client")
 
 val SayaHttpClient = run {
     HttpClient(CIO) {
@@ -41,7 +45,7 @@ val SayaHttpClient = run {
         Logging {
             level = LogLevel.INFO
             logger = object : Logger {
-                private val logger = KotlinLogging.logger("saya.http")
+                private val logger = KotlinLogging.createSayaLogger("saya.http")
 
                 override fun log(message: String) {
                     logger.trace { message }
@@ -110,4 +114,13 @@ val SayaMirakurunApi = run {
         logger.info { "Mirakurun/mirakc に接続できません。Mirakurun/mirakc 連携機能は提供しません。" }
         null
     }
+}
+
+val SayaMirakcAribWrapper = run {
+    if (!Files.exists(Paths.get(Env.MIRAKC_ARIB_PATH))) {
+        logger.info { "mirakc-arib が見つかりません。mirakc-arib 連携機能は提供しません。" }
+        return@run null
+    }
+
+    MirakcAribWrapper(Env.MIRAKC_ARIB_PATH)
 }

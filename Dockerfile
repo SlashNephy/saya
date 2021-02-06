@@ -20,9 +20,16 @@ COPY src/main/ /app/src/main/
 RUN gradle -version > /dev/null \
     && gradle shadowJar --parallel --no-daemon
 
+# For mirakc-arib
+FROM mirakc/mirakc:alpine AS mirakc-image
+
 # Final Stage
 FROM openjdk:17-jdk-alpine
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
+
+COPY --from=mirakc-image /usr/local/bin/mirakc-arib /usr/local/bin/
+RUN apk add --update --no-cache libgcc libstdc++
+
 COPY docs/ /app/docs/
 
 WORKDIR /app
