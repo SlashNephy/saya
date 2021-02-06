@@ -91,6 +91,15 @@ services:
       TWITTER_CS: xxx
       TWITTER_AT: xxx
       TWITTER_ATS: xxx
+      # /files エンドポイントで TS ファイルを検索するパス (null)
+      # 別途 volume マウントが必要です
+      MOUNT_POINT: /mnt
+      # mirakc-arib へのパス ("/usr/local/bin/mirakc-arib")
+      # Docker イメージを使用している場合は指定不要です
+      MIRAKC_ARIB_PATH: /usr/local/bin/mirakc-arib
+    volumes:
+      # 録画 TS ファイルの置き場所
+      - /mnt:/mnt:ro
 
   elaina:
     container_name: elaina

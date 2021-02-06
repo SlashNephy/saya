@@ -17,7 +17,6 @@ object Env {
     val TWITTER_ATS by stringOrNull
     val MORITAPO_EMAIL by stringOrNull
     val MORITAPO_PASSWORD by stringOrNull
-    // TODO: README
     val MOUNT_POINT by stringOrNull
     val MIRAKC_ARIB_PATH by string { "/usr/local/bin/mirakc-arib" }
 }
