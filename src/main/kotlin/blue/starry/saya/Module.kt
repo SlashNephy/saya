@@ -50,13 +50,19 @@ fun Application.module() {
             getIndex()
 
             route("comments") {
+                getCommentInfo()
+
                 route("{target}") {
                     route("live") {
-                        wsLiveComments()
+                        wsLiveCommentsByTarget()
                     }
 
                     route("timeshift") {
-                        wsTimeshiftComments()
+                        wsTimeshiftCommentsByTarget()
+                    }
+
+                    route("info") {
+                        getCommentInfoByTarget()
                     }
                 }
             }

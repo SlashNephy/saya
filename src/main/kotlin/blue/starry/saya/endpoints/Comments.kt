@@ -1,6 +1,7 @@
 package blue.starry.saya.endpoints
 
 import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.common.respondOr404
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.models.TimeshiftCommentControl
@@ -14,7 +15,10 @@ import blue.starry.saya.services.nicolive.NicoLiveApi
 import blue.starry.saya.services.nicolive.NicoLiveCommentProvider
 import blue.starry.saya.services.nicolive.toSayaComment
 import blue.starry.saya.services.twitter.TwitterHashTagProvider
+import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
@@ -75,7 +79,7 @@ private enum class CommentSource(private vararg val aliases: String) {
 }
 
 // TODO: BroadcastChannel の共有
-fun Route.wsLiveComments() {
+fun Route.wsLiveCommentsByTarget() {
     webSocket {
         val target: String by call.parameters
         val sources = CommentSource.from(call.parameters["sources"])
@@ -113,7 +117,7 @@ fun Route.wsLiveComments() {
     }
 }
 
-fun Route.wsTimeshiftComments() {
+fun Route.wsTimeshiftCommentsByTarget() {
     webSocket {
         val target: String by call.parameters
 
@@ -242,6 +246,26 @@ fun Route.wsTimeshiftComments() {
             }
 
             logger.debug { "クライアントの命令: $control" }
+        }
+    }
+}
+
+fun Route.getCommentInfo() {
+    get {
+        call.respond(
+            NicoJkApi.getChannels().toList()
+        )
+    }
+}
+
+fun Route.getCommentInfoByTarget() {
+    get {
+        val target: String by call.parameters
+
+        call.respondOr404 {
+            val channel = findChannel(target) ?: return@respondOr404 null
+
+            NicoJkApi.getChannels().find { it.jk == channel.jk }
         }
     }
 }

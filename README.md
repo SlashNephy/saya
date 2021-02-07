@@ -141,6 +141,7 @@ saya および [ci7lus/elaina](https://github.com/ci7lus/elaina) は次のプロ
 
 - [tsukumijima/TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus)
 - [tsukumijima/jikkyo-api](https://github.com/tsukumijima/jikkyo-api)
+- [asannou/namami](https://github.com/asannou/namami)
 
 DTV 実況コミュニティの皆さまに感謝します。
 

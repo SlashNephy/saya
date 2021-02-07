@@ -78,3 +78,10 @@ data class TimeshiftCommentControl(
         Ready, Resume, Pause, Sync
     }
 }
+
+@Serializable
+data class CommentInfo(
+    val jk: Int,
+    val force: Int,
+    val last: String
+)
