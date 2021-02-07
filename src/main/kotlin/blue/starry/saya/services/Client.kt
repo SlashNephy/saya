@@ -110,8 +110,8 @@ val SayaMirakurunApi = run {
         }
 
         api
-    } catch (e: ResponseException) {
-        logger.info { "Mirakurun/mirakc に接続できません。Mirakurun/mirakc 連携機能は提供しません。" }
+    } catch (e: Throwable) {
+        logger.info(e) { "Mirakurun/mirakc に接続できません。Mirakurun/mirakc 連携機能は提供しません。" }
         null
     }
 }
