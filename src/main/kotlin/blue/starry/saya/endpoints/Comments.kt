@@ -266,7 +266,7 @@ fun Route.getCommentInfoByTarget() {
         call.respondOr404 {
             val channel = findChannel(target) ?: return@respondOr404 null
 
-            NicoJkApi.getChannels().find { it.jk == channel.jk }
+            NicoJkApi.getChannels().find { it.channel.jk == channel.jk }
         }
     }
 }

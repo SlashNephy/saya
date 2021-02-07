@@ -38,7 +38,6 @@ object NicoJkApi {
             CommentInfo(
                 channel = jkChannel,
                 service = MirakurunDataManager.Services.find { it.actualId in jkChannel.serviceIds },
-                jk = jk,
                 force = channel.getFirstElementByTagName("force").textContent.toInt(),
                 last = channel.getFirstElementByTagName("last_res").textContent
             )

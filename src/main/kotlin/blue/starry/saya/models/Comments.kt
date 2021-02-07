@@ -72,7 +72,6 @@ data class TimeshiftCommentControl(
 data class CommentInfo(
     val channel: JikkyoChannel,
     val service: MirakurunService?,
-    val jk: Int,
     val force: Int,
     val last: String
 )
