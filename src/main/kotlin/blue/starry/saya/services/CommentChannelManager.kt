@@ -1,13 +1,13 @@
 package blue.starry.saya.services
 
-import blue.starry.saya.models.Channel
+import blue.starry.saya.models.MirakurunChannel
 import blue.starry.saya.models.JikkyoChannel
 
 object CommentChannelManager {
     val Channels = listOf(
         // GR (キー局)
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 1,
             name = "NHK 総合",
             serviceIds = setOf(
@@ -69,7 +69,7 @@ object CommentChannelManager {
             hashtags = setOf("nhktv")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 2,
             name = "Eテレ",
             serviceIds = setOf(
@@ -121,7 +121,7 @@ object CommentChannelManager {
             hashtags = setOf("Eテレ")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 4,
             name = "日テレ",
             serviceIds = setOf(
@@ -168,7 +168,7 @@ object CommentChannelManager {
             hashtags = setOf("ntv")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 5,
             name = "テレビ朝日",
             serviceIds = setOf(
@@ -210,7 +210,7 @@ object CommentChannelManager {
             hashtags = setOf("tvasahi")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 6,
             name = "TBS",
             serviceIds = setOf(
@@ -256,7 +256,7 @@ object CommentChannelManager {
             hashtags = setOf("tbs")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 7,
             name = "テレビ東京",
             serviceIds = setOf(
@@ -280,7 +280,7 @@ object CommentChannelManager {
             hashtags = setOf("tvtokyo")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 8,
             name = "フジテレビ",
             serviceIds = setOf(
@@ -327,7 +327,7 @@ object CommentChannelManager {
 
         // GR (地方局)
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 9,
             name = "TOKYO MX",
             serviceIds = setOf(
@@ -341,7 +341,7 @@ object CommentChannelManager {
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 231,
             name = "放送大学",
             serviceIds = setOf(
@@ -350,7 +350,7 @@ object CommentChannelManager {
             hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 10,
             name = "テレ玉",
             serviceIds = setOf(
@@ -362,7 +362,7 @@ object CommentChannelManager {
             hashtags = setOf("テレ玉")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 11,
             name = "tvk",
             serviceIds = setOf(
@@ -374,7 +374,7 @@ object CommentChannelManager {
             hashtags = setOf("tvk")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             jk = 12,
             name = "チバテレビ",
             serviceIds = setOf(
@@ -385,7 +385,7 @@ object CommentChannelManager {
             hashtags = setOf("チバテレ")
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "群馬テレビ",
             serviceIds = setOf(
                 25656  // 群馬: 群馬テレビ
@@ -393,7 +393,7 @@ object CommentChannelManager {
             miyouId = "群馬テレビ"
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "とちぎテレビ",
             serviceIds = setOf(
                 28728  // 栃木: とちぎテレビ
@@ -401,49 +401,49 @@ object CommentChannelManager {
             miyouId = "とちぎテレビ"
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "三重テレビ",
             serviceIds = setOf(
                 38960  // 三重: 三重テレビ
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "ぎふチャン",
             serviceIds = setOf(
                 39984  // 岐阜: ぎふチャン
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "KBS京都",
             serviceIds = setOf(
                 42032  // 京都: KBS京都
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "サンテレビ",
             serviceIds = setOf(
                 43056  // 兵庫: サンテレビ
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "テレビ和歌山",
             serviceIds = setOf(
                 44080  // 和歌山: テレビ和歌山
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "奈良テレビ",
             serviceIds = setOf(
                 45104  // 奈良: 奈良テレビ
             )
         ),
         JikkyoChannel(
-            type = Channel.Type.GR,
+            type = MirakurunChannel.Type.GR,
             name = "BBCびわ湖放送",
             serviceIds = setOf(
                 46128  // 滋賀: BBCびわ湖放送
@@ -452,7 +452,7 @@ object CommentChannelManager {
 
         // BS
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 101,
             name = "NHKBS1",
             serviceIds = setOf(101, 102),
@@ -462,7 +462,7 @@ object CommentChannelManager {
             hashtags = setOf("nhkbs1")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 103,
             name = "NHKBSプレミアム",
             serviceIds = setOf(103, 104),
@@ -472,7 +472,7 @@ object CommentChannelManager {
             hashtags = setOf("nhkbsp")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 141,
             name = "BS日テレ",
             serviceIds = setOf(141, 142, 143),
@@ -482,7 +482,7 @@ object CommentChannelManager {
             hashtags = setOf("BS日テレ")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 151,
             name = "BS朝日",
             serviceIds = setOf(151, 152, 153),
@@ -492,7 +492,7 @@ object CommentChannelManager {
             hashtags = setOf("BS朝日")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 161,
             name = "BS-TBS",
             serviceIds = setOf(161, 162, 163),
@@ -502,7 +502,7 @@ object CommentChannelManager {
             hashtags = setOf("bstbs")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 171,
             name = "BSテレ東",
             serviceIds = setOf(171, 172, 173),
@@ -512,7 +512,7 @@ object CommentChannelManager {
             hashtags = setOf("BSテレ東")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 181,
             name = "BSフジ",
             serviceIds = setOf(181, 182, 183),
@@ -522,7 +522,7 @@ object CommentChannelManager {
             hashtags = setOf("BSフジ")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 191,
             name = "WOWOWプライム",
             serviceIds = setOf(191),
@@ -531,7 +531,7 @@ object CommentChannelManager {
             communities = setOf("co5251972")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 192,
             name = "WOWOWライブ",
             serviceIds = setOf(192),
@@ -540,7 +540,7 @@ object CommentChannelManager {
             communities = setOf("co5251976")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 193,
             name = "WOWOWシネマ",
             serviceIds = setOf(193),
@@ -549,28 +549,28 @@ object CommentChannelManager {
             communities = setOf("co5251983")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 200,
             name = "スターチャンネル1",
             serviceIds = setOf(200),
             miyouId = "スターチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 201,
             name = "スターチャンネル2",
             serviceIds = setOf(201),
             miyouId = "スターチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 202,
             name = "スターチャンネル3",
             serviceIds = setOf(202),
             miyouId = "スターチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 211,
             name = "BS11イレブン",
             tags = setOf("BS11"),
@@ -580,7 +580,7 @@ object CommentChannelManager {
             hashtags = setOf("BS11")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 222,
             name = "BS12トゥエルビ",
             tags = setOf("TwellV", "BS12"),
@@ -590,21 +590,21 @@ object CommentChannelManager {
             hashtags = setOf("BS12")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 231,
             name = "放送大学ex",
             serviceIds = setOf(231),
             hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 231,
             name = "放送大学on",
             serviceIds = setOf(232),
             hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 234,
             name = "グリーンチャンネル",
             serviceIds = setOf(234),
@@ -613,7 +613,7 @@ object CommentChannelManager {
             communities = setOf("co5217651")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 236,
             name = "BSアニマックス",
             serviceIds = setOf(236),
@@ -621,70 +621,70 @@ object CommentChannelManager {
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 238,
             name = "FOXbs238",
             serviceIds = setOf(238),
             miyouId = "FOXスポーツエンタ"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 241,
             name = "BSスカパー!",
             serviceIds = setOf(241),
             miyouId = "BSスカパー"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 242,
             name = "J SPORTS 1",
             serviceIds = setOf(242),
             miyouId = "J SPORTS"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 243,
             name = "J SPORTS 2",
             serviceIds = setOf(243),
             miyouId = "J SPORTS"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 244,
             name = "J SPORTS 3",
             serviceIds = setOf(244),
             miyouId = "J SPORTS"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 245,
             name = "J SPORTS 4",
             serviceIds = setOf(245),
             miyouId = "J SPORTS"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 251,
             name = "BS釣りビジョン",
             serviceIds = setOf(251),
             miyouId = "BS釣りビジョン"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 252,
             name = "WOWOWプラス",
             serviceIds = setOf(252),
             miyouId = "イマジカBS・映画"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 255,
             name = "日本映画専門ch",
             serviceIds = setOf(255),
             miyouId = "BS日本映画専門"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 256,
             name = "ディズニーch",
             serviceIds = setOf(256),
@@ -692,56 +692,56 @@ object CommentChannelManager {
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 258,
             name = "Dlife",
             serviceIds = setOf(258),
             miyouId = "ディーライフ"
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "放送大学ラジオ",
             serviceIds = setOf(531),
             hashtags = setOf("放送大学")
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "NHKデータ1",
             serviceIds = setOf(700, 701)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "707チャンネル",
             serviceIds = setOf(707)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "株価情報",
             serviceIds = setOf(777)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "ご案内チャンネル",
             serviceIds = setOf(791)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "プレミアムナビ",
             serviceIds = setOf(792)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "スターチャンネル",
             serviceIds = setOf(800)
         ),
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             name = "スカパー!ガイド",
             serviceIds = setOf(840)
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.BS,
+            type = MirakurunChannel.Type.BS,
             jk = 910,
             name = "SOLiVE24",
             serviceIds = setOf(910)
@@ -749,37 +749,37 @@ object CommentChannelManager {
 
         // CS: 映画
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "東映チャンネル",
             serviceIds = setOf(218),
             miyouId = "東映チャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "衛星劇場",
             serviceIds = setOf(219),
             miyouId = "衛星劇場"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "映画・チャンネルNECO",
             serviceIds = setOf(223),
             miyouId = "映画・chNECO"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ザ・シネマ",
             serviceIds = setOf(227),
             miyouId = "ザ・シネマ"
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "FOXムービー",
             serviceIds = setOf(229)
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ムービープラス",
             serviceIds = setOf(240),
             miyouId = "ムービープラス"
@@ -787,25 +787,25 @@ object CommentChannelManager {
 
         // スポーツ
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカイA",
             serviceIds = setOf(250),
             miyouId = "スカイA"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "GAORA SPORTS",
             serviceIds = setOf(254),
             miyouId = "GAORA"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "日テレジータス",
             serviceIds = setOf(257),
             miyouId = "日テレジータス"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ゴルフネットワーク",
             serviceIds = setOf(262),
             miyouId = "ゴルフネット"
@@ -813,25 +813,25 @@ object CommentChannelManager {
 
         // CS: 音楽
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スペースシャワーTV プラス",
             serviceIds = setOf(321),
             miyouId = "スペシャプラス"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スペースシャワーTV",
             serviceIds = setOf(322),
             miyouId = "スペースシャワーTV"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "MTV",
             serviceIds = setOf(323),
             miyouId = "MTV"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ミュージック・エア",
             serviceIds = setOf(
                 324,
@@ -840,13 +840,13 @@ object CommentChannelManager {
             miyouId = "ミュージック・エア"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "エムオン!",
             serviceIds = setOf(325),
             miyouId = "エムオン"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "歌謡ポップス",
             serviceIds = setOf(329),
             miyouId = "歌謡ポップス"
@@ -854,19 +854,19 @@ object CommentChannelManager {
 
         // CS: アニメ
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "キッズステーション",
             serviceIds = setOf(330),
             miyouId = "キッズステーション"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "カートゥーン ネットワーク",
             serviceIds = setOf(331),
             miyouId = "カートゥーン"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             jk = 333,
             name = "AT-X",
             serviceIds = setOf(333),
@@ -876,90 +876,90 @@ object CommentChannelManager {
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ディズニーXD",
             serviceIds = setOf(334)
         ),
 
         // CS: 総合エンターテイメント
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "TBSチャンネル1",
             serviceIds = setOf(296),
             miyouId = "TBSチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "TBSチャンネル2",
             serviceIds = setOf(297),
             miyouId = "TBSチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "テレ朝チャンネル1",
             serviceIds = setOf(298),
             miyouId = "テレ朝チャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "テレ朝チャンネル2",
             serviceIds = setOf(299)
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "日テレプラス",
             serviceIds = setOf(300),
             miyouId = "日テレプラス"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "エンタメ～テレ☆シネドラバラエティ",
             serviceIds = setOf(301)
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "チャンネル銀河",
             serviceIds = setOf(305),
             miyouId = "銀河"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "フジテレビONE",
             serviceIds = setOf(307),
             miyouId = "フジテレビONE"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "フジテレビTWO",
             serviceIds = setOf(308),
             miyouId = "フジテレビTWO"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "フジテレビNEXT",
             serviceIds = setOf(309),
             miyouId = "フジテレビNEXT"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカチャン0",
             serviceIds = setOf(800),
             miyouId = "スカサカ"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカチャン1",
             serviceIds = setOf(801),
             miyouId = "スカチャン"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカチャン2",
             serviceIds = setOf(802),
             miyouId = "スカチャン"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカチャン3",
             serviceIds = setOf(805),
             miyouId = "スカチャン"
@@ -967,111 +967,111 @@ object CommentChannelManager {
 
         // CS: 海外ドラマ・バラエティ
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スーパー！ドラマTV",
             serviceIds = setOf(310),
             miyouId = "スーパードラマ"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "AXN",
             serviceIds = setOf(311),
             miyouId = "AXN 海外ドラマ"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "FOX",
             serviceIds = setOf(312),
             miyouId = "FOX"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "女性チャンネル♪LaLa TV",
             serviceIds = setOf(314),
             miyouId = "女性ch/LaLa"
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "FOXプラス",
             serviceIds = setOf(315)
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "AXNミステリー",
             serviceIds = setOf(316),
             miyouId = "AXNミステリー"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "KBS World",
             serviceIds = setOf(317)
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "M net",
             serviceIds = setOf(318)
         ),
 
         // CS: 国内ドラマ・バラエティ・舞台
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "TAKARAZUKA SKY STAGE",
             serviceIds = setOf(290),
             miyouId = "SKY STAGE"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "時代劇専門チャンネル",
             serviceIds = setOf(292),
             miyouId = "時代劇専門"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ファミリー劇場",
             serviceIds = setOf(293),
             miyouId = "ファミリー劇場"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ホームドラマチャンネル",
             serviceIds = setOf(294),
             miyouId = "ホームドラマ"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "MONDO TV",
             serviceIds = setOf(295),
             miyouId = "MONDO TV"
         ),
         // 停波済み
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "旅チャンネル",
             serviceIds = setOf(362)
         ),
 
         // CS: ドキュメンタリー
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ディスカバリーチャンネル",
             serviceIds = setOf(340),
             miyouId = "ディスカバリー"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "アニマルプラネット",
             serviceIds = setOf(341),
             miyouId = "アニマルプラネット"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ヒストリーチャンネル",
             serviceIds = setOf(342),
             miyouId = "ヒストリーチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ナショナル ジオグラフィック",
             serviceIds = setOf(343),
             miyouId = "ナショジオ"
@@ -1079,25 +1079,25 @@ object CommentChannelManager {
 
         // CS: ニュース
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "日テレNEWS24",
             serviceIds = setOf(349),
             miyouId = "日テレNEWS24"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "TBS NEWS",
             serviceIds = setOf(351),
             miyouId = "TBSニュースバード"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "BBCワールドニュース",
             serviceIds = setOf(353),
             miyouId = "BBCワールド"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "CNNj",
             serviceIds = setOf(354),
             miyouId = "CNNj"
@@ -1105,13 +1105,13 @@ object CommentChannelManager {
 
         // CS: 教育
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ディズニージュニア",
             serviceIds = setOf(339),
             miyouId = "ディズニージュニア"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "囲碁・将棋チャンネル",
             serviceIds = setOf(363),
             miyouId = "囲碁・将棋チャンネル"
@@ -1119,20 +1119,20 @@ object CommentChannelManager {
 
         // CS: ショッピング
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "ショップチャンネル",
             serviceIds = setOf(55),
             miyouId = "ショップチャンネル"
         ),
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "QVC",
             serviceIds = setOf(161),
             miyouId = "QVC"
         ),
 
         JikkyoChannel(
-            type = Channel.Type.CS,
+            type = MirakurunChannel.Type.CS,
             name = "スカパー!プロモ",
             serviceIds = setOf(100),
             miyouId = "スカパープロモ"

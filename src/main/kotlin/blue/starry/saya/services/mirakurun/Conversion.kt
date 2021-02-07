@@ -2,14 +2,14 @@ package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.models.TunerProcess
+import blue.starry.saya.models.MirakurunTunerProcess
 import kotlinx.serialization.json.jsonPrimitive
 import mu.KotlinLogging
 import java.text.Normalizer
-import blue.starry.saya.models.Channel as SayaChannel
-import blue.starry.saya.models.Program as SayaProgram
-import blue.starry.saya.models.Service as SayaService
-import blue.starry.saya.models.Tuner as SayaTuner
+import blue.starry.saya.models.MirakurunChannel as SayaChannel
+import blue.starry.saya.models.MirakurunProgram as SayaProgram
+import blue.starry.saya.models.MirakurunService as SayaService
+import blue.starry.saya.models.MirakurunTuner as SayaTuner
 
 private val logger = KotlinLogging.createSayaLogger("saya.mirakurun")
 
@@ -188,8 +188,8 @@ fun Program.Genre.toSayaGenre(): Int {
     return lv1 * 16 + lv2
 }
 
-fun SayaTuner.toSayaTunerProcess(): TunerProcess? {
-    return TunerProcess(
+fun SayaTuner.toSayaTunerProcess(): MirakurunTunerProcess? {
+    return MirakurunTunerProcess(
         json = jsonObjectOf(
             "pid" to pid
         ),

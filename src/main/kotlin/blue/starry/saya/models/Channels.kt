@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class JikkyoChannel(
-    val type: Channel.Type,
+    val type: MirakurunChannel.Type,
     val jk: Int? = null,
     val name: String,
     val serviceIds: Set<Int>,

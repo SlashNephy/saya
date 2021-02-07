@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-data class Service(
+data class MirakurunService(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -44,11 +44,11 @@ data class Service(
     /**
      * タイプ
      */
-    val type: Channel.Type
+    val type: MirakurunChannel.Type
 )
 
 @Serializable
-data class Channel(
+data class MirakurunChannel(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -72,7 +72,7 @@ data class Channel(
     /**
      * サービスのリスト
      */
-    val services: List<Service>
+    val services: List<MirakurunService>
 ) {
     enum class Type {
         GR, BS, CS, SKY
@@ -80,7 +80,7 @@ data class Channel(
 }
 
 @Serializable
-data class Logo(
+data class MirakurunServiceLogo(
     /**
      * ロゴ ID
      */
@@ -89,7 +89,7 @@ data class Logo(
     /**
      * サービス
      */
-    val service: Service,
+    val service: MirakurunService,
 
     /**
      * ロゴデータ (PNG, base64)
@@ -98,7 +98,7 @@ data class Logo(
 )
 
 @Serializable
-data class Program(
+data class MirakurunProgram(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -112,7 +112,7 @@ data class Program(
     /**
      * サービス
      */
-    val service: Service,
+    val service: MirakurunService,
 
     /**
      * 開始時刻 (エポック秒)
@@ -181,7 +181,7 @@ data class Program(
 }
 
 @Serializable
-data class Tuner(
+data class MirakurunTuner(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -189,7 +189,7 @@ data class Tuner(
 
     val index: Int,
     val name: String,
-    val types: List<Channel.Type>,
+    val types: List<MirakurunChannel.Type>,
     val command: String?,
     val pid: Int?,
     val users: List<User>,
@@ -208,19 +208,11 @@ data class Tuner(
 }
 
 @Serializable
-data class TunerProcess(
+data class MirakurunTunerProcess(
     /**
      * Mirakurun オブジェクト (非公開)
      */
     @Transient internal val json: JsonObject? = null,
 
     val pid: Int
-)
-
-@Serializable
-data class Genre(
-    val id: Int,
-    val main: String,
-    val sub: String,
-    val count: Int
 )

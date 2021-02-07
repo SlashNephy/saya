@@ -18,7 +18,7 @@ data class FileInfo(
     val name: String,
     val description: String?,
     val extended: String?,
-    val service: Service?,
+    val service: MirakurunService?,
     val startAt: Long,
     val endAt: Long,
     val duration: Int,
