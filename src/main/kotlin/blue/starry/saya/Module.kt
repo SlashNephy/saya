@@ -78,6 +78,10 @@ fun Application.module() {
                     }
                 }
             }
+
+            route("channels") {
+                getChannels()
+            }
         }
     }
 }

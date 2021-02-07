@@ -4,7 +4,6 @@ import blue.starry.saya.models.Channel
 import blue.starry.saya.models.JikkyoChannel
 
 object CommentChannelManager {
-    // TODO: Network ID による判定
     val Channels = listOf(
         // GR (キー局)
         JikkyoChannel(
