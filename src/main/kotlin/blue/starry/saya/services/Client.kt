@@ -29,7 +29,7 @@ import kotlin.time.minutes
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
 private val logger = KotlinLogging.createSayaLogger("saya.client")
 
-val SayaHttpClient = run {
+val SayaHttpClient by lazy {
     HttpClient(CIO) {
         install(WebSockets)
         install(HttpCookies) {
@@ -59,12 +59,12 @@ val SayaHttpClient = run {
     }
 }
 
-val SayaTwitterClient = run {
+val SayaTwitterClient by lazy {
     val (ck, cs) = Env.TWITTER_CK to Env.TWITTER_CS
     val (at, ats) = Env.TWITTER_AT to Env.TWITTER_ATS
     if (ck == null || cs == null || at == null || ats == null) {
         logger.info { "Twitter の資格情報が設定されていません。Twitter 連携機能は提供しません。" }
-        return@run null
+        return@lazy null
     }
 
     PenicillinClient {
@@ -76,21 +76,21 @@ val SayaTwitterClient = run {
     }
 }
 
-val SayaAnnictClient = run {
+val SayaAnnictClient by lazy {
     val token = Env.ANNICT_TOKEN
     if (token == null) {
         logger.info { "Annict の資格情報が設定されていません。Annict 連携機能は提供しません。" }
-        return@run null
+        return@lazy null
     }
 
     AnnictClient(token)
 }
 
-val SayaMiyouTVApi = run {
+val SayaMiyouTVApi by lazy {
     val (email, pass) = Env.MORITAPO_EMAIL to Env.MORITAPO_PASSWORD
     if (email == null || pass == null) {
         logger.info { "MiyouTV の資格情報が設定されていません。MiyouTV 連携機能は提供しません。" }
-        return@run null
+        return@lazy null
     }
 
     val login = runBlocking {
@@ -100,7 +100,7 @@ val SayaMiyouTVApi = run {
     MiyouTVApi(login.token)
 }
 
-val SayaMirakurunApi = run {
+val SayaMirakurunApi by lazy {
     try {
         val api = MirakurunApi(Env.MIRAKURUN_HOST, Env.MIRAKURUN_PORT)
 
@@ -116,10 +116,10 @@ val SayaMirakurunApi = run {
     }
 }
 
-val SayaMirakcAribWrapper = run {
+val SayaMirakcAribWrapper by lazy {
     if (!Files.exists(Paths.get(Env.MIRAKC_ARIB_PATH))) {
         logger.info { "mirakc-arib が見つかりません。mirakc-arib 連携機能は提供しません。" }
-        return@run null
+        return@lazy null
     }
 
     MirakcAribWrapper(Env.MIRAKC_ARIB_PATH)

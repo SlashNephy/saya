@@ -104,9 +104,9 @@ fun Route.wsLiveCommentsByTarget() {
             }
         }
 
-        if (CommentSource.Twitter in sources && channel.hashtags.isNotEmpty() && SayaTwitterClient != null) {
+        if (CommentSource.Twitter in sources && channel.hashtags.isNotEmpty()) {
             launch {
-                val twitter = TwitterHashTagProvider(channel, comments, channel.hashtags, SayaTwitterClient)
+                val twitter = TwitterHashTagProvider(channel, comments, channel.hashtags, SayaTwitterClient ?: return@launch)
                 twitter.start()
             }
         }
@@ -159,13 +159,14 @@ fun Route.wsTimeshiftCommentsByTarget() {
             }
         }
 
-        if (CommentSource.GoChan in sources && channel.miyouId != null && SayaMiyouTVApi != null) {
+        if (CommentSource.GoChan in sources && channel.miyouId != null) {
             launch {
+                val client = SayaMiyouTVApi ?: return@launch
                 val queue = Channel<Comment>(Channel.UNLIMITED)
 
                 launch {
                     repeat(duration / unit) { i ->
-                        SayaMiyouTVApi.getComments(
+                        client.getComments(
                             channel.miyouId,
                             (startAt + unit * i) * 1000,
                             minOf(startAt + unit * (i + 1), endAt) * 1000
