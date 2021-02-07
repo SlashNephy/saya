@@ -47,10 +47,12 @@ data class Comment(
      */
     val size: Size
 ) {
+    @Suppress("EnumEntryName")
     enum class Position {
         right, top, bottom
     }
 
+    @Suppress("EnumEntryName")
     enum class Size {
         normal, small, medium, big
     }
@@ -68,6 +70,8 @@ data class TimeshiftCommentControl(
 
 @Serializable
 data class CommentInfo(
+    val channel: JikkyoChannel,
+    val service: MirakurunService?,
     val jk: Int,
     val force: Int,
     val last: String

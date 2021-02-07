@@ -2,9 +2,12 @@ package blue.starry.saya.services.nicojk
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.models.CommentInfo
+import blue.starry.saya.services.CommentChannelManager
 import blue.starry.saya.services.SayaHttpClient
+import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import io.ktor.client.request.*
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.StringReader
@@ -26,20 +29,29 @@ object NicoJkApi {
             .newDocumentBuilder()
             .parse(source)
 
-        val channels = document.getElementsByTagName("channel").asSequence() + document.getElementsByTagName("bs_channel").asSequence()
-
+        document.getElementsByTagName("channel").toList() + document.getElementsByTagName("bs_channel").toList()
+    }.let { channels ->
         channels.map { channel ->
-            val id = channel.getElementsByTagName("id").item(0).textContent.toInt()
-            val lastRes = channel.getElementsByTagName("last_res").item(0).textContent
-            val force = channel.getElementsByTagName("force").item(0).textContent.toInt()
+            val jk = channel.getFirstElementByTagName("id").textContent.toInt()
+            val jkChannel = CommentChannelManager.Channels.first { it.jk == jk }
 
-            CommentInfo(id, force, lastRes)
+            CommentInfo(
+                channel = jkChannel,
+                service = MirakurunDataManager.Services.find { it.actualId in jkChannel.serviceIds },
+                jk = jk,
+                force = channel.getFirstElementByTagName("force").textContent.toInt(),
+                last = channel.getFirstElementByTagName("last_res").textContent
+            )
         }
     }
 
-    private fun NodeList.asSequence() = sequence {
+    private fun NodeList.toList() = buildList {
         for (i in 0 until length) {
-            yield(item(i) as Element)
+            add(item(i) as Element)
         }
+    }
+
+    private fun Element.getFirstElementByTagName(name: String): Node {
+        return getElementsByTagName(name).item(0)
     }
 }
