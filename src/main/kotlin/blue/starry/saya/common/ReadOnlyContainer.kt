@@ -16,7 +16,7 @@ class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>?) {
 
     private val initialJob = GlobalScope.launch {
         collection.addAll(block() ?: return@launch)
-        logger.debug { "Initial update job for ${this::class.simpleName} was finished." }
+        logger.debug { "Initial update job for ${this@ReadOnlyContainer::class.simpleName} was finished." }
     }
 
     init {
@@ -24,7 +24,7 @@ class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>?) {
             while (isActive) {
                 delay(15.minutes)
                 update()
-                logger.debug { "Regular update job for ${this::class.simpleName} was finished." }
+                logger.debug { "Regular update job for ${this@ReadOnlyContainer::class.simpleName} was finished." }
             }
         }
     }
