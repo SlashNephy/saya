@@ -22,7 +22,7 @@ class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>?) {
     init {
         GlobalScope.launch {
             while (isActive) {
-                delay(15.minutes)
+                delay(Env.SAYA_UPDATE_INTERVAL_MINS.minutes)
                 update()
                 logger.debug { "Regular update job for ${this@ReadOnlyContainer::class.simpleName} was finished." }
             }

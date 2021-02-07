@@ -81,6 +81,8 @@ services:
       # ログレベル ("INFO")
       # 利用可能な値: ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
       SAYA_LOG: DEBUG
+      # 内部データ 更新間隔 [分] (15)
+      SAYA_UPDATE_INTERVAL_MINS: 15
       # Mirakurun のホスト, ポート番号 ("mirakurun", 40772)
       MIRAKURUN_HOST: mirakurun
       MIRAKURUN_PORT: 40772
