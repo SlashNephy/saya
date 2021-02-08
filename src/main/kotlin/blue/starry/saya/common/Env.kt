@@ -21,6 +21,7 @@ object Env {
     val MORITAPO_PASSWORD by stringOrNull
     val MOUNT_POINT by stringOrNull
     val MIRAKC_ARIB_PATH by string { "/usr/local/bin/mirakc-arib" }
+    val FFMPEG_PATH by string { "/usr/local/bin/ffmpeg" }
 }
 
 private fun boolean(default: () -> Boolean): ReadOnlyProperty<Env, Boolean> = ReadOnlyProperty { _, property ->
