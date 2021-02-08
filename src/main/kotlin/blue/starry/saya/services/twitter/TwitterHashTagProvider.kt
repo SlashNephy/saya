@@ -8,6 +8,7 @@ import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
 import blue.starry.penicillin.extensions.RateLimit
 import blue.starry.penicillin.extensions.execute
+import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.extensions.rateLimit
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.common.Env
@@ -61,7 +62,7 @@ class TwitterHashTagProvider(
                 val comment = status.toSayaComment(tags) ?: return
                 comments.send(comment)
 
-                logger.trace { status }
+                logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
             }
 
             override suspend fun onDisconnect(cause: Throwable?) {
@@ -86,7 +87,7 @@ class TwitterHashTagProvider(
                     val comment = status.toSayaComment(tags) ?: return@forEach
                     comments.send(comment)
 
-                    logger.trace { status }
+                    logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
                 }
 
                 lastId = response.result.statuses.lastOrNull()?.id
