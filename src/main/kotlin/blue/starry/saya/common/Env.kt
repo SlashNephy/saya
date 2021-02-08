@@ -16,7 +16,7 @@ object Env {
     val TWITTER_CS by stringOrNull
     val TWITTER_AT by stringOrNull
     val TWITTER_ATS by stringOrNull
-    val TWITTER_PREFER_STREAMING_API by boolean { false }
+    val TWITTER_PREFER_STREAMING_API by boolean { true }
     val MORITAPO_EMAIL by stringOrNull
     val MORITAPO_PASSWORD by stringOrNull
     val MOUNT_POINT by stringOrNull

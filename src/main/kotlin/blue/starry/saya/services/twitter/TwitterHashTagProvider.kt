@@ -52,7 +52,6 @@ class TwitterHashTagProvider(
     }
 
     private suspend fun doStreamLoop(client: ApiClient, tags: Set<String>) {
-        // TODO: Penicillin 側の API をあとでなおす, coroutineContext を渡す仕様に変更
         client.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
             override suspend fun onConnect() {
                 logger.debug { "connect" }
@@ -68,7 +67,7 @@ class TwitterHashTagProvider(
             override suspend fun onDisconnect(cause: Throwable?) {
                 logger.debug(cause) { "disconnect" }
             }
-        }, false).join()
+        })
     }
 
     private suspend fun doSearchLoop(client: ApiClient, tags: Set<String>) {

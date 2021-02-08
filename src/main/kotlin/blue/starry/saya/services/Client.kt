@@ -11,6 +11,7 @@ import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import io.ktor.client.*
+import io.ktor.client.engine.apache.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
@@ -72,7 +73,8 @@ val SayaTwitterClient by lazy {
             application(ck, cs)
             token(at, ats)
         }
-        httpClient(SayaHttpClient)
+        // For streaming API stability
+        httpClient(Apache)
     }
 }
 
