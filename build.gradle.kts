@@ -15,7 +15,7 @@ object ThirdpartyVersion {
     const val JsonKt = "6.0.0"
     const val Jsoup = "1.13.1"
     const val AnnictKt = "2.4.2"
-    const val Penicillin = "6.0.2"
+    const val Penicillin = "6.0.3"
     const val ApacheCommonsCodec = "1.15"
     // const val KtorSwagger = "0.7.0"
     // const val Clikt = "3.1.0"
@@ -31,11 +31,10 @@ object ThirdpartyVersion {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven(url = "https://kotlin.bintray.com/kotlinx")
-    maven(url = "https://jitpack.io")
-    maven(url = "https://dl.bintray.com/riptakagi/maven")
     maven(url = "https://dl.bintray.com/starry-blue-sky/stable")
+    maven(url = "https://dl.bintray.com/riptakagi/maven")
+    // maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -49,6 +48,7 @@ dependencies {
 
     // Ktor Client
     implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
+    implementation("io.ktor:ktor-client-apache:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-serialization:${ThirdpartyVersion.Ktor}")
     implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
 
