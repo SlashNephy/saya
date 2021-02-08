@@ -1,7 +1,25 @@
 package blue.starry.saya.services
 
-import blue.starry.saya.models.MirakurunChannel
+import blue.starry.saya.common.component1
+import blue.starry.saya.common.component2
+import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.models.Comment
+import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.JikkyoChannel
+import blue.starry.saya.models.MirakurunChannel
+import blue.starry.saya.services.mirakurun.MirakurunDataManager
+import blue.starry.saya.services.nicolive.NicoLiveCommentProvider
+import blue.starry.saya.services.twitter.TwitterHashTagProvider
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import mu.KotlinLogging
+import java.util.*
 
 object CommentChannelManager {
     val Channels = listOf(
@@ -1138,4 +1156,95 @@ object CommentChannelManager {
             miyouId = "スカパープロモ"
         )
     )
+
+    private val logger = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
+
+    suspend fun findByTarget(target: String): JikkyoChannel? {
+        return if (target.startsWith("jk")) {
+            // jk*** から探す
+
+            val jk = target.removePrefix("jk").toIntOrNull() ?: return null
+            Channels.find { it.jk == jk }
+        } else {
+            // Mirakurun 互換 Service ID から探す
+
+            val serviceId = target.toLongOrNull() ?: return null
+            val mirakurun = MirakurunDataManager.Services.find { it.id == serviceId } ?: return null
+            Channels.find { it.serviceIds.contains(mirakurun.actualId) }
+        }
+    }
+
+    private val Providers = mutableMapOf<Pair<JikkyoChannel, CommentSource>, Pair<LiveCommentProvider, Job>>()
+    private val providersLock = Mutex()
+
+    /**
+     * リアルタイムコメント配信を購読する
+     *
+     * 購読数が 0 になると自動でコメントの取得 [Job] がキャンセルされる
+     *
+     * @param channel 実況チャンネル [JikkyoChannel]
+     * @param sources コメント配信元 [CommentSource] のリスト
+     */
+    fun subscribeLiveComments(channel: JikkyoChannel, sources: List<CommentSource>) = GlobalScope.produce<Comment> {
+        val id = UUID.randomUUID()
+
+        /**
+         * 実況チャンネル [JikkyoChannel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
+         * 外側の produce が終了したときに購読数が 0 なら自動で処理も停止させる
+         *
+         * @param source コメント配信元 [CommentSource]
+         * @param block リアルタイムコメントを取得する [LiveCommentProvider]
+         */
+        suspend fun register(source: CommentSource, block: () -> LiveCommentProvider) {
+            if (source !in sources) {
+                return
+            }
+
+            var (provider, job) = providersLock.withLock {
+                Providers[channel to source]
+            }
+
+            // 取得 Job
+            // 前回の Job が走っていなければ再生成
+            if (provider == null || job == null || !job.isActive) {
+                provider = block()
+                job = provider.start()
+
+                providersLock.withLock {
+                    Providers[channel to source] = provider to job
+                }
+            }
+
+            // 配信 Job
+            // クライアントが接続を閉じると終了する
+            launch {
+                provider.subscription.create(id)
+                logger.debug { "create id: $id [${channel.name}, $source]" }
+
+                provider.comments.openSubscription().consumeEach {
+                    send(it)
+                }
+            }.invokeOnCompletion {
+                runBlocking {
+                    provider.subscription.remove(id)
+                    logger.debug { "remove id: $id [${channel.name}, $source]" }
+
+                    if (provider.subscription.isEmpty()) {
+                        job.cancel()
+                        logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
+                    }
+                }
+
+                logger.trace(it) { "$this is closing..." }
+            }
+        }
+
+        register(CommentSource.Nicolive) {
+            NicoLiveCommentProvider(channel)
+        }
+
+        register(CommentSource.Twitter) {
+            TwitterHashTagProvider(channel)
+        }
+    }
 }

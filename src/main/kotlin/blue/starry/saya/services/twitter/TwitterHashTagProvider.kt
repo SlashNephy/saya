@@ -4,65 +4,55 @@ import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
-import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
-import blue.starry.saya.services.CommentProvider
+import blue.starry.saya.services.LiveCommentProvider
+import blue.starry.saya.services.SayaTwitterClient
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class TwitterHashTagProvider(
-    override val channel: JikkyoChannel,
-    override val comments: BroadcastChannel<Comment>,
-    private val tags: Set<String>,
-    private val client: ApiClient
-): CommentProvider {
-    private val logger = KotlinLogging.createSayaLogger("saya.services.twitter#${tags.joinToString(",")}")
+    override val channel: JikkyoChannel
+): LiveCommentProvider {
+    override val comments = BroadcastChannel<Comment>(1)
+    override val subscription = LiveCommentProvider.Subscription()
+    private val logger = KotlinLogging.createSayaLogger("saya.services.twitter.${channel.name}]")
 
-    suspend fun start() {
+    override fun start() = GlobalScope.launch {
+        val client = SayaTwitterClient ?: return@launch
+        val tags = channel.hashtags
+        if (tags.isEmpty()) {
+            return@launch
+        }
+
         try {
-            connect()
+            connect(client, tags)
         } catch (t: Throwable) {
-            logger.trace { "cancel: TwitterHashTagProvider: ${t.stackTraceToString()}" }
+            logger.trace(t) { "cancel" }
         }
     }
 
-    private suspend fun connect() {
+    private suspend fun connect(client: ApiClient, tags: Set<String>) {
+        // TODO: Penicillin 側の API をあとでなおす, coroutineContext を渡す仕様に変更
         client.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
             override suspend fun onConnect() {
-                logger.debug { "twitter:connect" }
+                logger.debug { "connect" }
             }
 
             override suspend fun onStatus(status: Status) {
-                val comment = createComment(status)
+                val comment = status.toSayaComment(tags)
                 comments.send(comment)
 
                 logger.trace { status }
             }
 
             override suspend fun onDisconnect(cause: Throwable?) {
-                logger.debug(cause) { "twitter:disconnect" }
+                logger.debug(cause) { "disconnect" }
             }
         }, true).join()
-    }
-
-    private fun createComment(status: Status): Comment {
-        return Comment(
-            tags.joinToString(",") { "#$it" },
-            Instant.from(
-                DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(status.createdAtRaw)
-            ).epochSecond,
-            0,
-            status.user.name,
-            tags.fold(status.text) { r, t -> r.replace("#$t", "") },
-            "#ffffff",
-            Comment.Position.right,
-            Comment.Size.normal
-        )
     }
 }

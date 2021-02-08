@@ -75,3 +75,23 @@ data class CommentInfo(
     val force: Int,
     val last: String
 )
+
+enum class CommentSource(private vararg val aliases: String) {
+    Nicolive("nico", "nicolive"),
+    Twitter("twitter"),
+    GoChan("5ch", "2ch");
+
+    companion object {
+        fun from(sources: String?): List<CommentSource> {
+            return if (sources == null) {
+                values().toList()
+            } else {
+                val t = sources.split(",")
+
+                values().filter {
+                    it.aliases.any { alias -> alias in t }
+                }
+            }
+        }
+    }
+}
