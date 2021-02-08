@@ -16,10 +16,15 @@ object Env {
     val TWITTER_CS by stringOrNull
     val TWITTER_AT by stringOrNull
     val TWITTER_ATS by stringOrNull
+    val TWITTER_PREFER_STREAMING_API by boolean { false }
     val MORITAPO_EMAIL by stringOrNull
     val MORITAPO_PASSWORD by stringOrNull
     val MOUNT_POINT by stringOrNull
     val MIRAKC_ARIB_PATH by string { "/usr/local/bin/mirakc-arib" }
+}
+
+private fun boolean(default: () -> Boolean): ReadOnlyProperty<Env, Boolean> = ReadOnlyProperty { _, property ->
+    System.getenv(property.name)?.toBooleanFuzzy() ?: default()
 }
 
 private val stringOrNull: ReadOnlyProperty<Env, String?>

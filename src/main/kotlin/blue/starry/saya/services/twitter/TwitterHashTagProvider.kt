@@ -10,6 +10,7 @@ import blue.starry.penicillin.extensions.RateLimit
 import blue.starry.penicillin.extensions.execute
 import blue.starry.penicillin.extensions.rateLimit
 import blue.starry.penicillin.models.Status
+import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
@@ -39,7 +40,10 @@ class TwitterHashTagProvider(
         }
 
         try {
-            doStreamLoop(client, tags)
+            if (Env.TWITTER_PREFER_STREAMING_API) {
+                doStreamLoop(client, tags)
+            }
+
             doSearchLoop(client, tags)
         } catch (t: Throwable) {
             logger.trace(t) { "cancel" }
@@ -63,7 +67,7 @@ class TwitterHashTagProvider(
             override suspend fun onDisconnect(cause: Throwable?) {
                 logger.debug(cause) { "disconnect" }
             }
-        }, false).cancel()
+        }, false).join()
     }
 
     private suspend fun doSearchLoop(client: ApiClient, tags: Set<String>) {

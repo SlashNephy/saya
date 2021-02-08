@@ -94,6 +94,9 @@ services:
       TWITTER_CS: xxx
       TWITTER_AT: xxx
       TWITTER_ATS: xxx
+      # Twitter からツイートを取得する際にストリーミング API を使用するか (false)
+      # 試験的な機能のため, 一部の環境で動作しない可能性があります。
+      TWITTER_PREFER_STREAMING_API: true
       # /files エンドポイントで TS ファイルを検索するパス (null)
       # 別途 volume マウントが必要です
       MOUNT_POINT: /mnt
