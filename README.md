@@ -43,7 +43,9 @@ saya is still in heavy development.
 - [ci7lus/elaina](https://github.com/ci7lus/elaina)
   - EPGStation を介した番組プレイヤーです。saya の API をフロントエンドで利用しています。
 
-# Docker
+# Get Started
+
+## Docker
 
 環境構築が容易なので Docker で導入することをおすすめします。
 
@@ -136,9 +138,33 @@ docker-compose down
 
 up すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
 
+## 直接実行
+
+リリースから Jar を取ってきて実行するか, `./gradlew run` で実行できます。
+
+設定値の変更は現在, 環境変数経由でしか行なえません。ご了承ください。
+
+```console
+SAYA_LOG=DEBUG java -jar /path/to/saya.jar
+```
+
 # Endpoints
 
 saya が提供する API は [endpoints.md](https://github.com/SlashNephy/saya/blob/master/docs/endpoints.md) に一覧があります。
+
+# Contribution
+
+開発には IntelliJ IDEA をおすすめします。
+
+不安定なプロジェクトにつき, 互換性のない変更や方針変更が発生する可能性があります。ご了承ください。
+
+```console
+# ビルド
+./gradlew build
+
+# 実行
+./gradlew run
+```
 
 # Acknowledgments
 
@@ -147,6 +173,7 @@ saya および [ci7lus/elaina](https://github.com/ci7lus/elaina) は次のプロ
 - [tsukumijima/TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus)
 - [tsukumijima/jikkyo-api](https://github.com/tsukumijima/jikkyo-api)
 - [asannou/namami](https://github.com/asannou/namami)
+- [silane/TVTComment](https://github.com/silane/TVTComment)
 
 DTV 実況コミュニティの皆さまに感謝します。
 
