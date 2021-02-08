@@ -20,7 +20,7 @@ fun Status.toSayaComment(tags: Set<String>): Comment? {
             DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(createdAtRaw)
         ).epochSecond,
         Random.nextInt(0..1000),
-        user.name,
+        "${user.name} @${user.screenName}",
         tags.fold(text) { r, t -> r.replace("#$t", "") },
         "#ffffff",
         Comment.Position.right,
