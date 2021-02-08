@@ -12,7 +12,7 @@ class NicoLiveCommentProvider(
     override val comments = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
 
-    override fun start() = GlobalScope.launch {
+    override suspend fun start() {
         // チャンネル名をタグ名として追加
         val tags = channel.tags.plus(channel.name)
 

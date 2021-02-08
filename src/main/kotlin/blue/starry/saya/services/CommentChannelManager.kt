@@ -10,16 +10,14 @@ import blue.starry.saya.models.MirakurunChannel
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.nicolive.NicoLiveCommentProvider
 import blue.starry.saya.services.twitter.TwitterHashTagProvider
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import java.util.*
+import kotlin.time.seconds
 
 object CommentChannelManager {
     val Channels = listOf(
@@ -1208,7 +1206,17 @@ object CommentChannelManager {
             // 前回の Job が走っていなければ再生成
             if (provider == null || job == null || !job.isActive) {
                 provider = block()
-                job = provider.start()
+                job = launch {
+                    while (isActive) {
+                        try {
+                            provider.start()
+                        } catch (t: Throwable) {
+                            logger.error(t) { "error in $provider" }
+                        } finally {
+                            delay(3.seconds)
+                        }
+                    }
+                }
 
                 providersLock.withLock {
                     Providers[channel to source] = provider to job

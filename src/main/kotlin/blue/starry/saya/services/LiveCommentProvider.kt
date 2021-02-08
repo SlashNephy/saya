@@ -2,7 +2,6 @@ package blue.starry.saya.services
 
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -30,7 +29,7 @@ interface LiveCommentProvider {
     /**
      * コメントの取得を開始する
      */
-    fun start(): Job
+    suspend fun start()
 
     class Subscription {
         private val collection = mutableSetOf<UUID>()

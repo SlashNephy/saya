@@ -15,15 +15,9 @@ import blue.starry.saya.models.Comment
 import blue.starry.saya.models.JikkyoChannel
 import blue.starry.saya.services.LiveCommentProvider
 import blue.starry.saya.services.SayaTwitterClient
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.util.date.*
-import io.ktor.utils.io.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.time.Duration
 import java.time.Instant
@@ -37,11 +31,11 @@ class TwitterHashTagProvider(
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter.${channel.name}]")
 
-    override fun start() = GlobalScope.launch {
-        val client = SayaTwitterClient ?: return@launch
+    override suspend fun start() {
+        val client = SayaTwitterClient ?: return
         val tags = channel.hashtags
         if (tags.isEmpty()) {
-            return@launch
+            return
         }
 
         try {
@@ -69,7 +63,7 @@ class TwitterHashTagProvider(
             override suspend fun onDisconnect(cause: Throwable?) {
                 logger.debug(cause) { "disconnect" }
             }
-        }, false).join()
+        }, false).cancel()
     }
 
     private suspend fun doSearchLoop(client: ApiClient, tags: Set<String>) {
