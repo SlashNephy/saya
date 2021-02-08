@@ -9,7 +9,7 @@ import java.util.*
 
 fun Status.toSayaComment(tags: Set<String>): Comment {
     return Comment(
-        tags.joinToString(",") { "#$it" },
+        "Twitter [${tags.joinToString(",") { "#$it" }}]",
         Instant.from(
             DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss X uuuu", Locale.ROOT).parse(createdAtRaw)
         ).epochSecond,
