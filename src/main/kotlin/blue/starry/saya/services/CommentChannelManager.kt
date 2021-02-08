@@ -1198,29 +1198,29 @@ object CommentChannelManager {
                 return
             }
 
-            var (provider, job) = providersLock.withLock {
-                Providers[channel to source]
-            }
+            val (provider, job) = providersLock.withLock {
+                var (first, second) = Providers[channel to source]
 
-            // 取得 Job
-            // 前回の Job が走っていなければ再生成
-            if (provider == null || job == null || !job.isActive) {
-                provider = block()
-                job = launch {
-                    while (isActive) {
-                        try {
-                            provider.start()
-                        } catch (t: Throwable) {
-                            logger.error(t) { "error in $provider" }
-                        } finally {
-                            delay(3.seconds)
+                // 取得 Job
+                // 前回の Job が走っていなければ再生成
+                if (first == null || second == null || !second.isActive) {
+                    first = block()
+                    second = launch {
+                        while (isActive) {
+                            try {
+                                first.start()
+                            } catch (t: Throwable) {
+                                logger.error(t) { "error in $first" }
+                            } finally {
+                                delay(3.seconds)
+                            }
                         }
                     }
+
+                    Providers[channel to source] = first to second
                 }
 
-                providersLock.withLock {
-                    Providers[channel to source] = provider to job
-                }
+                first to second
             }
 
             // 配信 Job
