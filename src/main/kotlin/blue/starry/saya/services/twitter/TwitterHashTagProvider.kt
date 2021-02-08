@@ -100,9 +100,8 @@ class TwitterHashTagProvider(
                     delay(15.seconds)
                 } else {
                     val duration = Duration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
-
                     val safeRate = duration / limit.remaining
-                    logger.trace { "Sleep $safeRate ($tags)" }
+                    logger.trace { "Ratelimit ${limit.remaining}/${limit.limit}: Sleep $safeRate ($tags)" }
 
                     delay(safeRate)
                 }
