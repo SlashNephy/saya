@@ -58,7 +58,7 @@ class TwitterHashTagProvider(
             }
 
             override suspend fun onStatus(status: Status) {
-                val comment = status.toSayaComment(tags)
+                val comment = status.toSayaComment(tags) ?: return
                 comments.send(comment)
 
                 logger.trace { status }
@@ -83,7 +83,7 @@ class TwitterHashTagProvider(
                 ).execute()
 
                 response.result.statuses.forEach { status ->
-                    val comment = status.toSayaComment(tags)
+                    val comment = status.toSayaComment(tags) ?: return@forEach
                     comments.send(comment)
 
                     logger.trace { status }

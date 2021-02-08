@@ -9,7 +9,11 @@ import java.util.*
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-fun Status.toSayaComment(tags: Set<String>): Comment {
+fun Status.toSayaComment(tags: Set<String>): Comment? {
+    if (text.startsWith("RT @")) {
+        return null
+    }
+
     return Comment(
         "Twitter [${tags.joinToString(",") { "#$it" }}]",
         Instant.from(
