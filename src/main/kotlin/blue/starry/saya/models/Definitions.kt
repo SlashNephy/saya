@@ -3,7 +3,7 @@ package blue.starry.saya.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Definition(
+data class Definitions(
     val channels: List<Channel>,
     val boards: List<Board>
 ) {

@@ -14,7 +14,7 @@ import blue.starry.penicillin.models.Status
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
-import blue.starry.saya.models.Definition
+import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.LiveCommentProvider
 import blue.starry.saya.services.SayaTwitterClient
 import io.ktor.util.date.*
@@ -27,7 +27,7 @@ import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
 class TwitterHashTagProvider(
-    override val channel: Definition.Channel
+    override val channel: Definitions.Channel
 ): LiveCommentProvider {
     override val comments = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()

@@ -1,7 +1,7 @@
 package blue.starry.saya.services
 
 import blue.starry.saya.models.Comment
-import blue.starry.saya.models.Definition
+import blue.starry.saya.models.Definitions
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -14,7 +14,7 @@ interface LiveCommentProvider {
     /**
      * 実況チャンネル
      */
-    val channel: Definition.Channel
+    val channel: Definitions.Channel
 
     /**
      * コメントキュー

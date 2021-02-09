@@ -5,7 +5,7 @@ import blue.starry.saya.common.component2
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentSource
-import blue.starry.saya.models.Definition
+import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.gochan.GochanResCommentProvider
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.nicolive.NicoLiveCommentProvider
@@ -24,20 +24,20 @@ import kotlin.io.path.readText
 import kotlin.time.seconds
 
 object CommentChannelManager {
-    private val definitionPath = Paths.get("docs", "definition.yml")
+    private val definitionsPath = Paths.get("docs", "definitions.yml")
 
-    val Channels: List<Definition.Channel>
-    val Boards: List<Definition.Board>
+    val Channels: List<Definitions.Channel>
+    val Boards: List<Definitions.Board>
 
     init {
-        val definition = Yaml.default.decodeFromString<Definition>(definitionPath.readText())
-        Channels = definition.channels
-        Boards = definition.boards
+        val definitions = Yaml.default.decodeFromString<Definitions>(definitionsPath.readText())
+        Channels = definitions.channels
+        Boards = definitions.boards
     }
 
     private val logger = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
 
-    suspend fun findByTarget(target: String): Definition.Channel? {
+    suspend fun findByTarget(target: String): Definitions.Channel? {
         return if (target.startsWith("jk")) {
             // jk*** から探す
 
@@ -52,7 +52,7 @@ object CommentChannelManager {
         }
     }
 
-    private val Providers = mutableMapOf<Pair<Definition.Channel, CommentSource>, Pair<LiveCommentProvider, Job>>()
+    private val Providers = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Pair<LiveCommentProvider, Job>>()
     private val providersLock = Mutex()
 
     /**
@@ -63,7 +63,7 @@ object CommentChannelManager {
      * @param channel 実況チャンネル [JikkyoChannel]
      * @param sources コメント配信元 [CommentSource] のリスト
      */
-    fun subscribeLiveComments(channel: Definition.Channel, sources: List<CommentSource>) = GlobalScope.produce<Comment> {
+    fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = GlobalScope.produce<Comment> {
         val id = UUID.randomUUID()
 
         /**

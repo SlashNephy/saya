@@ -2,7 +2,7 @@ package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.models.Definition
+import blue.starry.saya.models.Definitions
 import blue.starry.saya.models.MirakurunTunerProcess
 import kotlinx.serialization.json.jsonPrimitive
 import mu.KotlinLogging
@@ -23,7 +23,7 @@ fun Service.toSayaService(): SayaService? {
         logoId = if (hasLogoData) logoId else null,
         keyId = remoteControlKeyId,
         channel = channel.channel,
-        type = Definition.Channel.Type.values().firstOrNull { it.name == channel.type } ?: return null
+        type = Definitions.Channel.Type.values().firstOrNull { it.name == channel.type } ?: return null
     )
 }
 
@@ -34,7 +34,7 @@ internal fun String.normalize(): String {
 suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
     return SayaChannel(
         json = json,
-        type = Definition.Channel.Type.values().firstOrNull { it.name == type } ?: return null,
+        type = Definitions.Channel.Type.values().firstOrNull { it.name == type } ?: return null,
         group = channel,
         name = name.orEmpty().normalize(),
         services = MirakurunDataManager.Services.filter {
@@ -166,7 +166,7 @@ fun Tuner.toSayaTuner(): SayaTuner {
         index = index,
         name = name,
         types = types.mapNotNull { type ->
-            Definition.Channel.Type.values().firstOrNull { it.name == type }
+            Definitions.Channel.Type.values().firstOrNull { it.name == type }
         },
         command = command,
         pid = pid,

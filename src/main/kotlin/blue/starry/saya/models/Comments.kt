@@ -70,7 +70,7 @@ data class TimeshiftCommentControl(
 
 @Serializable
 data class CommentInfo(
-    val channel: Definition.Channel,
+    val channel: Definitions.Channel,
     val service: MirakurunService?,
     val force: Int,
     val last: String

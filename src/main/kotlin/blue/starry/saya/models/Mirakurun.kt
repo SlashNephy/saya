@@ -44,7 +44,7 @@ data class MirakurunService(
     /**
      * タイプ
      */
-    val type: Definition.Channel.Type
+    val type: Definitions.Channel.Type
 )
 
 @Serializable
@@ -57,7 +57,7 @@ data class MirakurunChannel(
     /**
      * チャンネルタイプ
      */
-    val type: Definition.Channel.Type,
+    val type: Definitions.Channel.Type,
 
     /**
      * チャンネルグループ
@@ -185,7 +185,7 @@ data class MirakurunTuner(
 
     val index: Int,
     val name: String,
-    val types: List<Definition.Channel.Type>,
+    val types: List<Definitions.Channel.Type>,
     val command: String?,
     val pid: Int?,
     val users: List<User>,

@@ -1,13 +1,13 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.saya.models.Comment
-import blue.starry.saya.models.Definition
+import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.LiveCommentProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 
 class NicoLiveCommentProvider(
-    override val channel: Definition.Channel,
+    override val channel: Definitions.Channel,
 ): LiveCommentProvider {
     override val comments = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
