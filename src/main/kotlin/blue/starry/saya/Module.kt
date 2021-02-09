@@ -79,8 +79,14 @@ fun Application.module() {
                 }
             }
 
-            route("channels") {
-                getChannels()
+            route("definitions") {
+                route("channels") {
+                    getChannelDefinitions()
+                }
+
+                route("boards") {
+                    getBoardDefinitions()
+                }
             }
         }
     }
