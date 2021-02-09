@@ -62,7 +62,7 @@ class TwitterHashTagProvider(
             }
 
             override suspend fun onStatus(status: Status) {
-                val comment = status.toSayaComment(tags) ?: return
+                val comment = status.toSayaComment("Twitter Filter", tags) ?: return
                 comments.send(comment)
 
                 logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
@@ -88,7 +88,7 @@ class TwitterHashTagProvider(
 
                 if (lastId != null) {
                     for (status in response.result.statuses) {
-                        val comment = status.toSayaComment(tags) ?: continue
+                        val comment = status.toSayaComment("Twitter 検索", tags) ?: continue
                         comments.send(comment)
 
                         logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
