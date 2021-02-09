@@ -78,8 +78,13 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
     && apk del --purge .build-deps \
     && rm -rf /tmp/ffmpeg
 
+## Add user
+RUN addgroup -S saya \
+    && adduser -S saya -G saya
+
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
 
+USER saya
 WORKDIR /app
 ENTRYPOINT ["java", "-jar", "/app/saya.jar"]
