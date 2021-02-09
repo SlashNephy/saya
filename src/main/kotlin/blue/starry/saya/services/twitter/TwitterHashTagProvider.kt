@@ -40,11 +40,15 @@ class TwitterHashTagProvider(
             return
         }
 
-        try {
-            if (Env.TWITTER_PREFER_STREAMING_API) {
+        if (Env.TWITTER_PREFER_STREAMING_API) {
+            try {
                 doStreamLoop(client, tags)
+            } catch (t: Throwable) {
+                logger.error(t) { "error in stream" }
             }
+        }
 
+        try {
             doSearchLoop(client, tags)
         } catch (t: Throwable) {
             logger.trace(t) { "cancel" }
@@ -82,14 +86,16 @@ class TwitterHashTagProvider(
                     sinceId = lastId
                 ).execute()
 
-                response.result.statuses.forEach { status ->
-                    val comment = status.toSayaComment(tags) ?: return@forEach
-                    comments.send(comment)
+                if (lastId != null) {
+                    for (status in response.result.statuses) {
+                        val comment = status.toSayaComment(tags) ?: continue
+                        comments.send(comment)
 
-                    logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
+                        logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
+                    }
                 }
 
-                lastId = response.result.statuses.lastOrNull()?.id
+                lastId = response.result.statuses.firstOrNull()?.id?.plus(1) ?: lastId
                 limit = response.rateLimit
             } catch (t: Throwable) {
                 logger.error(t) { "error in doSearchLoop" }
