@@ -74,7 +74,11 @@ val SayaTwitterClient by lazy {
             token(at, ats)
         }
         // For streaming API stability
-        httpClient(Apache)
+        httpClient(Apache) {
+            install(HttpTimeout) {
+                socketTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
+            }
+        }
     }
 }
 
