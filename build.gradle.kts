@@ -13,6 +13,7 @@ plugins {
 object ThirdpartyVersion {
     const val Ktor = "1.5.1"
     const val JsonKt = "6.0.0"
+    const val kaml = "0.27.0"
     const val Jsoup = "1.13.1"
     const val AnnictKt = "2.4.2"
     const val Penicillin = "6.0.3"
@@ -53,6 +54,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
 
     implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
+    implementation("com.charleskorn.kaml:kaml:${ThirdpartyVersion.kaml}")
     implementation("jp.annict:annict-kt:${ThirdpartyVersion.AnnictKt}")
     implementation("blue.starry:penicillin:${ThirdpartyVersion.Penicillin}")
     implementation("commons-codec:commons-codec:${ThirdpartyVersion.ApacheCommonsCodec}")

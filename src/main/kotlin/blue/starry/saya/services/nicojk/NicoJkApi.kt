@@ -33,7 +33,7 @@ object NicoJkApi {
     }.let { channels ->
         channels.map { channel ->
             val jk = channel.getFirstElementByTagName("id").textContent.toInt()
-            val jkChannel = CommentChannelManager.Channels.first { it.jk == jk }
+            val jkChannel = CommentChannelManager.Channels.first { it.nicojkId == jk }
 
             CommentInfo(
                 channel = jkChannel,

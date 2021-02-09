@@ -70,7 +70,7 @@ data class TimeshiftCommentControl(
 
 @Serializable
 data class CommentInfo(
-    val channel: JikkyoChannel,
+    val channel: Definition.Channel,
     val service: MirakurunService?,
     val force: Int,
     val last: String
@@ -79,7 +79,7 @@ data class CommentInfo(
 enum class CommentSource(private vararg val aliases: String) {
     Nicolive("nico", "nicolive"),
     Twitter("twitter"),
-    GoChan("5ch", "2ch");
+    Gochan("5ch", "2ch");
 
     companion object {
         fun from(sources: String?): List<CommentSource> {

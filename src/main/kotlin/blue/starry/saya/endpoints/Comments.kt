@@ -89,7 +89,7 @@ fun Route.wsTimeshiftCommentsByTarget() {
             }
         }
 
-        if (CommentSource.GoChan in sources && channel.miyouId != null) {
+        if (CommentSource.Gochan in sources && channel.miyoutvId != null) {
             launch {
                 val client = SayaMiyouTVApi ?: return@launch
                 val queue = Channel<Comment>(Channel.UNLIMITED)
@@ -97,7 +97,7 @@ fun Route.wsTimeshiftCommentsByTarget() {
                 launch {
                     repeat(duration / unit) { i ->
                         client.getComments(
-                            channel.miyouId,
+                            channel.miyoutvId,
                             (startAt + unit * i) * 1000,
                             minOf(startAt + unit * (i + 1), endAt) * 1000
                         ).data.comments.map {
@@ -112,18 +112,18 @@ fun Route.wsTimeshiftCommentsByTarget() {
             }
         }
 
-        if (CommentSource.Nicolive in sources && channel.jk != null) {
+        if (CommentSource.Nicolive in sources && channel.nicojkId != null) {
             launch {
                 val queue = Channel<Comment>(Channel.UNLIMITED)
 
                 launch {
                     repeat(duration / unit) { i ->
                         NicoJkApi.getComments(
-                            "jk${channel.jk}",
+                            "jk${channel.nicojkId}",
                             startAt + unit * i,
                             minOf(startAt + unit * (i + 1), endAt)
                         ).packets.map {
-                            it.chat.toSayaComment("ニコニコ実況過去ログAPI [jk${channel.jk}]")
+                            it.chat.toSayaComment("ニコニコ実況過去ログAPI [jk${channel.nicojkId}]")
                         }.forEach {
                             queue.send(it)
                         }
@@ -196,7 +196,7 @@ fun Route.getCommentInfoByTarget() {
         call.respondOr404 {
             val channel = CommentChannelManager.findByTarget(target) ?: return@respondOr404 null
 
-            NicoJkApi.getChannels().find { it.channel.jk == channel.jk }
+            NicoJkApi.getChannels().find { it.channel.nicojkId == channel.nicojkId }
         }
     }
 }

@@ -44,7 +44,7 @@ data class MirakurunService(
     /**
      * タイプ
      */
-    val type: MirakurunChannel.Type
+    val type: Definition.Channel.Type
 )
 
 @Serializable
@@ -57,7 +57,7 @@ data class MirakurunChannel(
     /**
      * チャンネルタイプ
      */
-    val type: Type,
+    val type: Definition.Channel.Type,
 
     /**
      * チャンネルグループ
@@ -73,11 +73,7 @@ data class MirakurunChannel(
      * サービスのリスト
      */
     val services: List<MirakurunService>
-) {
-    enum class Type {
-        GR, BS, CS, SKY
-    }
-}
+)
 
 @Serializable
 data class MirakurunServiceLogo(
@@ -189,7 +185,7 @@ data class MirakurunTuner(
 
     val index: Int,
     val name: String,
-    val types: List<MirakurunChannel.Type>,
+    val types: List<Definition.Channel.Type>,
     val command: String?,
     val pid: Int?,
     val users: List<User>,
