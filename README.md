@@ -91,7 +91,7 @@ services:
       # Annict のアクセストークン (null)
       # 以下, 未設定でも動作します
       ANNICT_TOKEN: xxx
-      # Twitter の資格情報 (null, ...)
+      # Twitter の資格情報 (null, null, null, null)
       TWITTER_CK: xxx
       TWITTER_CS: xxx
       TWITTER_AT: xxx
@@ -99,6 +99,15 @@ services:
       # Twitter からツイートを取得する際にストリーミング API を使用するか (false)
       # 試験的な機能のため, 一部の環境で動作しない可能性があります。
       TWITTER_PREFER_STREAMING_API: true
+      # 5ch API への接続情報 (null, null, null, null, null)
+      GOCHAN_HM_KEY: xxx
+      GOCHAN_APP_KEY: xxx
+      GOCHAN_AUTH_UA: xxx
+      GOCHAN_AUTH_X_2CH_UA: xxx
+      GOCHAN_UA: xxx
+      # モリタポアカウントの資格情報 (null, null)
+      MORITAPO_EMAIL: xxx
+      MORITAPO_PASSWORD: xxx
       # /files エンドポイントで TS ファイルを検索するパス (null)
       # 別途 volume マウントが必要です
       MOUNT_POINT: /mnt

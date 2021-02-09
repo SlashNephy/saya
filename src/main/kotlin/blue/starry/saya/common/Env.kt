@@ -17,6 +17,11 @@ object Env {
     val TWITTER_AT by stringOrNull
     val TWITTER_ATS by stringOrNull
     val TWITTER_PREFER_STREAMING_API by boolean { true }
+    val GOCHAN_HM_KEY by stringOrNull
+    val GOCHAN_APP_KEY by stringOrNull
+    val GOCHAN_AUTH_UA by stringOrNull
+    val GOCHAN_AUTH_X_2CH_UA by stringOrNull
+    val GOCHAN_UA by stringOrNull
     val MORITAPO_EMAIL by stringOrNull
     val MORITAPO_PASSWORD by stringOrNull
     val MOUNT_POINT by stringOrNull

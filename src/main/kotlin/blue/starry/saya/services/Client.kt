@@ -7,6 +7,7 @@ import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.services.gochan.GochanClient
 import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
@@ -129,4 +130,16 @@ val SayaMirakcAribWrapper by lazy {
     }
 
     MirakcAribWrapper(Env.MIRAKC_ARIB_PATH)
+}
+
+val Saya5chClient by lazy {
+    val (hmKey, appKey) = Env.GOCHAN_HM_KEY to Env.GOCHAN_APP_KEY
+    val (authUA, ua) = Env.GOCHAN_AUTH_UA to Env.GOCHAN_UA
+    val authX2chUA = Env.GOCHAN_AUTH_X_2CH_UA
+    if (hmKey == null || appKey == null || authUA == null || ua == null || authX2chUA == null) {
+        logger.info { "5ch API への接続情報が設定されていません。5ch 連携機能は提供しません。" }
+        return@lazy null
+    }
+
+    GochanClient(hmKey, appKey, authUA, authX2chUA, ua)
 }
