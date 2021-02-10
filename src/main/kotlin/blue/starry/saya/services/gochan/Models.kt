@@ -1,26 +1,28 @@
 package blue.starry.saya.services.gochan
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class GochanRes(
-    val number: Int,
     val name: String,
     val mail: String,
     val userId: String?,
-    val date: LocalDateTime?,
+    val time: ZonedDateTime,
     val text: String
 )
 
 data class GochanThread(
-    val url: String?,
     val id: String,
-    val title: String?,
-    val resCount: Int,
-    val reses: MutableList<GochanRes>
+    val title: String
 )
 
-data class GochanBoard(
-    val url: String,
+data class GochanSubjectItem(
+    val threadId: String,
     val title: String,
-    val threads: MutableList<GochanThread>
+    val resCount: Int
+)
+
+data class GochanThreadAddress(
+    val server: String,
+    val board: String,
+    val id: String
 )

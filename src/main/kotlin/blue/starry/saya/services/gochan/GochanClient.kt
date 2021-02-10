@@ -41,16 +41,9 @@ class GochanClient(
     }
 
     /**
-     * 呼び出し側のタイミングで DAT 取得を行う
-     * この関数を呼び出しただけでは取得処理は開始しない
-     *
-     * @param server
-     * @param board
-     * @param threadId
-     * @param additionalHeaders
-     * @return
+     * DAT 取得を行う
      */
-    suspend fun getDat(server: String, board: String, threadId: String, additionalHeaders: Headers = Headers.Empty): HttpStatement {
+    suspend fun getDat(server: String, board: String, threadId: String, additionalHeaders: Headers = Headers.Empty): HttpResponse {
         if (sessionId == null) {
             authorize()
         }
@@ -66,9 +59,17 @@ class GochanClient(
 
         return SayaHttpClient.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
             userAgent(ua)
-            header(HttpHeaders.Connection, "close")
             headers.appendAll(additionalHeaders)
             expectSuccess = false
         }
+    }
+
+    /**
+     * スレッド一覧を取得する
+     */
+    suspend fun getSubject(server: String, board: String): String {
+        return SayaHttpClient.get<HttpResponse>("https://$server.5ch.net/$board/subject.txt") {
+            userAgent(ua)
+        }.readText(charset("Shift_JIS"))
     }
 }

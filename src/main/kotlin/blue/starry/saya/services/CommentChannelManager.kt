@@ -141,8 +141,9 @@ object CommentChannelManager {
 
         register(CommentSource.Gochan) {
             val client = Saya5chClient ?: return@register null
+            val board = Boards.find { it.id == channel.boardId } ?: return@register null
 
-            LiveGochanResCommentProvider(channel, client)
+            LiveGochanResCommentProvider(channel, client, board)
         }
     }
 }
