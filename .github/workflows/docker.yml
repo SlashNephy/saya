@@ -6,14 +6,13 @@ on:
       - .gitignore
       - LICENSE
       - '**.md'
-    branches-ignore:
-      - 'releases/**'
+    branches:
+      - master
+      - dev
 
   release:
     types:
       - published
-
-  workflow_dispatch:
 
 env:
   DOCKER_BASE_NAME: slashnephy/saya
