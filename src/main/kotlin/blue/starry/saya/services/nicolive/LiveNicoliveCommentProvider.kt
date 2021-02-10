@@ -6,7 +6,7 @@ import blue.starry.saya.services.LiveCommentProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 
-class NicoLiveCommentProvider(
+class LiveNicoliveCommentProvider(
     override val channel: Definitions.Channel,
 ): LiveCommentProvider {
     override val comments = BroadcastChannel<Comment>(1)
@@ -17,15 +17,15 @@ class NicoLiveCommentProvider(
         val tags = channel.nicoliveTags.plus(channel.name)
 
         tags.mapNotNull { tag ->
-            val programs = NicoLiveApi.getLivePrograms(tag)
+            val programs = NicoliveApi.getLivePrograms(tag)
             val search = programs.data.find { data ->
                 // コミュニティ放送 or 「ニコニコ実況」タグ付きの公式番組
                 !channel.hasOfficialNicolive || data.tags.any { it.text == "ニコニコ実況" }
             } ?: return@mapNotNull null
 
-            val data = NicoLiveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${search.id}")
+            val data = NicoliveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${search.id}")
 
-            val ws = NicoLiveSystemWebSocket(this@NicoLiveCommentProvider, data.site.relive.webSocketUrl, search.id)
+            val ws = NicoliveSystemWebSocket(this@LiveNicoliveCommentProvider, data.site.relive.webSocketUrl, search.id)
             ws.start()
         }.joinAll()
     }

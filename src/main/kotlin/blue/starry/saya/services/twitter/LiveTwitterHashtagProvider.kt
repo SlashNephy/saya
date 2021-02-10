@@ -25,7 +25,7 @@ import java.time.Instant
 import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
-class TwitterHashTagProvider(
+class LiveTwitterHashtagProvider(
     override val channel: Definitions.Channel,
     private val client: ApiClient,
     private val tags: Set<String>

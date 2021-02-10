@@ -6,8 +6,8 @@ import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketMessageJson
-import blue.starry.saya.services.comments.nicolive.models.NicoLiveWebSocketSystemJson
+import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketMessageJson
+import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketSystemJson
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.CancellationException
@@ -17,9 +17,9 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
 
-class NicoLiveMessageWebSocket(
-    private val provider: NicoLiveCommentProvider,
-    private val room: NicoLiveWebSocketSystemJson.Data,
+class NicoliveMessageWebSocket(
+    private val provider: LiveNicoliveCommentProvider,
+    private val room: NicoliveWebSocketSystemJson.Data,
     private val lvName: String
 ) {
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${provider.channel.name}")
@@ -28,7 +28,7 @@ class NicoLiveMessageWebSocket(
         try {
             connect()
         } catch (t: Throwable) {
-            logger.trace(t) { "cancel: NicoLiveMessageWebSocket" }
+            logger.trace(t) { "cancel: NicoliveMessageWebSocket" }
         }
     }
 
@@ -93,7 +93,7 @@ class NicoLiveMessageWebSocket(
     private suspend fun DefaultClientWebSocketSession.consumeFrames() {
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
             val message = frame.readText().parseObject {
-                NicoLiveWebSocketMessageJson(it)
+                NicoliveWebSocketMessageJson(it)
             }
 
             val comment = message.chat?.toSayaComment("ニコニコ生放送 [$lvName]")

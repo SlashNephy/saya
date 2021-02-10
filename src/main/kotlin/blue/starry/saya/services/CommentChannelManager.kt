@@ -6,10 +6,10 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.gochan.GochanResCommentProvider
+import blue.starry.saya.services.gochan.LiveGochanResCommentProvider
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
-import blue.starry.saya.services.nicolive.NicoLiveCommentProvider
-import blue.starry.saya.services.twitter.TwitterHashTagProvider
+import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
+import blue.starry.saya.services.twitter.LiveTwitterHashtagProvider
 import com.charleskorn.kaml.Yaml
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
@@ -129,20 +129,20 @@ object CommentChannelManager {
         }
 
         register(CommentSource.Nicolive) {
-            NicoLiveCommentProvider(channel)
+            LiveNicoliveCommentProvider(channel)
         }
 
         register(CommentSource.Twitter) {
             val client = SayaTwitterClient ?: return@register null
             val tags = channel.twitterKeywords.ifEmpty { return@register null }
 
-            TwitterHashTagProvider(channel, client, tags)
+            LiveTwitterHashtagProvider(channel, client, tags)
         }
 
         register(CommentSource.Gochan) {
             val client = Saya5chClient ?: return@register null
 
-            GochanResCommentProvider(channel, client)
+            LiveGochanResCommentProvider(channel, client)
         }
     }
 }
