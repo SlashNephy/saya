@@ -605,18 +605,27 @@ channels:
       - 200
     nicojkId: 200
     miyoutvId: 'スターチャンネル'
+    boardId: 'BSPAY'
+    threadKeywords:
+      - 'スターチャンネル'
   - name: 'スターチャンネル2'
     type: 'BS'
     serviceIds:
       - 201
     nicojkId: 201
     miyoutvId: 'スターチャンネル'
+    boardId: 'BSPAY'
+    threadKeywords:
+      - 'スターチャンネル'
   - name: 'スターチャンネル3'
     type: 'BS'
     serviceIds:
       - 202
     nicojkId: 202
     miyoutvId: 'スターチャンネル'
+    boardId: 'BSPAY'
+    threadKeywords:
+      - 'スターチャンネル'
   - name: 'BS11イレブン'
     type: 'BS'
     serviceIds:
