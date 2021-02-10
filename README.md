@@ -3,7 +3,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/Docker)](https://hub.docker.com/r/slashnephy/saya)
-[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/slashnephy/saya/latest)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Pulls](https://img.shields.io/docker/pulls/slashnephy/saya)](https://hub.docker.com/r/slashnephy/saya)
 [![license](https://img.shields.io/github/license/SlashNephy/saya)](https://github.com/SlashNephy/saya/blob/master/LICENSE)
 [![issues](https://img.shields.io/github/issues/SlashNephy/saya)](https://github.com/SlashNephy/saya/issues)
@@ -64,6 +64,10 @@ saya is still in heavy development.
   dev ブランチへのプッシュの際にビルドされます。開発版のため, 不安定である可能性があります。
 - `slashnephy/saya:<version>`  
   GitHub 上のリリースに対応します。
+- `slashnephy/saya:***-vaapi`  
+  VAAPI によるハードウェアエンコーディングを有効化した ffmpeg ビルドを同梱しています。
+- `slashnephy/saya:***-nvenc`  
+  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg ビルドを同梱しています。CUDA Runtime 内臓の Ubuntu イメージのため, ややイメージサイズが大きいです。
 
 `docker-compose.yml`
 
