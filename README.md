@@ -65,9 +65,9 @@ saya is still in heavy development.
 - `slashnephy/saya:<version>`  
   GitHub 上のリリースに対応します。
 - `slashnephy/saya:***-vaapi`  
-  VAAPI によるハードウェアエンコーディングを有効化した ffmpeg ビルドを同梱しています。
+  VAAPI によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 - `slashnephy/saya:***-nvenc`  
-  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg ビルドを同梱しています。CUDA Runtime 内臓の Ubuntu イメージのため, ややイメージサイズが大きいです。
+  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。CUDA Runtime 内蔵の Ubuntu イメージのため, ややイメージサイズが大きいです。
 
 `docker-compose.yml`
 
