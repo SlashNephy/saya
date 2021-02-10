@@ -27,8 +27,15 @@ saya is still in heavy development.
 次の機能を現在実装しています。
 
 - ライブ再生 / 録画番組再生での実況コメントの配信
-  - ライブ再生時には [ニコニコ実況](https://jk.nicovideo.jp/) の公式放送およびコミュニティ放送 / Twitter ハッシュタグから取得します。
-  - 録画番組再生時には [ニコニコ実況 過去ログ API](https://jikkyo.tsukumijima.net/) / 5ch 過去ログから取得します。
+  - ライブ再生時には次のソースから取得します。
+    + [ニコニコ実況](https://jk.nicovideo.jp/) の公式放送およびコミュニティ放送
+    + Twitter ハッシュタグ (Filter ストリーム or 検索 API)
+    + 5ch DAT
+    
+  - 録画番組再生時には次のソースから取得します。
+    + [ニコニコ実況 過去ログ API](https://jikkyo.tsukumijima.net/)
+    + 5ch 過去ログ
+  
 - TS ファイルから EPG 情報を抽出
 - and more, coming soon...
 
@@ -97,6 +104,7 @@ services:
       TWITTER_AT: xxx
       TWITTER_ATS: xxx
       # Twitter からツイートを取得する際にストリーミング API を使用するか (false)
+      # 接続に失敗した場合には通常の検索 API にフォールバックします。
       # 試験的な機能のため, 一部の環境で動作しない可能性があります。
       TWITTER_PREFER_STREAMING_API: 'true'
       # 5ch API への接続情報 (null, null, null, null, null)
