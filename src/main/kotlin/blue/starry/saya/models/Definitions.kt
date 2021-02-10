@@ -30,7 +30,8 @@ data class Definitions(
     data class Board(
         val id: String,
         val name: String,
-        val url: String,
+        val server: String,
+        val board: String,
         val keywords: List<String> = emptyList()
     )
 }
