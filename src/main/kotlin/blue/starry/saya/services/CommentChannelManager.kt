@@ -67,13 +67,14 @@ object CommentChannelManager {
         val id = UUID.randomUUID()
 
         /**
-         * 実況チャンネル [JikkyoChannel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
+         * 実況チャンネル [Definitions.Channel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
+         *
          * 外側の produce が終了したときに購読数が 0 なら自動で処理も停止させる
          *
          * @param source コメント配信元 [CommentSource]
          * @param block リアルタイムコメントを取得する [LiveCommentProvider]
          */
-        suspend fun register(source: CommentSource, block: () -> LiveCommentProvider) {
+        suspend fun register(source: CommentSource, block: () -> LiveCommentProvider?) {
             if (source !in sources) {
                 return
             }
@@ -84,7 +85,7 @@ object CommentChannelManager {
                 // 取得 Job
                 // 前回の Job が走っていなければ再生成
                 if (first == null || second == null || !second.isActive) {
-                    first = block()
+                    first = block() ?: return
                     second = launch {
                         while (isActive) {
                             try {
@@ -132,11 +133,16 @@ object CommentChannelManager {
         }
 
         register(CommentSource.Twitter) {
-            TwitterHashTagProvider(channel)
+            val client = SayaTwitterClient ?: return@register null
+            val tags = channel.twitterKeywords.ifEmpty { return@register null }
+
+            TwitterHashTagProvider(channel, client, tags)
         }
 
         register(CommentSource.Gochan) {
-            GochanResCommentProvider(channel)
+            val client = Saya5chClient ?: return@register null
+
+            GochanResCommentProvider(channel, client)
         }
     }
 }

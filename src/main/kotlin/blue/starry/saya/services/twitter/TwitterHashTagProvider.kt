@@ -16,7 +16,6 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.LiveCommentProvider
-import blue.starry.saya.services.SayaTwitterClient
 import io.ktor.util.date.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
@@ -27,19 +26,15 @@ import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
 class TwitterHashTagProvider(
-    override val channel: Definitions.Channel
+    override val channel: Definitions.Channel,
+    private val client: ApiClient,
+    private val tags: Set<String>
 ): LiveCommentProvider {
     override val comments = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter.${channel.name}]")
 
     override suspend fun start() {
-        val client = SayaTwitterClient ?: return
-        val tags = channel.twitterKeywords
-        if (tags.isEmpty()) {
-            return
-        }
-
         if (Env.TWITTER_PREFER_STREAMING_API) {
             try {
                 doStreamLoop(client, tags)
