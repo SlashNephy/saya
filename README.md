@@ -98,7 +98,7 @@ services:
       TWITTER_ATS: xxx
       # Twitter からツイートを取得する際にストリーミング API を使用するか (false)
       # 試験的な機能のため, 一部の環境で動作しない可能性があります。
-      TWITTER_PREFER_STREAMING_API: true
+      TWITTER_PREFER_STREAMING_API: 'true'
       # 5ch API への接続情報 (null, null, null, null, null)
       GOCHAN_HM_KEY: xxx
       GOCHAN_APP_KEY: xxx
