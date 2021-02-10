@@ -1,5 +1,7 @@
 package blue.starry.saya.common
 
+import java.text.Normalizer
+
 operator fun <A, B> Pair<A, B>?.component1(): A? {
     return this?.first
 }
@@ -22,4 +24,8 @@ internal fun String?.toBooleanFuzzy(): Boolean {
         toIntOrNull() == 1 -> true
         else -> toLowerCase().toBoolean()
     }
+}
+
+fun String.normalize(): String {
+    return Normalizer.normalize(this, Normalizer.Form.NFKC)
 }

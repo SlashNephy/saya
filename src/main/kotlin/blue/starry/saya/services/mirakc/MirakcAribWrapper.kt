@@ -7,7 +7,7 @@ import blue.starry.saya.models.File
 import blue.starry.saya.models.FileInfo
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.mirakurun.mainGenres
-import blue.starry.saya.services.mirakurun.normalize
+import blue.starry.saya.common.normalize
 import blue.starry.saya.services.mirakurun.subGenres
 import mu.KotlinLogging
 import java.nio.file.Path
