@@ -25,7 +25,7 @@ class LiveGochanResCommentProvider(
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
     private val threadSearchInterval = 10.seconds
     private val resCollectInterval = 5.seconds
-    private val threadLimit = 3
+    private val threadLimit = 5
 
     override suspend fun start() {
         joinAll(
