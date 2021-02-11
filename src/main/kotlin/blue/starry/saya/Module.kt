@@ -2,7 +2,9 @@ package blue.starry.saya
 
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.endpoints.*
+import blue.starry.saya.endpoints.getIndex
+import blue.starry.saya.endpoints.wsLiveComments
+import blue.starry.saya.endpoints.wsTimeshiftComments
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -50,42 +52,14 @@ fun Application.module() {
             getIndex()
 
             route("comments") {
-                getCommentInfo()
-
                 route("{target}") {
                     route("live") {
-                        wsLiveCommentsByTarget()
+                        wsLiveComments()
                     }
 
                     route("timeshift") {
-                        wsTimeshiftCommentsByTarget()
+                        wsTimeshiftComments()
                     }
-
-                    route("info") {
-                        getCommentInfoByTarget()
-                    }
-                }
-            }
-
-            route("files") {
-                getFiles()
-
-                route("{id}") {
-                    getFileById()
-
-                    route("info") {
-                        getFileInfoById()
-                    }
-                }
-            }
-
-            route("definitions") {
-                route("channels") {
-                    getChannelDefinitions()
-                }
-
-                route("boards") {
-                    getBoardDefinitions()
                 }
             }
         }

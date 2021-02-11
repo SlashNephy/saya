@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-data class MirakurunService(
+data class Service(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -44,11 +44,11 @@ data class MirakurunService(
     /**
      * タイプ
      */
-    val type: Definitions.Channel.Type
+    val type: Channel.Type
 )
 
 @Serializable
-data class MirakurunChannel(
+data class Channel(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -57,7 +57,7 @@ data class MirakurunChannel(
     /**
      * チャンネルタイプ
      */
-    val type: Definitions.Channel.Type,
+    val type: Type,
 
     /**
      * チャンネルグループ
@@ -72,11 +72,15 @@ data class MirakurunChannel(
     /**
      * サービスのリスト
      */
-    val services: List<MirakurunService>
-)
+    val services: List<Service>
+) {
+    enum class Type {
+        GR, BS, CS, SKY
+    }
+}
 
 @Serializable
-data class MirakurunServiceLogo(
+data class Logo(
     /**
      * ロゴ ID
      */
@@ -85,7 +89,7 @@ data class MirakurunServiceLogo(
     /**
      * サービス
      */
-    val service: MirakurunService,
+    val service: Service,
 
     /**
      * ロゴデータ (PNG, base64)
@@ -94,7 +98,7 @@ data class MirakurunServiceLogo(
 )
 
 @Serializable
-data class MirakurunProgram(
+data class Program(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -108,7 +112,7 @@ data class MirakurunProgram(
     /**
      * サービス
      */
-    val service: MirakurunService,
+    val service: Service,
 
     /**
      * 開始時刻 (エポック秒)
@@ -177,7 +181,7 @@ data class MirakurunProgram(
 }
 
 @Serializable
-data class MirakurunTuner(
+data class Tuner(
     /**
      * Mirakurun オブジェクト (非公開)
      */
@@ -185,7 +189,7 @@ data class MirakurunTuner(
 
     val index: Int,
     val name: String,
-    val types: List<Definitions.Channel.Type>,
+    val types: List<Channel.Type>,
     val command: String?,
     val pid: Int?,
     val users: List<User>,
@@ -204,11 +208,19 @@ data class MirakurunTuner(
 }
 
 @Serializable
-data class MirakurunTunerProcess(
+data class TunerProcess(
     /**
      * Mirakurun オブジェクト (非公開)
      */
     @Transient internal val json: JsonObject? = null,
 
     val pid: Int
+)
+
+@Serializable
+data class Genre(
+    val id: Int,
+    val main: String,
+    val sub: String,
+    val count: Int
 )

@@ -104,7 +104,7 @@ data class SearchPrograms(override val json: JsonObject): JsonModel {
     }
 }
 
-data class NicoliveWebSocketSystemJson(override val json: JsonObject): JsonModel {
+data class NicoLiveWebSocketSystemJson(override val json: JsonObject): JsonModel {
     val type by string
     val data by model { Data(it) }
 
@@ -128,7 +128,7 @@ data class NicoliveWebSocketSystemJson(override val json: JsonObject): JsonModel
     }
 }
 
-data class NicoliveWebSocketMessageJson(override val json: JsonObject) : JsonModel {
+data class NicoLiveWebSocketMessageJson(override val json: JsonObject) : JsonModel {
     val chat by nullableModel { Chat(it) }
 }
 
