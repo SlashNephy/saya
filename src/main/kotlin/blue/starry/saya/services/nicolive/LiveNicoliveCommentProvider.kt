@@ -7,7 +7,6 @@ import blue.starry.saya.services.LiveCommentProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging
-import kotlin.time.seconds
 
 class LiveNicoliveCommentProvider(
     override val channel: Definitions.Channel,
@@ -19,33 +18,28 @@ class LiveNicoliveCommentProvider(
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${channel.name}]")
 
     override suspend fun start() {
-        tags.map { tag ->
+        tags.mapNotNull { tag ->
+            val programs = NicoliveApi.getLivePrograms(tag)
+            programs.data.find { data ->
+                // コミュニティ放送 or 「ニコニコ実況」タグ付きの公式番組
+                !channel.hasOfficialNicolive || data.tags.any { it.text == "ニコニコ実況" }
+            }
+        }.distinctBy {
+            it.id
+        }.map {
+            NicoliveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${it.id}")
+        }.distinctBy {
+            it.program.nicoliveProgramId
+        }.map {
             GlobalScope.launch {
-                while (true) {
-                    try {
-                        doCollectCommentLoop(tag)
-                    } catch (e: CancellationException) {
-                        break
-                    } catch (t: Throwable) {
-                        logger.error(t) { "error in doCollectCommentLoop(${tag.intern()})" }
-                    }
-
-                    delay(5.seconds)
+                try {
+                    val ws = NicoliveSystemWebSocket(this@LiveNicoliveCommentProvider, it)
+                    ws.start()
+                } catch (e: CancellationException) {
+                } catch (t: Throwable) {
+                    logger.error(t) { "error in doCollectCommentLoop(${it.program.nicoliveProgramId}, ${it.program.title})" }
                 }
             }
         }.joinAll()
-    }
-
-    private suspend fun doCollectCommentLoop(tag: String) {
-        val programs = NicoliveApi.getLivePrograms(tag)
-        val search = programs.data.find { data ->
-            // コミュニティ放送 or 「ニコニコ実況」タグ付きの公式番組
-            !channel.hasOfficialNicolive || data.tags.any { it.text == "ニコニコ実況" }
-        } ?: return
-
-        val data = NicoliveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${search.id}")
-        val ws = NicoliveSystemWebSocket(this@LiveNicoliveCommentProvider, data.site.relive.webSocketUrl, search.id)
-
-        ws.start()
     }
 }
