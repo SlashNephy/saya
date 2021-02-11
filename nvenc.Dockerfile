@@ -21,35 +21,49 @@ RUN gradle -version > /dev/null \
     && gradle shadowJar --parallel --no-daemon
 
 # For mirakc-arib
-FROM mirakc/mirakc:alpine AS mirakc-image
+FROM mirakc/mirakc:debian AS mirakc-image
 
 # Final Stage
-FROM openjdk:17-jdk-alpine
+FROM nvidia/cuda:11.2.0-devel
+
+# Java
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        default-jre-headless \
+        language-pack-ja \
+    && apt-get clean \
+    && rm -rf \
+        /var/lib/apt/lists/* \
+    && locale-gen ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
 
 ## Copy mirakc-arib binary
 COPY --from=mirakc-image /usr/local/bin/mirakc-arib /usr/local/bin/
-## Install gcc runtime
-RUN apk add --update --no-cache libgcc libstdc++
 
 ## ffmpeg build Stage
 ## ffmpeg version must be <4.2 for subtitle support.
 ## Refer issue https://github.com/EMWUI/EDCB_Material_WebUI/issues/17
 ARG FFMPEG_VERSION=4.1.6
 ARG CPUCORE=4
-RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
-    && apk add --update --no-cache --virtual .build-deps \
-        build-base \
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES video,compute,utility
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         curl \
         tar \
-        coreutils \
-        x264-dev \
-        fdk-aac-dev \
-    \
-    # runtime
-    && apk add --no-cache \
-        x264 \
-        x264-libs \
-        fdk-aac \
+        git \
+        ca-certificates \
+        build-essential \
+        nasm \
+        yasm \
+        libx264-dev \
+        libfdk-aac-dev \
+    # nv-codec-headers
+    && cd /tmp \
+    && git clone https://github.com/FFmpeg/nv-codec-headers \
+    && cd nv-codec-headers \
+    && make -j${CPUCORE} \
+    && make install \
     # build
     && mkdir /tmp/ffmpeg \
     && cd /tmp/ffmpeg \
@@ -68,6 +82,12 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         --enable-libfdk-aac \
         --enable-gpl \
         --enable-nonfree \
+        # nvenc
+        --enable-cuda \
+        --enable-cuvid \
+        --extra-cflags=-I/usr/local/cuda/include \
+        --extra-ldflags=-L/usr/local/cuda/lib64 \
+        --enable-nvenc \
     && make -j${CPUCORE} \
     && make install \
     && make distclean \
@@ -75,12 +95,21 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
     && ffmpeg -encoders \
     \
     # cleaning
-    && apk del --purge .build-deps \
-    && rm -rf /tmp/ffmpeg
+    && apt-get remove --purge -y \
+        curl \
+        git \
+        build-essential \
+        nasm \
+        yasm \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf \
+        /var/lib/apt/lists/* \
+        /tmp/ffmpeg \
+        /tmp/nv-codec-headers
 
 ## Add user
-RUN addgroup -S saya \
-    && adduser -S saya -G saya
+RUN adduser --disabled-password --gecos "" saya
 
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/

@@ -44,12 +44,15 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         coreutils \
         x264-dev \
         fdk-aac-dev \
+        libva-dev \
     \
     # runtime
     && apk add --no-cache \
         x264 \
         x264-libs \
         fdk-aac \
+        libva \
+        intel-media-driver \
     # build
     && mkdir /tmp/ffmpeg \
     && cd /tmp/ffmpeg \
@@ -68,6 +71,10 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/reposi
         --enable-libfdk-aac \
         --enable-gpl \
         --enable-nonfree \
+        # vaapi
+        --enable-vaapi \
+        # Intel QSV
+        # --enable-libmfx
     && make -j${CPUCORE} \
     && make install \
     && make distclean \
