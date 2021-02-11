@@ -1187,44 +1187,44 @@ boards:
     name: '番組ch(NHK総合)'
     server: 'nhk2'
     board: 'livenhk'
-    keywords:
-      - 'NHK総合を常に実況し続けるスレ'
+#    keywords:
+#      - 'NHK総合を常に実況し続けるスレ'
   - id: 'ETV'
     name: '番組ch(Eテレ)'
     server: 'nhk2'
     board: 'liveetv'
-    keywords:
-      - 'NHK教育を見て'
+#    keywords:
+#      - 'NHK教育を見て'
   - id: 'NTV'
     name: '番組ch(日テレ)'
     server: 'himawari'
     board: 'liventv'
-    keywords:
-      - '実況 ◆ 日本テレビ'
+#    keywords:
+#      - '実況 ◆ 日本テレビ'
   - id: 'EX'
     name: '番組ch(テレ朝)'
     server: 'himawari'
     board: 'liveanb'
-    keywords:
-      - '実況 ◆ テレビ朝日'
+#    keywords:
+#      - '実況 ◆ テレビ朝日'
   - id: 'TBS'
     name: '番組ch(TBS)'
     server: 'himawari'
     board: 'livetbs'
-    keywords:
-      - '実況 ◆ ＴＢＳテレビ'
+#    keywords:
+#      - '実況 ◆ ＴＢＳテレビ'
   - id: 'TX'
     name: '番組ch(テレ東)'
     server: 'himawari'
     board: 'livetx'
-    keywords:
-      - '実況 ◆ テレビ東京'
+#    keywords:
+#      - '実況 ◆ テレビ東京'
   - id: 'CX'
     name: '番組ch(フジ)'
     server: 'himawari'
     board: 'livecx'
-    keywords:
-      - '実況 ◆ フジテレビ'
+#    keywords:
+#      - '実況 ◆ フジテレビ'
   - id: 'MX'
     name: '番組ch(MX)'
     server: 'fate'

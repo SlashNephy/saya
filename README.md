@@ -132,6 +132,8 @@ services:
     volumes:
       # 録画 TS ファイルの置き場所
       - /mnt:/mnt:ro
+      # definitions.yml を書き換えて使用したい場合
+      # - ./definitions.yml:/app/docs/definitions.yml:ro
 
   elaina:
     container_name: elaina
