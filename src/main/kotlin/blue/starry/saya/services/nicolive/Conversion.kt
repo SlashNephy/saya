@@ -1,7 +1,6 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.saya.models.Comment
-import blue.starry.saya.services.comments.nicolive.models.Chat
 
 fun Chat.toSayaComment(source: String): Comment {
     val (color, type, size) = parseMail(mail)

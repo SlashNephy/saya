@@ -2,8 +2,6 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.comments.nicolive.models.EmbeddedData
-import blue.starry.saya.services.comments.nicolive.models.SearchPrograms
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.jsoup.Jsoup

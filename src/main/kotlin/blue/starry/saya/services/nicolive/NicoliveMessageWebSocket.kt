@@ -6,8 +6,6 @@ import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketMessageJson
-import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketSystemJson
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.flow.collect
@@ -18,9 +16,9 @@ import mu.KotlinLogging
 class NicoliveMessageWebSocket(
     private val provider: LiveNicoliveCommentProvider,
     private val room: NicoliveWebSocketSystemJson.Data,
-    private val lvName: String
+    private val data: EmbeddedData
 ) {
-    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${provider.channel.name}")
+    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
     suspend fun start() {
         SayaHttpClient.webSocket(room.messageServer.uri) {
@@ -75,7 +73,7 @@ class NicoliveMessageWebSocket(
                 NicoliveWebSocketMessageJson(it)
             }
 
-            val comment = message.chat?.toSayaComment("ニコニコ生放送 [$lvName]")
+            val comment = message.chat?.toSayaComment("ニコニコ生放送 [${data.program.nicoliveProgramId}, ${data.program.title}]")
             if (comment != null) {
                 provider.comments.send(comment)
             }

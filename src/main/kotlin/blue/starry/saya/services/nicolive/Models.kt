@@ -1,4 +1,4 @@
-package blue.starry.saya.services.comments.nicolive.models
+package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
@@ -8,6 +8,8 @@ data class EmbeddedData(override val json: JsonObject): JsonModel {
     val site by model { Site(it) }
 
     data class Program(override val json: JsonObject): JsonModel {
+        val title by string
+        val nicoliveProgramId by string
         val tag by model { Tag(it) }
         val status by string
         val beginTime by long
