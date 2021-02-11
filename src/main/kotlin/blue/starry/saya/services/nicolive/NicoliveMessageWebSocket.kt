@@ -10,8 +10,6 @@ import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketMessa
 import blue.starry.saya.services.comments.nicolive.models.NicoliveWebSocketSystemJson
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -25,30 +23,11 @@ class NicoliveMessageWebSocket(
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${provider.channel.name}")
 
     suspend fun start() {
-        try {
-            connect()
-        } catch (t: Throwable) {
-            logger.trace(t) { "cancel: NicoliveMessageWebSocket" }
-        }
-    }
-
-    private suspend fun connect() {
         SayaHttpClient.webSocket(room.messageServer.uri) {
-            try {
-                logger.debug { "mws:connect" }
+            logger.debug { "mws:connect" }
 
-                handshake()
-                consumeFrames()
-            } catch (t: Throwable) {
-                when (t) {
-                    is ClosedReceiveChannelException, is CancellationException -> {
-                        logger.debug("mws:close (${closeReason.await()})")
-                    }
-                    else -> {
-                        logger.error("mws:error (${closeReason.await()}), ${t.stackTraceToString()}")
-                    }
-                }
-            }
+            handshake()
+            consumeFrames()
         }
     }
 

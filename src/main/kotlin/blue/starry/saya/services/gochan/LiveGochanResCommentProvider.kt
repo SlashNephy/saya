@@ -5,11 +5,8 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.LiveCommentProvider
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.time.ZonedDateTime
 import kotlin.time.seconds
@@ -31,13 +28,27 @@ class LiveGochanResCommentProvider(
         joinAll(
             GlobalScope.launch {
                 while (true) {
-                    searchThreads()
+                    try {
+                        doSearchThreadsLoop()
+                    } catch (e: CancellationException) {
+                        break
+                    } catch (t: Throwable) {
+                        logger.error(t) { "error in doSearchThreadsLoop" }
+                    }
+
                     delay(threadSearchInterval)
                 }
             },
             GlobalScope.launch {
                 while (true) {
-                    collectRes()
+                    try {
+                        doCollectResLoop()
+                    } catch (e: CancellationException) {
+                        break
+                    } catch (t: Throwable) {
+                        logger.error(t) { "error in doCollectResLoop" }
+                    }
+
                     delay(resCollectInterval)
                 }
             }
@@ -47,7 +58,7 @@ class LiveGochanResCommentProvider(
     private val threadLoaders = mutableMapOf<GochanThreadAddress, GochanDatThreadLoader>().asThreadSafe()
     private val subject = mutableMapOf<GochanThreadAddress, GochanSubjectItem>().asThreadSafe()
 
-    private suspend fun searchThreads() {
+    private suspend fun doSearchThreadsLoop() {
         val items = AutoGochanThreadSelector.enumerate(client, channel, board, limit = threadLimit)
 
         subject.withLock { subject ->
@@ -56,11 +67,13 @@ class LiveGochanResCommentProvider(
             for (item in items) {
                 val address = GochanThreadAddress(board.server, board.board, item.threadId)
                 subject[address] = item
+
+                logger.trace { item }
             }
         }
     }
 
-    private suspend fun collectRes() {
+    private suspend fun doCollectResLoop() {
         subject.withLock { subject ->
             for ((address, item) in subject) {
                 val loader = threadLoaders.withLock { safeThreadLoaders ->
@@ -74,6 +87,8 @@ class LiveGochanResCommentProvider(
                     it.time.plusSeconds(15).isAfter(now)
                 }.forEach {
                     comments.send(it.toSayaComment("5ch [${item.title}]"))
+
+                    logger.trace { it }
                 }
             }
         }

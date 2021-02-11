@@ -60,7 +60,7 @@ object CommentChannelManager {
      *
      * 購読数が 0 になると自動でコメントの取得 [Job] がキャンセルされる
      *
-     * @param channel 実況チャンネル [JikkyoChannel]
+     * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
      */
     fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = GlobalScope.produce<Comment> {
@@ -90,11 +90,13 @@ object CommentChannelManager {
                         while (isActive) {
                             try {
                                 first.start()
+                            } catch (e: CancellationException) {
+                                break
                             } catch (t: Throwable) {
                                 logger.error(t) { "error in $first" }
-                            } finally {
-                                delay(3.seconds)
                             }
+
+                            delay(5.seconds)
                         }
                     }
 
@@ -119,17 +121,20 @@ object CommentChannelManager {
                     logger.debug { "remove id: $id [${channel.name}, $source]" }
 
                     if (provider.subscription.isEmpty()) {
-                        job.cancel()
                         logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
+                        job.cancelAndJoin()
                     }
                 }
 
-                logger.trace(it) { "$this is closing..." }
+                logger.trace { "$this is closing..." }
             }
         }
 
         register(CommentSource.Nicolive) {
-            LiveNicoliveCommentProvider(channel)
+            // チャンネル名をタグ名として追加
+            val tags = channel.nicoliveTags.plus(channel.name)
+
+            LiveNicoliveCommentProvider(channel, tags)
         }
 
         register(CommentSource.Twitter) {

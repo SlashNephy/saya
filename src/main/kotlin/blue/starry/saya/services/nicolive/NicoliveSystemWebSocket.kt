@@ -15,27 +15,14 @@ import kotlinx.coroutines.flow.filterIsInstance
 import mu.KotlinLogging
 
 class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider, private val wsUrl: String, private val lvName: String) {
-    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive.${provider.channel.name}")
+    private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
-    fun start() = GlobalScope.launch {
-        try {
-            connect()
-        } catch (t: Throwable) {
-            logger.trace(t) { "cancel: NicoliveSystemWebSocket" }
-        }
-    }
-
-    private suspend fun connect() {
+    suspend fun start() {
         SayaHttpClient.webSocket(wsUrl) {
-            try {
-                logger.debug { "ws:connect" }
+            logger.debug { "ws:connect" }
 
-                handshake()
-                consumeFrames()
-            } catch (t: Throwable) {
-                val reason = closeReason.await()
-                logger.debug(t) { "ws:close ($reason)" }
-            }
+            handshake()
+            consumeFrames()
         }
     }
 
