@@ -1,5 +1,6 @@
 package blue.starry.saya.services.twitter
 
+import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.endpoints.search
@@ -40,12 +41,19 @@ class LiveTweetProvider(
 
     override suspend fun start() = coroutineScope {
         if (Env.TWITTER_PREFER_STREAMING_API) {
-            try {
-                doStreamLoop(client, keywords)
-            } catch (e: CancellationException) {
-                return@coroutineScope
-            } catch (t: Throwable) {
-                logger.error(t) { "error in doStreamLoop" }
+            while (isActive) {
+                try {
+                    doStreamLoop(client, keywords)
+                } catch (e: CancellationException) {
+                    return@coroutineScope
+                // レートリミット
+                } catch (e: PenicillinException) {
+                    break
+                } catch (t: Throwable) {
+                    logger.error(t) { "error in doStreamLoop" }
+                }
+
+                delay(5.seconds)
             }
         }
 
