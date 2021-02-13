@@ -8,9 +8,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Comment(
     /**
-     * コメントの配信元 (e.g. "lv2646436", "#twitter")
+     * コメントの配信元
      */
     val source: String,
+
+    /**
+     * コメントの配信元の URL
+     */
+    val sourceUrl: String? = null,
 
     /**
      * コメントの投稿時間 (エポック秒)
@@ -35,17 +40,17 @@ data class Comment(
     /**
      * コメントの hex 表記の色 (e.g. "#123456")
      */
-    val color: String,
+    val color: String = "#ffffff",
 
     /**
      * コメントの位置
      */
-    val type: Position,
+    val type: Position = Position.right,
 
     /**
      * コメントのサイズ
      */
-    val size: Size
+    val size: Size = Size.normal
 ) {
     @Suppress("EnumEntryName")
     enum class Position {

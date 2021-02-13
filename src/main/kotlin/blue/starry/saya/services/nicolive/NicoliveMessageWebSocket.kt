@@ -73,7 +73,10 @@ class NicoliveMessageWebSocket(
                 NicoliveWebSocketMessageJson(it)
             }
 
-            val comment = message.chat?.toSayaComment("ニコニコ生放送 [${data.program.nicoliveProgramId}, ${data.program.title}]")
+            val comment = message.chat?.toSayaComment(
+                source = "ニコニコ生放送 [${data.program.title}]",
+                sourceUrl = "https://live2.nicovideo.jp/watch/${data.program.nicoliveProgramId}"
+            )
             if (comment != null) {
                 provider.comments.send(comment)
             }

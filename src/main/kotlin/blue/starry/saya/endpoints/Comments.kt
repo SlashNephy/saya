@@ -123,7 +123,10 @@ fun Route.wsTimeshiftCommentsByTarget() {
                             startAt + unit * i,
                             minOf(startAt + unit * (i + 1), endAt)
                         ).packets.map {
-                            it.chat.toSayaComment("ニコニコ実況過去ログAPI [jk${channel.nicojkId}]")
+                            it.chat.toSayaComment(
+                                source = "ニコニコ実況過去ログAPI [jk${channel.nicojkId}]",
+                                sourceUrl = "https://jikkyo.tsukumijima.net/api/kakolog/jk${channel.nicojkId}?starttime=${it.chat.date}&endtime=${it.chat.date + 1}&format=json"
+                            )
                         }.forEach {
                             queue.send(it)
                         }

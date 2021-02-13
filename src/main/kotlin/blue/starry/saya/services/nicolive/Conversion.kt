@@ -2,11 +2,12 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.saya.models.Comment
 
-fun Chat.toSayaComment(source: String): Comment {
+fun Chat.toSayaComment(source: String, sourceUrl: String): Comment {
     val (color, type, size) = parseMail(mail)
 
     return Comment(
         source = source,
+        sourceUrl = sourceUrl,
         time = date,
         timeMs = dateUsec / 1000,
         author = userId,
