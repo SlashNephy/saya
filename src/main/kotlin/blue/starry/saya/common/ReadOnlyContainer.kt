@@ -6,21 +6,25 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import mu.KotlinLogging
 import kotlin.time.minutes
 
 class ReadOnlyContainer<T: Any>(private val block: suspend () -> List<T>?) {
     private val mutex = Mutex()
     private val collection = mutableListOf<T>()
+    private val logger = KotlinLogging.createSayaLogger("saya.ReadOnlyContainer")
 
     private val initialJob = GlobalScope.launch {
         collection.addAll(block() ?: return@launch)
+        logger.debug { "Initial update job for ${this@ReadOnlyContainer::class.simpleName} was finished." }
     }
 
     init {
         GlobalScope.launch {
             while (isActive) {
-                delay(15.minutes)
+                delay(Env.SAYA_UPDATE_INTERVAL_MINS.minutes)
                 update()
+                logger.debug { "Regular update job for ${this@ReadOnlyContainer::class.simpleName} was finished." }
             }
         }
     }
