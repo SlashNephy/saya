@@ -9,6 +9,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging
 import java.time.ZonedDateTime
+import kotlin.random.Random
+import kotlin.random.nextLong
 import kotlin.time.seconds
 
 class LiveGochanResCommentProvider(
@@ -92,6 +94,7 @@ class LiveGochanResCommentProvider(
                     ))
 
                     logger.trace { it }
+                    delay(Random.nextLong(0..300L))
                 }
             }
         }
