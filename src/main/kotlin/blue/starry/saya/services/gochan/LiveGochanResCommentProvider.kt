@@ -24,10 +24,10 @@ class LiveGochanResCommentProvider(
     private val resCollectInterval = 5.seconds
     private val threadLimit = 5
 
-    override suspend fun start() {
+    override suspend fun start() = coroutineScope {
         joinAll(
-            GlobalScope.launch {
-                while (true) {
+            launch {
+                while (isActive) {
                     try {
                         doSearchThreadsLoop()
                     } catch (e: CancellationException) {
@@ -39,8 +39,8 @@ class LiveGochanResCommentProvider(
                     delay(threadSearchInterval)
                 }
             },
-            GlobalScope.launch {
-                while (true) {
+            launch {
+                while (isActive) {
                     try {
                         doCollectResLoop()
                     } catch (e: CancellationException) {

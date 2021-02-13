@@ -1,7 +1,5 @@
 package blue.starry.saya.services
 
-import blue.starry.saya.common.component1
-import blue.starry.saya.common.component2
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentSource
@@ -52,7 +50,7 @@ object CommentChannelManager {
         }
     }
 
-    private val Providers = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Pair<LiveCommentProvider, Job>>()
+    private val Providers = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Pair<LiveCommentProvider, Job?>>()
     private val providersLock = Mutex()
 
     /**
@@ -80,53 +78,54 @@ object CommentChannelManager {
             }
 
             val (provider, job) = providersLock.withLock {
-                var (first, second) = Providers[channel to source]
+                val (oldProvider, oldJob) = Providers.getOrPut(channel to source) {
+                    (block() ?: return) to null
+                }
 
                 // 取得 Job
                 // 前回の Job が走っていなければ再生成
-                if (first == null || second == null || !second.isActive) {
-                    first = block() ?: return
-                    second = launch {
+                if (oldJob == null || !oldJob.isActive) {
+                    Providers[channel to source] = oldProvider to GlobalScope.launch {
                         while (isActive) {
                             try {
-                                first.start()
+                                oldProvider.start()
                             } catch (e: CancellationException) {
                                 break
                             } catch (t: Throwable) {
-                                logger.error(t) { "error in $first" }
+                                logger.error(t) { "error in $oldProvider" }
                             }
 
                             delay(5.seconds)
                         }
-                    }
 
-                    Providers[channel to source] = first to second
+                        logger.debug { "$oldProvider is canceled." }
+                    }
                 }
 
-                first to second
+                Providers[channel to source]!!
             }
 
             // 配信 Job
             // クライアントが接続を閉じると終了する
             launch {
-                provider.subscription.create(id)
-                logger.debug { "create id: $id [${channel.name}, $source]" }
+                try {
+                    provider.subscription.create(id)
+                    logger.debug { "create id: $id [${channel.name}, $source]" }
 
-                provider.comments.openSubscription().consumeEach {
-                    send(it)
-                }
-            }.invokeOnCompletion {
-                runBlocking {
+                    provider.comments.openSubscription().consumeEach {
+                        send(it)
+                    }
+                } finally {
                     provider.subscription.remove(id)
                     logger.debug { "remove id: $id [${channel.name}, $source]" }
 
                     if (provider.subscription.isEmpty()) {
                         logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
-                        job.cancelAndJoin()
+                        job!!.cancel()
                     }
-                }
 
-                logger.trace { "$this is closing..." }
+                    logger.debug { "$this is closing... ($id) [${channel.name}, $source]" }
+                }
             }
         }
 

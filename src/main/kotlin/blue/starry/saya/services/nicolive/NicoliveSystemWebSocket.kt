@@ -83,12 +83,6 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
                     mwsJob?.cancel()
                     mwsJob = launch {
                         NicoliveMessageWebSocket(provider, message.data, data).start()
-                    }.apply {
-                        invokeOnCompletion {
-                            runBlocking {
-                                close()
-                            }
-                        }
                     }
                 }
                 "disconnect" -> {

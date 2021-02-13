@@ -17,7 +17,7 @@ class LiveNicoliveCommentProvider(
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${channel.name}]")
 
-    override suspend fun start() {
+    override suspend fun start() = coroutineScope {
         tags.mapNotNull { tag ->
             val programs = NicoliveApi.getLivePrograms(tag)
             programs.data.find { data ->
@@ -31,7 +31,7 @@ class LiveNicoliveCommentProvider(
         }.distinctBy {
             it.program.nicoliveProgramId
         }.map {
-            GlobalScope.launch {
+            launch {
                 try {
                     val ws = NicoliveSystemWebSocket(this@LiveNicoliveCommentProvider, it)
                     ws.start()

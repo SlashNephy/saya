@@ -18,7 +18,9 @@ import blue.starry.saya.services.LiveCommentProvider
 import io.ktor.util.date.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
@@ -36,24 +38,22 @@ class LiveTwitterHashtagProvider(
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter[${channel.name}]")
 
-    override suspend fun start() {
+    override suspend fun start() = coroutineScope {
         if (Env.TWITTER_PREFER_STREAMING_API) {
             try {
                 doStreamLoop(client, tags)
             } catch (e: CancellationException) {
-                return
+                return@coroutineScope
             } catch (t: Throwable) {
                 logger.error(t) { "error in doStreamLoop" }
             }
-
-            delay(5.seconds)
         }
 
-        while (true) {
+        while (isActive) {
             try {
                 doSearchLoop(client, tags)
             } catch (e: CancellationException) {
-                return
+                break
             } catch (t: Throwable) {
                 logger.trace(t) { "error in doSearchLoop" }
             }
