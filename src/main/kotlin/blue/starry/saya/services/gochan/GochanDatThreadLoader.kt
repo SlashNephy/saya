@@ -29,7 +29,7 @@ class GochanDatThreadLoader(private val address: GochanThreadAddress) {
 
             val response = client.getDat(address.server, address.board, address.id, headers)
             lastModified = response.headers[HttpHeaders.LastModified] ?: lastModified
-            val body = response.readText(charset("Shift_JIS"))
+            val body = response.readText(charset("MS932"))
 
             when (response.status) {
                 // 変更なし
