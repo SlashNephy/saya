@@ -1,0 +1,62 @@
+<html lang="en">
+    <head>
+        <title>saya WebSockets Test</title>
+        <style>
+            body {
+                background-color: #708090;
+            }
+        </style>
+    </head>
+    <body>
+        <label for="url">URL: </label><input type="text" id="url" size="100" value="http://localhost:1017/comments/jk1/live">
+        <button type="button" onclick="connect();">Connect</button>
+        <button type="button" onclick="disconnect();">Disconnect</button>
+
+        <div>Status: <span id="status"></span></div>
+
+        <hr>
+
+        <code id="response"></code>
+
+        <script>
+            const url = document.getElementById("url");
+            const status = document.getElementById("status");
+            const response = document.getElementById("response");
+
+            let ws;
+            function connect() {
+                disconnect();
+
+                ws = new WebSocket(url.value);
+                localStorage.setItem("url", url.value);
+
+                ws.onopen = () => {
+                    status.textContent = "OPEN";
+                };
+                ws.onclose = () => {
+                    status.textContent = "CLOSE";
+                };
+                ws.onerror = (e) => {
+                    status.textContent = `ERROR: ${e}`;
+                };
+                ws.onmessage = (e) => {
+                    const ele = document.createElement("p");
+                    ele.textContent = e.data;
+                    response.prepend(ele);
+                };
+            }
+
+            function disconnect() {
+                try {
+                    ws.close();
+                } catch {
+                }
+
+                response.textContent = "";
+            }
+
+            url.value = localStorage.getItem("url");
+            connect();
+        </script>
+    </body>
+</html>
