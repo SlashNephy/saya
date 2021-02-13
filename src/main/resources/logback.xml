@@ -11,7 +11,7 @@
     </appender>
 
     <logger name="saya" level="TRACE" />
-    <logger name="Penicillin" level="INFO" />
+    <logger name="Penicillin" level="TRACE" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

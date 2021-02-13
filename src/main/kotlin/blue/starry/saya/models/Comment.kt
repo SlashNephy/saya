@@ -52,16 +52,27 @@ data class Comment(
      */
     val size: Size = Size.normal
 ) {
-    @Suppress("EnumEntryName")
     enum class Position {
         right, top, bottom
     }
 
-    @Suppress("EnumEntryName")
     enum class Size {
         normal, small, medium, big
     }
 }
+
+@Serializable
+data class JikkyoChannel(
+    val type: Channel.Type,
+    val jk: Int? = null,
+    val name: String,
+    val serviceIds: Set<Int>,
+    val tags: Set<String> = emptySet(),
+    val isOfficial: Boolean = false,
+    val miyouId: String? = null,
+    val communities: Set<String> = emptySet(),
+    val hashtags: Set<String> = emptySet()
+)
 
 @Serializable
 data class TimeshiftCommentControl(
@@ -70,33 +81,5 @@ data class TimeshiftCommentControl(
 ) {
     enum class Action {
         Ready, Resume, Pause, Sync
-    }
-}
-
-@Serializable
-data class CommentInfo(
-    val channel: Definitions.Channel,
-    val service: MirakurunService?,
-    val force: Int,
-    val last: String
-)
-
-enum class CommentSource(private vararg val aliases: String) {
-    Nicolive("nico", "nicolive"),
-    Twitter("twitter"),
-    Gochan("5ch", "2ch");
-
-    companion object {
-        fun from(sources: String?): List<CommentSource> {
-            return if (sources == null) {
-                values().toList()
-            } else {
-                val t = sources.split(",")
-
-                values().filter {
-                    it.aliases.any { alias -> alias in t }
-                }
-            }
-        }
     }
 }

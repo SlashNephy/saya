@@ -2,15 +2,14 @@ package blue.starry.saya.services.mirakurun
 
 import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.common.normalize
-import blue.starry.saya.models.Definitions
-import blue.starry.saya.models.MirakurunTunerProcess
+import blue.starry.saya.models.TunerProcess
 import kotlinx.serialization.json.jsonPrimitive
 import mu.KotlinLogging
-import blue.starry.saya.models.MirakurunChannel as SayaChannel
-import blue.starry.saya.models.MirakurunProgram as SayaProgram
-import blue.starry.saya.models.MirakurunService as SayaService
-import blue.starry.saya.models.MirakurunTuner as SayaTuner
+import java.text.Normalizer
+import blue.starry.saya.models.Channel as SayaChannel
+import blue.starry.saya.models.Program as SayaProgram
+import blue.starry.saya.models.Service as SayaService
+import blue.starry.saya.models.Tuner as SayaTuner
 
 private val logger = KotlinLogging.createSayaLogger("saya.mirakurun")
 
@@ -23,14 +22,18 @@ fun Service.toSayaService(): SayaService? {
         logoId = if (hasLogoData) logoId else null,
         keyId = remoteControlKeyId,
         channel = channel.channel,
-        type = Definitions.Channel.Type.values().firstOrNull { it.name == channel.type } ?: return null
+        type = SayaChannel.Type.values().firstOrNull { it.name == channel.type } ?: return null
     )
+}
+
+internal fun String.normalize(): String {
+    return Normalizer.normalize(this, Normalizer.Form.NFKC)
 }
 
 suspend fun Service.Channel.toSayaChannel(): SayaChannel? {
     return SayaChannel(
         json = json,
-        type = Definitions.Channel.Type.values().firstOrNull { it.name == type } ?: return null,
+        type = SayaChannel.Type.values().firstOrNull { it.name == type } ?: return null,
         group = channel,
         name = name.orEmpty().normalize(),
         services = MirakurunDataManager.Services.filter {
@@ -162,7 +165,7 @@ fun Tuner.toSayaTuner(): SayaTuner {
         index = index,
         name = name,
         types = types.mapNotNull { type ->
-            Definitions.Channel.Type.values().firstOrNull { it.name == type }
+            SayaChannel.Type.values().firstOrNull { it.name == type }
         },
         command = command,
         pid = pid,
@@ -185,8 +188,8 @@ fun Program.Genre.toSayaGenre(): Int {
     return lv1 * 16 + lv2
 }
 
-fun SayaTuner.toSayaTunerProcess(): MirakurunTunerProcess? {
-    return MirakurunTunerProcess(
+fun SayaTuner.toSayaTunerProcess(): TunerProcess? {
+    return TunerProcess(
         json = jsonObjectOf(
             "pid" to pid
         ),
