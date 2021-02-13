@@ -90,7 +90,7 @@ class LiveGochanResCommentProvider(
                 }.forEach {
                     comments.send(it.toSayaComment(
                         source = "5ch [${item.title}]",
-                        sourceUrl = "https://${board.server}.5ch.net/${board.board}/${item.threadId}"
+                        sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
                     ))
 
                     logger.trace { it }
