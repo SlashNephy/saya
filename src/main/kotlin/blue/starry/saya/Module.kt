@@ -11,6 +11,7 @@ import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.websocket.*
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import kotlin.time.seconds
 import kotlin.time.toJavaDuration
@@ -22,7 +23,9 @@ fun Application.module() {
     }
     install(XForwardedHeaderSupport)
     install(ContentNegotiation) {
-        json()
+        json(Json {
+            encodeDefaults = true
+        })
     }
     install(CORS) {
         anyHost()

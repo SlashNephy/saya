@@ -33,6 +33,9 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToLong
 
 private val logger = KotlinLogging.createSayaLogger("saya.endpoints")
+private val jsonWithDefault = Json {
+    encodeDefaults = true
+}
 
 fun Route.wsLiveCommentsByTarget() {
     webSocket {
@@ -42,7 +45,8 @@ fun Route.wsLiveCommentsByTarget() {
         val channel = CommentChannelManager.findByTarget(target) ?: return@webSocket rejectWs { "Parameter target is invalid." }
 
         CommentChannelManager.subscribeLiveComments(channel, sources).consumeEach {
-            send(Json.encodeToString(it))
+
+            send(jsonWithDefault.encodeToString(it))
         }
     }
 }
@@ -80,7 +84,7 @@ fun Route.wsTimeshiftCommentsByTarget() {
                 while (pause) {
                     delay(100)
                 }
-                send(Json.encodeToString(comment))
+                send(jsonWithDefault.encodeToString(comment))
                 logger.trace { "配信: $comment" }
 
                 timeMs.getAndUpdate { prev ->
