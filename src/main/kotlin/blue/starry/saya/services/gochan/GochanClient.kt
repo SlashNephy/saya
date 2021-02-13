@@ -70,6 +70,6 @@ class GochanClient(
     suspend fun getSubject(server: String, board: String): String {
         return SayaHttpClient.get<HttpResponse>("https://$server.5ch.net/$board/subject.txt") {
             userAgent(ua)
-        }.readText(charset("Shift_JIS"))
+        }.readText(charset("MS932"))
     }
 }
