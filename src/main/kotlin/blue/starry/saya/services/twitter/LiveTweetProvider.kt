@@ -29,10 +29,10 @@ import java.time.Instant
 import kotlin.time.seconds
 import kotlin.time.toKotlinDuration
 
-class LiveTwitterHashtagProvider(
+class LiveTweetProvider(
     override val channel: Definitions.Channel,
     private val client: ApiClient,
-    private val tags: Set<String>
+    private val keywords: Set<String>
 ): LiveCommentProvider {
     override val comments = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
@@ -41,7 +41,7 @@ class LiveTwitterHashtagProvider(
     override suspend fun start() = coroutineScope {
         if (Env.TWITTER_PREFER_STREAMING_API) {
             try {
-                doStreamLoop(client, tags)
+                doStreamLoop(client, keywords)
             } catch (e: CancellationException) {
                 return@coroutineScope
             } catch (t: Throwable) {
@@ -51,7 +51,7 @@ class LiveTwitterHashtagProvider(
 
         while (isActive) {
             try {
-                doSearchLoop(client, tags)
+                doSearchLoop(client, keywords)
             } catch (e: CancellationException) {
                 break
             } catch (t: Throwable) {
@@ -62,14 +62,14 @@ class LiveTwitterHashtagProvider(
         }
     }
 
-    private suspend fun doStreamLoop(client: ApiClient, tags: Set<String>) {
-        client.stream.filter(track = tags.toList()).listen(object: FilterStreamListener {
+    private suspend fun doStreamLoop(client: ApiClient, keywords: Set<String>) {
+        client.stream.filter(track = keywords.toList()).listen(object: FilterStreamListener {
             override suspend fun onConnect() {
                 logger.debug { "connect" }
             }
 
             override suspend fun onStatus(status: Status) {
-                val comment = status.toSayaComment("Twitter Filter", tags) ?: return
+                val comment = status.toSayaComment("Twitter Filter", keywords) ?: return
                 comments.send(comment)
 
                 logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
@@ -88,16 +88,16 @@ class LiveTwitterHashtagProvider(
     private var lastId: Long? = null
     private var lastIdLock = Mutex()
 
-    private suspend fun doSearchLoop(client: ApiClient, tags: Set<String>) {
+    private suspend fun doSearchLoop(client: ApiClient, keywords: Set<String>) {
         lastIdLock.withLock {
             val response = client.search.search(
-                query = tags.joinToString(" OR ") { "#$it" },
+                query = keywords.joinToString(" OR "),
                 sinceId = lastId
             ).execute()
 
             if (lastId != null) {
                 for (status in response.result.statuses) {
-                    val comment = status.toSayaComment("Twitter 検索", tags) ?: continue
+                    val comment = status.toSayaComment("Twitter 検索", keywords) ?: continue
                     comments.send(comment)
 
                     logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
@@ -112,7 +112,7 @@ class LiveTwitterHashtagProvider(
             } else {
                 val duration = Duration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
                 val safeRate = duration / limit.remaining
-                logger.trace { "Ratelimit ${limit.remaining}/${limit.limit}: Sleep $safeRate ($tags)" }
+                logger.trace { "Ratelimit ${limit.remaining}/${limit.limit}: Sleep $safeRate ($keywords)" }
 
                 delay(safeRate)
             }

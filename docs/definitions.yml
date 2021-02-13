@@ -63,7 +63,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646436'
     twitterKeywords:
-      - 'nhktv'
+      - '#nhktv'
     boardId: 'NHK'
   - name: 'Eテレ'
     type: 'GR'
@@ -117,7 +117,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646437'
     twitterKeywords:
-      - 'Eテレ'
+      - '#Eテレ'
     boardId: 'ETV'
   - name: '日テレ'
     type: 'GR'
@@ -166,7 +166,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646438'
     twitterKeywords:
-      - 'ntv'
+      - '#ntv'
     boardId: 'NTV'
   - name: 'テレビ朝日'
     type: 'GR'
@@ -210,7 +210,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646439'
     twitterKeywords:
-      - 'tvasahi'
+      - '#tvasahi'
     boardId: 'EX'
   - name: 'TBS'
     type: 'GR'
@@ -258,7 +258,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646440'
     twitterKeywords:
-      - 'tbs'
+      - '#tbs'
     boardId: 'TBS'
   - name: 'テレビ東京'
     type: 'GR'
@@ -284,7 +284,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646441'
     twitterKeywords:
-      - 'tvtokyo'
+      - '#tvtokyo'
     boardId: 'TX'
   - name: 'フジテレビ'
     type: 'GR'
@@ -331,7 +331,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646442'
     twitterKeywords:
-      - 'fujitv'
+      - '#fujitv'
     boardId: 'CX'
 
   # 地上波 GR (ローカル)
@@ -348,15 +348,13 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646485'
     twitterKeywords:
-      - 'tokyomx'
+      - '#tokyomx'
     boardId: 'LOCAL'
   - name: '放送大学'
     type: 'GR'
     serviceIds:
       - 1088  # 関東広域: 放送大学
     nicojkId: 231
-    twitterKeywords:
-      - '放送大学'
   - name: 'テレ玉'
     type: 'GR'
     serviceIds:
@@ -368,7 +366,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5253063'
     twitterKeywords:
-      - 'テレ玉'
+      - '#テレ玉'
     boardId: 'LOCAL'
   - name: 'tvk'
     type: 'GR'
@@ -381,7 +379,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5215296'
     twitterKeywords:
-      - 'tvk'
+      - '#tvk'
     boardId: 'LOCAL'
   - name: 'チバテレビ'
     type: 'GR'
@@ -392,7 +390,7 @@ channels:
       - 'チバテレビ'
     miyoutvId: 'チバテレ'
     twitterKeywords:
-      - 'チバテレ'
+      - '#チバテレ'
     boardId: 'LOCAL'
   - name: '群馬テレビ'
     type: 'GR'
@@ -450,7 +448,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5214081'
     twitterKeywords:
-      - 'nhkbs1'
+      - '#nhkbs1'
     boardId: 'BSNHK'
     threadKeywords:
       - 'BS1'
@@ -468,7 +466,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5175227'
     twitterKeywords:
-      - 'nhkbsp'
+      - '#nhkbsp'
     boardId: 'BSNHK'
     threadKeywords:
       - 'BSプレミアム'
@@ -486,7 +484,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5175341'
     twitterKeywords:
-      - 'BS日テレ'
+      - '#BS日テレ'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BS日テレ'
@@ -504,7 +502,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5175345'
     twitterKeywords:
-      - 'BS朝日'
+      - '#BS朝日'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BS朝日'
@@ -522,7 +520,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5176119'
     twitterKeywords:
-      - 'bstbs'
+      - '#bstbs'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BS-TBS'
@@ -540,7 +538,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5176122'
     twitterKeywords:
-      - 'BSテレ東'
+      - '#BSテレ東'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BSテレ東'
@@ -557,7 +555,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5176125'
     twitterKeywords:
-      - 'BSフジ'
+      - '#BSフジ'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BSフジ'
@@ -639,7 +637,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646846'
     twitterKeywords:
-      - 'BS11'
+      - '#BS11'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BS11'
@@ -655,7 +653,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5193029'
     twitterKeywords:
-      - 'BS12'
+      - '#BS12'
     boardId: 'BSFREE'
     threadKeywords:
       - 'BS12'
@@ -665,15 +663,11 @@ channels:
     serviceIds:
       - 231
     nicojkId: 231
-    twitterKeywords:
-      - '放送大学'
   - name: '放送大学on'
     type: 'BS'
     serviceIds:
       - 232
     nicojkId: 231
-    twitterKeywords:
-      - '放送大学'
   - name: 'グリーンチャンネル'
     type: 'BS'
     serviceIds:
@@ -777,8 +771,6 @@ channels:
     serviceIds:
       - 531
     nicojkId: 231
-    twitterKeywords:
-      - '放送大学'
   - name: 'SOLiVE24'
     type: 'BS'
     serviceIds:
@@ -910,7 +902,7 @@ channels:
     nicoliveCommunityIds:
       - 'co5245469'
     twitterKeywords:
-      - 'at_x'
+      - '#at_x'
     boardId: 'SKYPER'
     threadKeywords:
       - 'AT‐X'

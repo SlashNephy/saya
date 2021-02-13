@@ -7,7 +7,7 @@ import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.gochan.LiveGochanResCommentProvider
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
-import blue.starry.saya.services.twitter.LiveTwitterHashtagProvider
+import blue.starry.saya.services.twitter.LiveTweetProvider
 import com.charleskorn.kaml.Yaml
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
@@ -138,9 +138,9 @@ object CommentChannelManager {
 
         register(CommentSource.Twitter) {
             val client = SayaTwitterClient ?: return@register null
-            val tags = channel.twitterKeywords.ifEmpty { return@register null }
+            val keywords = channel.twitterKeywords.ifEmpty { return@register null }
 
-            LiveTwitterHashtagProvider(channel, client, tags)
+            LiveTweetProvider(channel, client, keywords)
         }
 
         register(CommentSource.Gochan) {
