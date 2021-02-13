@@ -28,8 +28,6 @@ class LiveNicoliveCommentProvider(
             it.id
         }.map {
             NicoliveApi.getEmbeddedData("https://live2.nicovideo.jp/watch/${it.id}")
-        }.distinctBy {
-            it.program.nicoliveProgramId
         }.map {
             launch {
                 try {
