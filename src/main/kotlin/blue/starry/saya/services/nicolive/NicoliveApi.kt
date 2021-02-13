@@ -2,13 +2,11 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.comments.nicolive.models.EmbeddedData
-import blue.starry.saya.services.comments.nicolive.models.SearchPrograms
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.jsoup.Jsoup
 
-object NicoLiveApi {
+object NicoliveApi {
     suspend fun getLivePrograms(tag: String): SearchPrograms {
         return SayaHttpClient.get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&sort=startTime&limit=20&searchWord=$tag&searchTargets=tagsExact&order=desc") {
             header("X-Frontend-Id", "89")

@@ -24,7 +24,7 @@ RUN gradle -version > /dev/null \
 FROM mirakc/mirakc:alpine AS mirakc-image
 
 # Final Stage
-FROM slashnephy/dtv-ffmpeg-build:alpine
+FROM slashnephy/dtv-ffmpeg-build:vaapi
 
 ## Add user
 RUN addgroup -S saya \

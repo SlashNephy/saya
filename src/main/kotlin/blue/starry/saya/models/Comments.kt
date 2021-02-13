@@ -8,9 +8,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Comment(
     /**
-     * コメントの配信元 (e.g. "lv2646436", "#twitter")
+     * コメントの配信元
      */
     val source: String,
+
+    /**
+     * コメントの配信元の URL
+     */
+    val sourceUrl: String? = null,
 
     /**
      * コメントの投稿時間 (エポック秒)
@@ -35,39 +40,28 @@ data class Comment(
     /**
      * コメントの hex 表記の色 (e.g. "#123456")
      */
-    val color: String,
+    val color: String = "#ffffff",
 
     /**
      * コメントの位置
      */
-    val type: Position,
+    val type: Position = Position.right,
 
     /**
      * コメントのサイズ
      */
-    val size: Size
+    val size: Size = Size.normal
 ) {
+    @Suppress("EnumEntryName")
     enum class Position {
         right, top, bottom
     }
 
+    @Suppress("EnumEntryName")
     enum class Size {
         normal, small, medium, big
     }
 }
-
-@Serializable
-data class JikkyoChannel(
-    val type: Channel.Type,
-    val jk: Int? = null,
-    val name: String,
-    val serviceIds: Set<Int>,
-    val tags: Set<String> = emptySet(),
-    val isOfficial: Boolean = false,
-    val miyouId: String? = null,
-    val communities: Set<String> = emptySet(),
-    val hashtags: Set<String> = emptySet()
-)
 
 @Serializable
 data class TimeshiftCommentControl(
@@ -76,5 +70,33 @@ data class TimeshiftCommentControl(
 ) {
     enum class Action {
         Ready, Resume, Pause, Sync
+    }
+}
+
+@Serializable
+data class CommentInfo(
+    val channel: Definitions.Channel,
+    val service: MirakurunService?,
+    val force: Int,
+    val last: String
+)
+
+enum class CommentSource(private vararg val aliases: String) {
+    Nicolive("nico", "nicolive"),
+    Twitter("twitter"),
+    Gochan("5ch", "2ch");
+
+    companion object {
+        fun from(sources: String?): List<CommentSource> {
+            return if (sources == null) {
+                values().toList()
+            } else {
+                val t = sources.split(",")
+
+                values().filter {
+                    it.aliases.any { alias -> alias in t }
+                }
+            }
+        }
     }
 }

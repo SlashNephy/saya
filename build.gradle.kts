@@ -1,87 +1,110 @@
-group = "blue.starry"
-
 plugins {
-    kotlin("jvm") version "1.4.21"
-    kotlin("plugin.serialization") version "1.4.21"
+    kotlin("jvm") version "1.4.30"
+    kotlin("plugin.serialization") version "1.4.30"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
-    // For testing
-    id("com.adarshr.test-logger") version "2.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("com.adarshr.test-logger") version "2.1.1"
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
 }
 
-object ThirdpartyVersion {
+object Versions {
     const val Ktor = "1.5.1"
-    const val JsonKt = "6.0.0"
+    const val kaml = "0.27.0"
+    const val Penicillin = "6.0.5"
+    const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
-    const val AnnictKt = "2.4.2"
-    const val Penicillin = "6.0.2"
-    const val ApacheCommonsCodec = "1.15"
-    const val KtorSwagger = "0.7.0"
-    const val Clikt = "3.1.0"
 
-    // logging
+    const val AnnictKt = "2.4.2"
+    // const val KtorSwagger = "0.7.0"
+    // const val Clikt = "3.1.0"
+
     const val KotlinLogging = "2.0.4"
     const val Logback = "1.2.3"
     const val jansi = "1.18"
 
-    // testing
     const val JUnit = "5.7.0"
+}
+
+object Libraries {
+    const val KtorServerCIO = "io.ktor:ktor-server-cio:${Versions.Ktor}"
+    const val KtorWebSockets = "io.ktor:ktor-websockets:${Versions.Ktor}"
+    const val KtorSerialization = "io.ktor:ktor-serialization:${Versions.Ktor}"
+    const val KtorClientCIO = "io.ktor:ktor-client-cio:${Versions.Ktor}"
+    const val KtorClientApache = "io.ktor:ktor-client-apache:${Versions.Ktor}"
+    const val KtorClientSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
+    const val KtorClientLogging = "io.ktor:ktor-client-logging:${Versions.Ktor}"
+
+    const val kaml = "com.charleskorn.kaml:kaml:${Versions.kaml}"
+    const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
+    const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
+    const val Jsoup = "org.jsoup:jsoup:${Versions.Jsoup}"
+
+    const val AnnictKt = "jp.annict:annict-kt:${Versions.AnnictKt}"
+    // const val KtorSwagger = "com.github.nielsfalk:ktor-swagger:${Versions.KtorSwagger}"
+    // const val Clikt = "com.github.ajalt.clikt:clikt:${Versions.Clikt}"
+
+    const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
+    const val LogbackCore = "ch.qos.logback:logback-core:${Versions.Logback}"
+    const val LogbackClassic = "ch.qos.logback:logback-classic:${Versions.Logback}"
+    const val Jansi = "org.fusesource.jansi:jansi:${Versions.jansi}"
+    const val JUnitJupiter = "org.junit.jupiter:junit-jupiter:${Versions.JUnit}"
+
+    val ExperimentalAnnotations = setOf(
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "kotlin.io.path.ExperimentalPathApi",
+        "kotlin.time.ExperimentalTime",
+        "kotlin.ExperimentalStdlibApi"
+    )
 }
 
 repositories {
     mavenCentral()
-    jcenter()
+    // for ktor-swagger
+    // maven(url = "https://jitpack.io")
+
+    // TODO: It should be removed by May 1, 2021. It is potentially used by kotlinx-datetime.
     maven(url = "https://kotlin.bintray.com/kotlinx")
-    maven(url = "https://jitpack.io")
+    // TODO: It should be removed by May 1, 2021. It is potentially used by annict-kt.
     maven(url = "https://dl.bintray.com/riptakagi/maven")
-    maven(url = "https://dl.bintray.com/starry-blue-sky/stable")
 }
 
 dependencies {
-    // Ktor Server
-    implementation("io.ktor:ktor-server-cio:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-websockets:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-html-builder:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-serialization:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-locations:${ThirdpartyVersion.Ktor}")
-    implementation("com.github.nielsfalk:ktor-swagger:${ThirdpartyVersion.KtorSwagger}")
+    implementation(Libraries.KtorServerCIO)
+    implementation(Libraries.KtorWebSockets)
+    implementation(Libraries.KtorSerialization)
+    implementation(Libraries.KtorClientCIO)
+    implementation(Libraries.KtorClientApache)
+    implementation(Libraries.KtorClientSerialization)
+    implementation(Libraries.KtorClientLogging)
 
-    // Ktor Client
-    implementation("io.ktor:ktor-client-cio:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-client-serialization:${ThirdpartyVersion.Ktor}")
-    implementation("io.ktor:ktor-client-logging:${ThirdpartyVersion.Ktor}")
+    implementation(Libraries.kaml)
+    implementation(Libraries.Penicillin)
+    implementation(Libraries.CommonsCodec)
+    implementation(Libraries.Jsoup)
 
-    implementation("blue.starry:jsonkt:${ThirdpartyVersion.JsonKt}")
-    implementation("jp.annict:annict-kt:${ThirdpartyVersion.AnnictKt}")
-    implementation("blue.starry:penicillin:${ThirdpartyVersion.Penicillin}")
-    implementation("commons-codec:commons-codec:${ThirdpartyVersion.ApacheCommonsCodec}")
+    implementation(Libraries.AnnictKt)
+    // implementation(Libraries.KtorSwagger)
+    // implementation(Libraries.Clikt)
 
-    // HTML parsing
-    implementation("org.jsoup:jsoup:${ThirdpartyVersion.Jsoup}")
+    implementation(Libraries.KotlinLogging)
+    implementation(Libraries.LogbackCore)
+    implementation(Libraries.LogbackClassic)
+    implementation(Libraries.Jansi)
 
-    // CLI
-    implementation("com.github.ajalt.clikt:clikt:${ThirdpartyVersion.Clikt}")
-
-    // logging
-    implementation("io.github.microutils:kotlin-logging:${ThirdpartyVersion.KotlinLogging}")
-    implementation("ch.qos.logback:logback-core:${ThirdpartyVersion.Logback}")
-    implementation("ch.qos.logback:logback-classic:${ThirdpartyVersion.Logback}")
-    implementation("org.fusesource.jansi:jansi:${ThirdpartyVersion.jansi}")
-
-    // testing
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter:${ThirdpartyVersion.JUnit}")
+    testImplementation(Libraries.JUnitJupiter)
 }
 
 kotlin {
     target {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
                 apiVersion = "1.4"
                 languageVersion = "1.4"
+                allWarningsAsErrors = true
                 verbose = true
             }
         }
@@ -89,11 +112,9 @@ kotlin {
 
     sourceSets.all {
         languageSettings.progressiveMode = true
-        languageSettings.apply {
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            useExperimentalAnnotation("kotlin.io.path.ExperimentalPathApi")
-            useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-            useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
+
+        Libraries.ExperimentalAnnotations.forEach {
+            languageSettings.useExperimentalAnnotation(it)
         }
     }
 }
@@ -101,6 +122,15 @@ kotlin {
 /*
  * Tests
  */
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+    }
+    ignoreFailures.set(true)
+}
 
 buildtimetracker {
     reporters {
@@ -112,20 +142,16 @@ buildtimetracker {
     }
 }
 
-testlogger {
-    theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
-}
-
-tasks.test {
+tasks.withType<Test> {
     useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
-}
 
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    manifest {
-        attributes("Main-Class" to "blue.starry.saya.MainKt")
+    testLogging {
+        showStandardStreams = true
+        events("passed", "failed")
+    }
+
+    testlogger {
+        theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
     }
 }
 
@@ -135,4 +161,10 @@ task<JavaExec>("run") {
     group = "application"
     main = "blue.starry.saya.MainKt"
     classpath(configurations.runtimeClasspath, tasks.jar)
+}
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    manifest {
+        attributes("Main-Class" to "blue.starry.saya.MainKt")
+    }
 }

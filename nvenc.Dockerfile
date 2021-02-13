@@ -21,22 +21,24 @@ RUN gradle -version > /dev/null \
     && gradle shadowJar --parallel --no-daemon
 
 # For mirakc-arib
-FROM mirakc/mirakc:alpine AS mirakc-image
+FROM mirakc/mirakc:debian AS mirakc-image
 
 # Final Stage
-FROM slashnephy/dtv-ffmpeg-build:alpine
+FROM slashnephy/dtv-ffmpeg-build:nvenc
 
 ## Add user
-RUN addgroup -S saya \
-    && adduser -S saya -G saya
+RUN adduser --disabled-password --gecos "" saya
 
 ## Install JRE 11
-RUN apk add --update --no-cache openjdk11-jre-headless
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        openjdk-11-jre-headless \
+    && apt-get clean \
+    && rm -rf \
+        /var/lib/apt/lists/*
 
 ## Copy mirakc-arib binary
 COPY --from=mirakc-image /usr/local/bin/mirakc-arib /usr/local/bin/
-## Install gcc runtime
-RUN apk add --update --no-cache libgcc libstdc++
 
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
