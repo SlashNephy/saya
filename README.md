@@ -56,8 +56,6 @@ saya is still in heavy development.
 
 環境構築が容易なので Docker で導入することをおすすめします。
 
-現在のベースイメージは `openjdk:17-jdk-alpine` です。いくつかフレーバーを用意しています。
-
 - `slashnephy/saya:latest`  
   master ブランチへのプッシュの際にビルドされます。安定しています。
 - `slashnephy/saya:dev`  
@@ -67,7 +65,7 @@ saya is still in heavy development.
 - `slashnephy/saya:***-vaapi`  
   VAAPI によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 - `slashnephy/saya:***-nvenc`  
-  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。CUDA Runtime 内蔵の Ubuntu イメージのため, ややイメージサイズが大きいです。
+  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 
 `docker-compose.yml`
 
@@ -79,6 +77,8 @@ services:
     container_name: saya
     image: slashnephy/saya:latest
     restart: always
+    # nvenc イメージを使用する場合に必要
+    # runtime: nvidia
     ports:
       - 1017:1017/tcp # いれいな
     # 環境変数で各種設定を行います
