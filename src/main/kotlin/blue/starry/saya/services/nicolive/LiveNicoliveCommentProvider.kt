@@ -12,7 +12,7 @@ class LiveNicoliveCommentProvider(
     override val channel: Definitions.Channel,
     private val tags: Set<String>
 ): LiveCommentProvider {
-    override val comments = BroadcastChannel<Comment>(1)
+    override val queue = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${channel.name}]")

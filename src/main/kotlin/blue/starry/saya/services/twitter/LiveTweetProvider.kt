@@ -35,7 +35,7 @@ class LiveTweetProvider(
     private val client: ApiClient,
     private val keywords: Set<String>
 ): LiveCommentProvider {
-    override val comments = BroadcastChannel<Comment>(1)
+    override val queue = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter[${channel.name}]")
 
@@ -78,7 +78,7 @@ class LiveTweetProvider(
 
             override suspend fun onStatus(status: Status) {
                 val comment = status.toSayaComment("Twitter Filter", keywords) ?: return
-                comments.send(comment)
+                queue.send(comment)
 
                 logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
             }
@@ -106,7 +106,7 @@ class LiveTweetProvider(
             if (lastId != null) {
                 for (status in response.result.statuses) {
                     val comment = status.toSayaComment("Twitter 検索", keywords) ?: continue
-                    comments.send(comment)
+                    queue.send(comment)
 
                     logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
                 }

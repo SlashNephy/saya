@@ -19,7 +19,7 @@ interface LiveCommentProvider {
     /**
      * コメントキュー
      */
-    val comments: BroadcastChannel<Comment>
+    val queue: BroadcastChannel<Comment>
 
     /**
      * 購読

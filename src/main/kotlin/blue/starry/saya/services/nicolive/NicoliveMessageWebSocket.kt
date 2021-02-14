@@ -78,7 +78,7 @@ class NicoliveMessageWebSocket(
                 sourceUrl = "https://live2.nicovideo.jp/watch/${data.program.nicoliveProgramId}"
             )
             if (comment != null) {
-                provider.comments.send(comment)
+                provider.queue.send(comment)
             }
 
             logger.trace { message }
