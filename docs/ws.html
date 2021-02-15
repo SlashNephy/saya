@@ -8,9 +8,16 @@
         </style>
     </head>
     <body>
-        <label for="url">URL: </label><input type="text" id="url" size="100" value="http://localhost:1017/comments/jk1/live">
-        <button type="button" onclick="connect();">Connect</button>
-        <button type="button" onclick="disconnect();">Disconnect</button>
+        <div>
+            <label for="url">URL: </label><input type="text" id="url" size="100" value="ws://localhost:1017/comments/jk1/live">
+            <button type="button" onclick="connect();">Connect</button>
+            <button type="button" onclick="disconnect();">Disconnect</button>
+        </div>
+
+        <div>
+            <label for="command">Command: </label><input type="text" id="command" size="90" value="{&quot;action&quot;: &quot;Sync&quot;, &quot;seconds&quot;: 0.0}">
+            <button type="button" onclick="send();">Send</button>
+        </div>
 
         <div>Status: <span id="status"></span></div>
 
@@ -20,6 +27,7 @@
 
         <script>
             const url = document.getElementById("url");
+            const command = document.getElementById("command");
             const status = document.getElementById("status");
             const response = document.getElementById("response");
 
@@ -35,6 +43,7 @@
                 };
                 ws.onclose = () => {
                     status.textContent = "CLOSE";
+                    setTimeout(connect, 3000);
                 };
                 ws.onerror = (e) => {
                     status.textContent = `ERROR: ${e}`;
@@ -55,7 +64,23 @@
                 response.textContent = "";
             }
 
-            url.value = localStorage.getItem("url");
+            function send() {
+                try {
+                    ws.send(command.value);
+                    localStorage.setItem("command", command.value);
+                } catch {
+                }
+            }
+
+            const lastUrl = localStorage.getItem("url");
+            if (lastUrl) {
+                url.value = lastUrl;
+            }
+            const lastCommand = localStorage.getItem("command");
+            if (lastCommand) {
+                command.value = lastCommand;
+            }
+
             connect();
         </script>
     </body>
