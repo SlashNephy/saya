@@ -28,11 +28,6 @@ data class Comment(
     val timeMs: Int,
 
     /**
-     * タイムシフトコメントでの開始地点からの再生時間 (秒)
-     */
-    val seconds: Double? = null,
-
-    /**
      * コメントの投稿者名 / ユーザ ID
      */
     val author: String,
