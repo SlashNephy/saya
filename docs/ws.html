@@ -11,7 +11,7 @@
         <div>
             <label for="url">URL: </label><input type="text" id="url" size="100" value="ws://localhost:1017/comments/jk1/live">
             <button type="button" onclick="connect();">Connect</button>
-            <button type="button" onclick="disconnect();">Disconnect</button>
+            <button type="button" onclick="disconnect(true);">Disconnect</button>
         </div>
 
         <div>
@@ -34,7 +34,7 @@
 
             let ws;
             function connect() {
-                disconnect();
+                disconnect(false);
 
                 ws = new WebSocket(url.value);
                 localStorage.setItem("url", url.value);
@@ -58,14 +58,16 @@
                 };
             }
 
-            function disconnect() {
+            function disconnect(byUser) {
                 try {
                     ws.close();
                 } catch {
                 }
 
                 response.textContent = "";
-                retry = false;
+                if (byUser) {
+                    retry = false;
+                }
             }
 
             function send() {
