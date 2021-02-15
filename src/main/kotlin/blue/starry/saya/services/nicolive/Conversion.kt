@@ -2,7 +2,7 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.saya.models.Comment
 
-fun Chat.toSayaComment(source: String, sourceUrl: String): Comment {
+fun Chat.toSayaComment(source: String, sourceUrl: String, seconds: Double? = null): Comment {
     val (color, type, size) = parseMail(mail)
 
     return Comment(
@@ -10,6 +10,7 @@ fun Chat.toSayaComment(source: String, sourceUrl: String): Comment {
         sourceUrl = sourceUrl,
         time = date,
         timeMs = dateUsec / 1000,
+        seconds = seconds,
         author = userId,
         text = content,
         color = color,

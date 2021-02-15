@@ -32,7 +32,8 @@ class TimeshiftNicoliveCommentProvider(
             }.map {
                 it.chat.toSayaComment(
                     source = "ニコニコ実況過去ログAPI [jk${channel.nicojkId}]",
-                    sourceUrl = "https://jikkyo.tsukumijima.net/api/kakolog/jk${channel.nicojkId}?starttime=${it.chat.date}&endtime=${it.chat.date + 1}&format=json"
+                    sourceUrl = "https://jikkyo.tsukumijima.net/api/kakolog/jk${channel.nicojkId}?starttime=${it.chat.date}&endtime=${it.chat.date + 1}&format=json",
+                    seconds = ((it.chat.date * 1000 + it.chat.dateUsec / 1000) - startAt * 1000) / 1000.0
                 )
             }
         }.collect {

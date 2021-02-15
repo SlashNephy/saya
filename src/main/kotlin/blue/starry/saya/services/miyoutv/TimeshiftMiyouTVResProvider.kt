@@ -28,7 +28,9 @@ class TimeshiftMiyouTVResProvider(
                 (startAt + unit * i) * 1000,
                 minOf(startAt + unit * (i + 1), endAt) * 1000
             ).data.comments.map {
-                it.toSayaComment()
+                it.toSayaComment(
+                    seconds = it.time / 1000.0 - startAt
+                )
             }
         }.collect {
             comments.withLock { list ->
