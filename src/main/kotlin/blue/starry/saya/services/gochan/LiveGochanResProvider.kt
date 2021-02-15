@@ -4,7 +4,7 @@ import blue.starry.saya.common.asThreadSafe
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.LiveCommentProvider
+import blue.starry.saya.services.comments.LiveCommentProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging
@@ -13,12 +13,12 @@ import kotlin.random.Random
 import kotlin.random.nextLong
 import kotlin.time.seconds
 
-class LiveGochanResCommentProvider(
+class LiveGochanResProvider(
     override val channel: Definitions.Channel,
     private val client: GochanClient,
     private val board: Definitions.Board
 ): LiveCommentProvider {
-    override val comments = BroadcastChannel<Comment>(1)
+    override val queue = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
@@ -88,7 +88,7 @@ class LiveGochanResCommentProvider(
                 loader.fetch(client).filter {
                     it.time.plusSeconds(15).isAfter(now)
                 }.forEach {
-                    comments.send(it.toSayaComment(
+                    queue.send(it.toSayaComment(
                         source = "5ch [${item.title}]",
                         sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
                     ))

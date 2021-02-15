@@ -1,4 +1,4 @@
-package blue.starry.saya.services
+package blue.starry.saya.services.comments
 
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
@@ -19,7 +19,7 @@ interface LiveCommentProvider {
     /**
      * コメントキュー
      */
-    val comments: BroadcastChannel<Comment>
+    val queue: BroadcastChannel<Comment>
 
     /**
      * 購読

@@ -1,0 +1,93 @@
+<html lang="en">
+    <head>
+        <title>saya WebSockets Test</title>
+        <style>
+            body {
+                background-color: #708090;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label for="url">URL: </label><input type="text" id="url" size="100" value="ws://localhost:1017/comments/jk1/live">
+            <button type="button" onclick="connect();">Connect</button>
+            <button type="button" onclick="disconnect(true);">Disconnect</button>
+        </div>
+
+        <div>
+            <label for="command">Command: </label><input type="text" id="command" size="90" value="{&quot;action&quot;: &quot;Sync&quot;, &quot;seconds&quot;: 0.0}">
+            <button type="button" onclick="send();">Send</button>
+        </div>
+
+        <div>Status: <span id="status"></span></div>
+
+        <hr>
+
+        <code id="response"></code>
+
+        <script>
+            const url = document.getElementById("url");
+            const command = document.getElementById("command");
+            const status = document.getElementById("status");
+            const response = document.getElementById("response");
+            let retry = true;
+
+            let ws;
+            function connect() {
+                disconnect(false);
+
+                ws = new WebSocket(url.value);
+                localStorage.setItem("url", url.value);
+
+                ws.onopen = () => {
+                    status.textContent = "OPEN";
+                };
+                ws.onclose = () => {
+                    status.textContent = "CLOSE";
+                    if (retry) {
+                        setTimeout(connect, 3000);
+                    }
+                };
+                ws.onerror = (e) => {
+                    status.textContent = `ERROR: ${e}`;
+                };
+                ws.onmessage = (e) => {
+                    const ele = document.createElement("p");
+                    ele.textContent = e.data;
+                    response.prepend(ele);
+                };
+            }
+
+            function disconnect(byUser) {
+                try {
+                    ws.close();
+                } catch {
+                }
+
+                response.textContent = "";
+                if (byUser) {
+                    retry = false;
+                }
+            }
+
+            function send() {
+                try {
+                    ws.send(command.value);
+                    localStorage.setItem("command", command.value);
+                } catch {
+                }
+            }
+
+            const lastUrl = localStorage.getItem("url");
+            if (lastUrl) {
+                url.value = lastUrl;
+            }
+            const lastCommand = localStorage.getItem("command");
+            if (lastCommand) {
+                command.value = lastCommand;
+            }
+
+            connect();
+        </script>
+    </body>
+</html>
