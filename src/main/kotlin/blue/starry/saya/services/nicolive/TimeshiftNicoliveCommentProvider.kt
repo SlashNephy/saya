@@ -26,7 +26,7 @@ class TimeshiftNicoliveCommentProvider(
             NicoJkApi.getComments(
                 "jk${channel.nicojkId}",
                 startAt + unit * i,
-                minOf(startAt + unit * (i + 1), endAt)
+                minOf(startAt + unit * (i + 1) - 1, endAt)
             ).packets.map {
                 it.chat.toSayaComment(
                     source = "ニコニコ実況過去ログAPI [jk${channel.nicojkId}]",
