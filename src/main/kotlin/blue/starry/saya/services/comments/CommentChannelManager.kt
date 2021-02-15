@@ -200,10 +200,10 @@ object CommentChannelManager {
                     try {
                         provider.fetch()
 
-                        logger.debug { "$provider is done." }
+                        logger.debug { "Fetch Job: $provider is done." }
                         break
                     } catch (e: CancellationException) {
-                        logger.debug { "$provider is canceled." }
+                        logger.debug { "Fetch Job: $provider is canceled." }
                         break
                     } catch (t: Throwable) {
                         logger.error(t) { "error in $provider" }
@@ -225,14 +225,16 @@ object CommentChannelManager {
                     }
                 }
 
-                logger.debug { "$provider is canceled." }
+                logger.debug { "Seek Job: $provider is canceled." }
             }
 
             // 配信 Job
             launch {
-                provider.queue.consumeEach {
-                    send(it)
-                    logger.trace { "配信: $it" }
+                provider.use { provider ->
+                    provider.queue.consumeEach {
+                        send(it)
+                        logger.trace { "Timeshift: $it" }
+                    }
                 }
             }
         }

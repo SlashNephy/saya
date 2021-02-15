@@ -86,4 +86,8 @@ abstract class TimeshiftCommentProviderImpl(
     override suspend fun resume() {
         paused.set(false)
     }
+
+    override fun close() {
+        queueJob?.cancel()
+    }
 }

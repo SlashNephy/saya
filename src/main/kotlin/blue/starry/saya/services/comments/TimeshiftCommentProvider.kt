@@ -3,8 +3,9 @@ package blue.starry.saya.services.comments
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import kotlinx.coroutines.channels.Channel
+import java.io.Closeable
 
-interface TimeshiftCommentProvider {
+interface TimeshiftCommentProvider: Closeable {
     /**
      * 実況チャンネル
      */
@@ -51,4 +52,9 @@ interface TimeshiftCommentProvider {
      * コメントの配信を再開する
      */
     suspend fun resume()
+
+    /**
+     * コメントのメモリリソースを閉じる
+     */
+    override fun close()
 }
