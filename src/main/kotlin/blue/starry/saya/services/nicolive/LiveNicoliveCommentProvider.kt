@@ -3,7 +3,7 @@ package blue.starry.saya.services.nicolive
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.LiveCommentProvider
+import blue.starry.saya.services.comments.LiveCommentProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import mu.KotlinLogging

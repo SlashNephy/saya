@@ -5,7 +5,7 @@ import blue.starry.saya.common.rejectWs
 import blue.starry.saya.common.respondOr404
 import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.TimeshiftCommentControl
-import blue.starry.saya.services.CommentChannelManager
+import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.nicojk.NicoJkApi
 import io.ktor.application.*
 import io.ktor.http.*

@@ -1,4 +1,4 @@
-package blue.starry.saya.services
+package blue.starry.saya.services.comments
 
 import blue.starry.saya.common.asThreadSafe
 import blue.starry.saya.common.createSayaLogger

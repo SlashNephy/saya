@@ -1,7 +1,7 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.TimeshiftCommentProviderImpl
+import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import blue.starry.saya.services.nicojk.NicoJkApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow

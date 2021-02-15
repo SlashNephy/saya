@@ -1,7 +1,7 @@
 package blue.starry.saya.services.miyoutv
 
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.TimeshiftCommentProviderImpl
+import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map

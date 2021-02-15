@@ -15,7 +15,7 @@ import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
-import blue.starry.saya.services.LiveCommentProvider
+import blue.starry.saya.services.comments.LiveCommentProvider
 import io.ktor.util.date.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.BroadcastChannel

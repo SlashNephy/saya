@@ -2,7 +2,7 @@ package blue.starry.saya.services.nicojk
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.models.CommentInfo
-import blue.starry.saya.services.CommentChannelManager
+import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.SayaHttpClient
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import io.ktor.client.request.*
