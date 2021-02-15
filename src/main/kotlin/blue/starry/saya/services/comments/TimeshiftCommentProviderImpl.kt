@@ -70,7 +70,7 @@ abstract class TimeshiftCommentProviderImpl(
                 } else {
                     newPositionMs < x.time * 1000 + x.timeMs
                 }
-            }.coerceIn(0, it.size - 1)
+            }.coerceAtLeast(0)
         }
 
         positionMs.set(newPositionMs)
