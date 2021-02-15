@@ -16,12 +16,24 @@ interface TimeshiftCommentProvider {
     val queue: Channel<Comment>
 
     /**
-     * コメントの取得を開始する
-     *
-     * @param startAt 開始時刻 (エポック秒)
-     * @param endAt 終了時刻 (エポック秒)
+     * タイムシフトコメントの開始時刻 (エポック秒)
      */
-    suspend fun start(startAt: Long, endAt: Long)
+    val startAt: Long
+
+    /**
+     * タイムシフトコメントの終了時刻 (エポック秒)
+     */
+    val endAt: Long
+
+    /**
+     * コメントの配信を開始する
+     */
+    suspend fun start()
+
+    /**
+     * コメントを取得する
+     */
+    suspend fun fetch()
 
     /**
      * コメントの位置をシークする
