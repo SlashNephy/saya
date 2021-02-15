@@ -27,7 +27,9 @@ class TimeshiftNicoliveCommentProvider(
                 "jk${channel.nicojkId}",
                 startAt + unit * i,
                 minOf(startAt + unit * (i + 1) - 1, endAt)
-            ).packets.map {
+            ).packets.filter {
+                "deleted" !in it.chat.json
+            }.map {
                 it.chat.toSayaComment(
                     source = "ニコニコ実況過去ログAPI [jk${channel.nicojkId}]",
                     sourceUrl = "https://jikkyo.tsukumijima.net/api/kakolog/jk${channel.nicojkId}?starttime=${it.chat.date}&endtime=${it.chat.date + 1}&format=json"
