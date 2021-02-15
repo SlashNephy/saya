@@ -220,8 +220,6 @@ object CommentChannelManager {
                     } catch (t: Throwable) {
                         logger.error(t) { "error in $provider" }
                     }
-
-                    delay(5.seconds)
                 }
 
                 logger.debug { "$provider is canceled." }
