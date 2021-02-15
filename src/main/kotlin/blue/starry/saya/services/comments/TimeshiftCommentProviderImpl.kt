@@ -64,7 +64,13 @@ abstract class TimeshiftCommentProviderImpl(
     override suspend fun seek(seconds: Double) {
         val newPositionMs = (startAt + seconds).times(1000).roundToLong()
         val newCommentIndex = comments.withLock {
-            it.indexOfFirst { x -> newPositionMs < x.time * 1000 + x.timeMs }.coerceIn(0, it.size - 1)
+            it.indexOfFirst { x ->
+                if (x.seconds != null) {
+                    seconds < x.seconds
+                } else {
+                    newPositionMs < x.time * 1000 + x.timeMs
+                }
+            }.coerceIn(0, it.size - 1)
         }
 
         positionMs.set(newPositionMs)
