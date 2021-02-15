@@ -30,6 +30,7 @@
             const command = document.getElementById("command");
             const status = document.getElementById("status");
             const response = document.getElementById("response");
+            let retry = true;
 
             let ws;
             function connect() {
@@ -43,7 +44,9 @@
                 };
                 ws.onclose = () => {
                     status.textContent = "CLOSE";
-                    setTimeout(connect, 3000);
+                    if (retry) {
+                        setTimeout(connect, 3000);
+                    }
                 };
                 ws.onerror = (e) => {
                     status.textContent = `ERROR: ${e}`;
@@ -62,6 +65,7 @@
                 }
 
                 response.textContent = "";
+                retry = false;
             }
 
             function send() {
