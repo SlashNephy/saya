@@ -6,10 +6,11 @@ import java.time.ZonedDateTime
 object GochanDatParser {
     fun parse(text: String): List<GochanRes> {
         return text.trim()
-            .lines()
+            .lineSequence()
             .map { it.split("<>") }
             .filter { it.size == 5 }
             .takeWhile { it[2] != "Over 1000 Thread.net" }
+            .takeWhile { "このスレッドは過去ログ倉庫に格納されています" !in it[3] }
             .map { res ->
                 GochanRes(
                     name = removeHtml(res[0]),
@@ -19,6 +20,7 @@ object GochanDatParser {
                     text = removeHtml(res[3])
                 )
             }
+            .toList()
     }
 
     private val DatePattern = "(\\d+)/(\\d+)/(\\d+)[^ ]* (\\d+):(\\d+):(\\d+)\\.(\\d+)".toRegex()
