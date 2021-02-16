@@ -18,7 +18,7 @@ class TimeshiftGochanResProvider(
             list.clear()
         }
 
-        AutoPastGochanThreadSelector.enumerate(client, board, startAt, endAt).map {
+        AutoPastGochanThreadSelector.enumerate(client, channel, board, startAt, endAt).map {
             val dat = client.get2chScDat(it.list.server, it.list.board, it.id)
 
             GochanDatParser.parse(dat).filter { res ->

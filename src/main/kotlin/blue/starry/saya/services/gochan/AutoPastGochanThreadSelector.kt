@@ -1,5 +1,6 @@
 package blue.starry.saya.services.gochan
 
+import blue.starry.saya.common.normalize
 import blue.starry.saya.models.Definitions
 import kotlinx.coroutines.flow.*
 import org.jsoup.Jsoup
@@ -9,17 +10,24 @@ object AutoPastGochanThreadSelector {
 
     suspend fun enumerate(
         client: GochanClient,
+        channel: Definitions.Channel,
         board: Definitions.Board,
         startAt: Long,
         endAt: Long,
         limit: Int = Int.MAX_VALUE
     ) = flow {
+        val keywords1 = board.keywords.map { it.normalize() }
+        val keywords2 = channel.threadKeywords.map { it.normalize() }
+
         emitAll(
             enumerateThreadList(client, board.server, board.board)
                 .filter { ((startAt until endAt) intersect (it.startAt until it.endAt)).any() }
                 .flatMapConcat { enumerateThreads(client, it) }
                 // スレッド ID の重複を避ける
                 .distinctUntilChangedBy { it.id }
+                // スレッドキーワードが空の場合にはすべて, 空ではないならいずれかのキーワードを含むスレッドのみ
+                .filter { keywords1.isEmpty() || keywords1.any { keyword -> keyword in it.title } }
+                .filter { keywords2.isEmpty() || keywords2.any { keyword -> keyword in it.title } }
                 // 開始時間 ~ 終了時間
                 .filter { it.id.toLong() in startAt until endAt }
                 .take(limit)
