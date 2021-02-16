@@ -26,3 +26,19 @@ data class GochanThreadAddress(
     val board: String,
     val id: String
 )
+
+data class GochanKakologThreadList(
+    val server: String,
+    val board: String,
+    val filename: String?,
+    val startAt: Long,
+    val endAt: Long
+)
+
+data class GochanKakologThread(
+    val list: GochanKakologThreadList,
+    val filename: String,
+    val title: String,
+    val url: String,
+    val lines: Int
+)
