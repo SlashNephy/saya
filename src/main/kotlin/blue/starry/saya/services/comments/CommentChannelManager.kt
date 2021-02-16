@@ -9,6 +9,7 @@ import blue.starry.saya.services.Saya5chClient
 import blue.starry.saya.services.SayaMiyouTVApi
 import blue.starry.saya.services.SayaTwitterClient
 import blue.starry.saya.services.gochan.LiveGochanResProvider
+import blue.starry.saya.services.gochan.TimeshiftGochanResProvider
 import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.miyoutv.TimeshiftMiyouTVResProvider
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
@@ -248,6 +249,13 @@ object CommentChannelManager {
             val id = channel.miyoutvId ?: return@register null
 
             TimeshiftMiyouTVResProvider(channel, startAt, endAt, api, id)
+        }
+
+        register(CommentSource.Gochan) {
+            val client = Saya5chClient ?: return@register null
+            val board = Boards.find { it.id == channel.boardId } ?: return@register null
+
+            TimeshiftGochanResProvider(channel, startAt, endAt, client, board)
         }
 
         // コントロール処理 Job

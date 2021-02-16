@@ -17,6 +17,7 @@ class GochanClient(
     private val ua: String
 ) {
     private var sessionId: String? = null
+    private val defaultCharset = charset("MS932")
 
     private fun calculateHash(message: String): String {
         return HmacUtils(HmacAlgorithms.HMAC_SHA_256, hmKey).hmacHex(message)
@@ -68,8 +69,20 @@ class GochanClient(
      * スレッド一覧を取得する
      */
     suspend fun getSubject(server: String, board: String): String {
-        return SayaHttpClient.get<HttpResponse>("https://$server.5ch.net/$board/subject.txt") {
+        return SayaHttpClient.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
             userAgent(ua)
-        }.readText(charset("MS932"))
+        }.toString(defaultCharset)
+    }
+
+    suspend fun get2chScDat(server: String, board: String, threadId: String): String {
+        return SayaHttpClient.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
+            userAgent(ua)
+        }.toString(defaultCharset)
+    }
+
+    suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
+        return SayaHttpClient.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
+            userAgent(ua)
+        }
     }
 }
