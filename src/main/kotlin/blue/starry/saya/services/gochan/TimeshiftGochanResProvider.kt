@@ -5,6 +5,7 @@ import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
+import kotlin.time.hours
 
 class TimeshiftGochanResProvider(
     channel: Definitions.Channel,
@@ -13,12 +14,14 @@ class TimeshiftGochanResProvider(
     private val client: GochanClient,
     private val board: Definitions.Board
 ): TimeshiftCommentProviderImpl(channel, startAt, endAt) {
+    private val allowedRange = 3.hours
+
     override suspend fun fetch() = coroutineScope {
         comments.withLock { list ->
             list.clear()
         }
 
-        AutoPastGochanThreadSelector.enumerate(client, channel, board, startAt, endAt).map {
+        AutoPastGochanThreadSelector.enumerate(client, channel, board, startAt, endAt, allowedRange).map {
             val dat = client.get2chScDat(it.list.server, it.list.board, it.id)
 
             GochanDatParser.parse(dat).filter { res ->
