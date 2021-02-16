@@ -3,8 +3,8 @@ package blue.starry.saya.services.gochan
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlin.time.hours
 
 class TimeshiftGochanResProvider(
@@ -32,10 +32,14 @@ class TimeshiftGochanResProvider(
                     sourceUrl = it.url
                 )
             }
-        }.collect {
+        }.toList().flatten().sortedBy {
+            it.time
+        }.also {
             comments.withLock { list ->
                 list.addAll(it)
             }
         }
+
+        Unit
     }
 }
