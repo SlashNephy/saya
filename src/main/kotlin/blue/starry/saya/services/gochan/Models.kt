@@ -37,7 +37,7 @@ data class GochanKakologThreadList(
 
 data class GochanKakologThread(
     val list: GochanKakologThreadList,
-    val filename: String,
+    val id: String,
     val title: String,
     val url: String,
     val lines: Int
