@@ -9,6 +9,7 @@ object GochanDatParser {
             .lines()
             .map { it.split("<>") }
             .filter { it.size == 5 }
+            .takeWhile { it[2] != "Over 1000 Thread.net" }
             .map { res ->
                 GochanRes(
                     name = removeHtml(res[0]),
