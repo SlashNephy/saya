@@ -72,4 +72,16 @@ class GochanClient(
             userAgent(ua)
         }.readText(charset("MS932"))
     }
+
+    suspend fun get2chScDat(server: String, board: String, threadId: String): String {
+        return SayaHttpClient.get("https://$server.2ch.sc/$board/dat/$threadId.dat") {
+            userAgent(ua)
+        }
+    }
+
+    suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
+        return SayaHttpClient.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
+            userAgent(ua)
+        }
+    }
 }
