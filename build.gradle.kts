@@ -54,7 +54,8 @@ object Libraries {
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         "kotlin.io.path.ExperimentalPathApi",
         "kotlin.time.ExperimentalTime",
-        "kotlin.ExperimentalStdlibApi"
+        "kotlin.ExperimentalStdlibApi",
+        "kotlinx.coroutines.FlowPreview"
     )
 }
 
