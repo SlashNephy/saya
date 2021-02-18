@@ -14,6 +14,7 @@ object Versions {
     const val Penicillin = "6.0.5"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
+    const val Guava = "30.1-jre"
 
     const val AnnictKt = "2.4.2"
     // const val KtorSwagger = "0.7.0"
@@ -39,6 +40,7 @@ object Libraries {
     const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
     const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
     const val Jsoup = "org.jsoup:jsoup:${Versions.Jsoup}"
+    const val Guava = "com.google.guava:guava:${Versions.Guava}"
 
     const val AnnictKt = "jp.annict:annict-kt:${Versions.AnnictKt}"
     // const val KtorSwagger = "com.github.nielsfalk:ktor-swagger:${Versions.KtorSwagger}"
@@ -83,6 +85,7 @@ dependencies {
     implementation(Libraries.Penicillin)
     implementation(Libraries.CommonsCodec)
     implementation(Libraries.Jsoup)
+    implementation(Libraries.Guava)
 
     implementation(Libraries.AnnictKt)
     // implementation(Libraries.KtorSwagger)
