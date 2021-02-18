@@ -1,4 +1,4 @@
-# saya: Japanese DTV backend service with powerful features
+# saya: API server to enhance the web-based watching experiences w/ elaina
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
@@ -9,41 +9,53 @@
 [![issues](https://img.shields.io/github/issues/SlashNephy/saya)](https://github.com/SlashNephy/saya/issues)
 [![pull requests](https://img.shields.io/github/issues-pr/SlashNephy/saya)](https://github.com/SlashNephy/saya/pulls)
 
-saya is still in heavy development.  
+saya is still in heavy development. まだ一般の利用向けに最適化されていません。
 
-- [REST API docs](https://slashnephy.github.io/saya)
+- [endpoints.md](https://github.com/SlashNephy/saya/blob/master/docs/endpoints.md)
 - [Roadmap](https://github.com/SlashNephy/saya/projects/1)
 
 ---
 
 # これはなに
 
-[ci7lus/elaina](https://github.com/ci7lus/elaina) 上で DTV 視聴環境を充実させるためにバックエンドとなる API サーバです。
+EPGStation を使用している環境で Web ベースの視聴環境を拡張することを目的とした API バックエンドサーバです。フロントエンドのコードは [ci7lus/elaina](https://github.com/ci7lus/elaina) に公開されています。
 
+そのため, saya 単体では予約・録画機能を有しません。
 
 [![elaina.png](https://raw.githubusercontent.com/SlashNephy/saya/master/docs/elaina.png)](https://github.com/ci7lus/elaina)
-
 
 次の機能を現在実装しています。
 
 - ライブ再生 / 録画番組再生での実況コメントの配信
   - ライブ再生時には次のソースから取得します。
-    + [ニコニコ実況](https://jk.nicovideo.jp/) の公式放送およびコミュニティ放送
+    + [ニコニコ実況](https://jk.nicovideo.jp/) の公式放送およびコミュニティ放送 (ログイン不要)
     + Twitter ハッシュタグ (Filter ストリーム or 検索 API)
     + 5ch DAT
-    
   - 録画番組再生時には次のソースから取得します。
     + [ニコニコ実況 過去ログ API](https://jikkyo.tsukumijima.net/)
     + 5ch 過去ログ
-  
 - TS ファイルから EPG 情報を抽出
 - and more, coming soon...
 
 その他実装予定の機能などは [Roadmap](https://github.com/SlashNephy/saya/projects/1) をご覧ください。
 
-次のプロジェクトとの併用を想定しています。
+saya は以下のプロジェクトとの併用を想定しています。
+
+```
+             +--------------------------+     +----------------+     +----------------+     +-------------+
+ Client A -> |   Live Comment Stream    |     |                |     |   EPGStation   |     |  Mirakurun  |
+             |         WebSockets       |     |                | <-> |                | <-> |   mirakc    |
+ Client B -> |    /comments/***/live    |     |     elaina     |     |  0.0.0.0:8888  |     +-------------+
+             +--------------------------+ <-> |                |     +----------------+     +-------------+
+             +--------------------------+     |                |     +----------------+     |  niconico   |
+             | Timeshift Comment Stream |     |  0.0.0.0:1234  |     |      saya      |     |    5ch      |
+ Client C -> |         WebSockets       |     |                | <-> |                | <-> |   Annict    |
+             | /comments/***/timeshift  |     |                |     |  0.0.0.0:1017  |     |      etc... |
+             +--------------------------+     +----------------+     +----------------+     +-------------+
+```
 
 - [Chinachu/Mirakurun](https://github.com/Chinachu/Mirakurun) or [mirakc/mirakc](https://github.com/mirakc/mirakc)
+  - チャンネル情報の取得に使用されます。
   - Mirakurun と mirakc のどちらでも動作します。なくても動作しますが一部制約が生じます。
 - [l3tnun/EPGStation](https://github.com/l3tnun/EPGStation)
   - saya を動作させる上では不要です。elaina 上で番組を再生する場合に必要です。
@@ -60,16 +72,20 @@ saya is still in heavy development.
 
 いくつかのイメージタグを用意しています。現在 linux/amd64 プラットホームのみサポートしています。
 
-- `slashnephy/saya:latest`  
-  master ブランチへのプッシュの際にビルドされます。安定しています。
-- `slashnephy/saya:dev`  
-  dev ブランチへのプッシュの際にビルドされます。開発版のため, 不安定である可能性があります。
-- `slashnephy/saya:<version>`  
-  GitHub 上のリリースに対応します。
-- `slashnephy/saya:***-vaapi`  
-  VAAPI (Intel CPU 内蔵 GPU, AMD グラフィックカード向け) によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
-- `slashnephy/saya:***-nvenc`  
-  NVEnc (NVIDIA グラフィックカード向け) によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
+- `slashnephy/saya:latest`
+  + master ブランチへのプッシュの際にビルドされます。基本的に最新の安定版バージョンになります。
+  + 比較的安定しています。
+- `slashnephy/saya:dev`
+  + dev ブランチへのプッシュの際にビルドされます。
+  + 開発版のため, 不安定である可能性があります。
+- `slashnephy/saya:<version>`
+  + GitHub 上のリリースに対応します。
+- `slashnephy/saya:***-vaapi`
+  + Intel CPU 内蔵 GPU or AMD グラフィックカードのユーザ向けです。
+  + VAAPI によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
+- `slashnephy/saya:***-nvenc`
+  + NVIDIA グラフィックカードのユーザ向けです。
+  + NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 
 ### docker-compose
 
