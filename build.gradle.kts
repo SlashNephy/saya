@@ -15,10 +15,7 @@ object Versions {
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
     const val Guava = "30.1-jre"
-
-    const val AnnictKt = "2.4.2"
-    // const val KtorSwagger = "0.7.0"
-    // const val Clikt = "3.1.0"
+    const val Clikt = "3.1.0"
 
     const val KotlinLogging = "2.0.4"
     const val Logback = "1.2.3"
@@ -41,10 +38,7 @@ object Libraries {
     const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
     const val Jsoup = "org.jsoup:jsoup:${Versions.Jsoup}"
     const val Guava = "com.google.guava:guava:${Versions.Guava}"
-
-    const val AnnictKt = "jp.annict:annict-kt:${Versions.AnnictKt}"
-    // const val KtorSwagger = "com.github.nielsfalk:ktor-swagger:${Versions.KtorSwagger}"
-    // const val Clikt = "com.github.ajalt.clikt:clikt:${Versions.Clikt}"
+    const val Clikt = "com.github.ajalt.clikt:clikt:${Versions.Clikt}"
 
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
     const val LogbackCore = "ch.qos.logback:logback-core:${Versions.Logback}"
@@ -63,13 +57,9 @@ object Libraries {
 
 repositories {
     mavenCentral()
-    // for ktor-swagger
-    // maven(url = "https://jitpack.io")
 
     // TODO: It should be removed by May 1, 2021. It is potentially used by kotlinx-datetime.
     maven(url = "https://kotlin.bintray.com/kotlinx")
-    // TODO: It should be removed by May 1, 2021. It is potentially used by annict-kt.
-    maven(url = "https://dl.bintray.com/riptakagi/maven")
 }
 
 dependencies {
@@ -86,10 +76,7 @@ dependencies {
     implementation(Libraries.CommonsCodec)
     implementation(Libraries.Jsoup)
     implementation(Libraries.Guava)
-
-    implementation(Libraries.AnnictKt)
-    // implementation(Libraries.KtorSwagger)
-    // implementation(Libraries.Clikt)
+    implementation(Libraries.Clikt)
 
     implementation(Libraries.KotlinLogging)
     implementation(Libraries.LogbackCore)

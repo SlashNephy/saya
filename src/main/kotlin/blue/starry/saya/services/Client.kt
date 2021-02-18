@@ -7,6 +7,7 @@ import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.services.annict.AnnictClient
 import blue.starry.saya.services.gochan.GochanClient
 import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
@@ -21,7 +22,6 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
-import jp.annict.client.AnnictClient
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.nio.file.Files
