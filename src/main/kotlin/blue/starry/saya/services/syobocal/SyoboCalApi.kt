@@ -43,8 +43,13 @@ object SyoboCalApi {
 
     private fun encodeLocalDateTimeRange(start: LocalDateTime?, end: LocalDateTime?): String? {
         return "${start?.format(QueryDateTimeFormatter).orEmpty()}-${end?.format(QueryDateTimeFormatter).orEmpty()}"
-            .trim('-')
-            .ifEmpty { null }
+            .let {
+                if (it == "-" || it.isEmpty()) {
+                    null
+                } else {
+                    it
+                }
+            }
     }
 
     private fun encodeCommaList(list: List<Any>?): String? {
