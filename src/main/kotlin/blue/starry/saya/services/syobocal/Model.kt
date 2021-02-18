@@ -31,7 +31,7 @@ private val Document.result: SyoboCalResponse.Result
 
 private val syoboCalDateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-private fun XmlModel.localDateTime(tagName: String? = null): ReadOnlyProperty<XmlModel, LocalDateTime> = delegate {
+private fun XmlModel.localDateTime(tagName: String? = null): ReadOnlyProperty<XmlModel, LocalDateTime> = delegate(tagName) {
     LocalDateTime.parse(it.textContent, syoboCalDateTimeFormat)
 }
 
