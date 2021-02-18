@@ -54,7 +54,11 @@ saya is still in heavy development.
 
 ## Docker
 
-環境構築が容易なので Docker で導入することをおすすめします。
+以下の README には Docker に関する用語が多く含まれます。必要に応じて [Docker 概要](https://docs.docker.jp/get-started/overview.html) (公式ドキュメント) を参照してください。
+
+### イメージ
+
+いくつかのイメージタグを用意しています。現在 linux/amd64 プラットホームのみサポートしています。
 
 - `slashnephy/saya:latest`  
   master ブランチへのプッシュの際にビルドされます。安定しています。
@@ -63,9 +67,13 @@ saya is still in heavy development.
 - `slashnephy/saya:<version>`  
   GitHub 上のリリースに対応します。
 - `slashnephy/saya:***-vaapi`  
-  VAAPI によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
+  VAAPI (Intel CPU 内蔵 GPU, AMD グラフィックカード向け) によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 - `slashnephy/saya:***-nvenc`  
-  NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
+  NVEnc (NVIDIA グラフィックカード向け) によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
+
+### docker-compose
+
+環境構築が容易なので docker-compose で導入することをおすすめします。docker-compose についての説明は [Docker Compose 概要](https://docs.docker.jp/compose/overview.html) (公式ドキュメント) などを参照してください。一言でいうと docker-compose は「複数のアプリケーションを一度に起動するためのツール」で, それを指示するための構成ファイルである `docker-compose.yml` を作成する必要があります。
 
 `docker-compose.yml`
 
@@ -77,7 +85,7 @@ services:
     container_name: saya
     image: slashnephy/saya:latest
     restart: always
-    # nvenc イメージを使用する場合に必要
+    # `***-nvenc` イメージを使用する場合に必要
     # runtime: nvidia
     ports:
       - 1017:1017/tcp # いれいな
@@ -142,31 +150,49 @@ services:
     ports:
       - 1234:1234/tcp
 
+  # Mirakurun/mirakc, EPGStation コンテナの構成例は
+  # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
+  # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
   mirakurun:
+    container_name: Mirakurun
+    image: chinachu/mirakurun:latest
+    restart: always
+    ports:
+      - 40772:40772/tcp
+    cap_add:
+      - SYS_ADMIN
+      - SYS_NICE
   epgstation:
-    # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
-    # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
+    container_name: EPGStation
+    image: l3tnun/epgstation:alpine
+    restart: always
+    ports:
+      - 8888:8888/tcp
 ```
 
-```console
-# イメージ更新
-docker pull slashnephy/saya:latest
+このように `docker-compose.yml` を作成し, 同じディレクトリで docker-compose を実行します。Linux 環境では root 権限で実行する必要があります。
 
-# 起動
+```console
+# 更新
+docker-compose pull
+
+# バックグラウンドで起動
 docker-compose up -d
 
 # ログ表示
 docker-compose logs -f
 
-# 停止
+# 破棄
 docker-compose down
 ```
 
-up すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
+`up -d` すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
 
 ## 直接実行
 
 リリースから Jar を取ってきて実行するか, `./gradlew run` で実行できます。
+
+Java の実行環境は JRE 8 以降が必要です。
 
 設定値の変更は現在, 環境変数経由でしか行なえません。ご了承ください。
 
@@ -180,7 +206,16 @@ saya が提供する API は [endpoints.md](https://github.com/SlashNephy/saya/b
 
 # Contribution
 
-開発には IntelliJ IDEA をおすすめします。
+IDE は IntelliJ IDEA をおすすめします。
+
+saya の開発には以下のブランチモデルを採用しています。
+
+- `master` ブランチ  
+  安定版とみなされます。基本的にバージョンアップの際に `dev` から merge されます。
+- `dev` ブランチ  
+  開発版とみなされます。
+- `feature-***` ブランチ  
+  特定の機能の開発に使用します。開発が一段落したのちに `dev` に squash merge されます。
 
 不安定なプロジェクトにつき, 互換性のない変更や方針変更が発生する可能性があります。ご了承ください。
 
