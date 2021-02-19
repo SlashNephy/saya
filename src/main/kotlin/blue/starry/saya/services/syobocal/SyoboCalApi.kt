@@ -69,7 +69,7 @@ object SyoboCalApi {
 
     suspend fun lookupPrograms(
         tids: List<Int>? = null,
-        chIds: List<String>? = null,
+        chIds: List<Int>? = null,
         stTimeStart: LocalDateTime? = null,
         stTimeEnd: LocalDateTime? = null,
         range: Pair<LocalDateTime, LocalDateTime>? = null,
@@ -92,7 +92,7 @@ object SyoboCalApi {
     )
 
     suspend fun lookupChannels(
-        chIds: List<String> = emptyList(),
+        chIds: List<Int> = emptyList(),
         lastUpdate: String? = null
     ) = query(
         "ChLookup",
