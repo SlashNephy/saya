@@ -688,6 +688,8 @@ channels:
       - 236
     nicojkId: 236
     miyoutvId: 'BSアニマックス'
+    nicoliveCommunityIds:
+      - 'co5296297'
     boardId: 'SKYPER'
     threadKeywords:
       - 'アニマックス'
