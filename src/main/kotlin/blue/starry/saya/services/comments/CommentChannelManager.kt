@@ -56,7 +56,7 @@ object CommentChannelManager {
 
             val serviceId = target.toLongOrNull() ?: return null
             val mirakurun = MirakurunDataManager.Services.find { it.id == serviceId } ?: return null
-            Channels.find { it.serviceIds.contains(mirakurun.actualId) }
+            Channels.find { it.type == mirakurun.type && it.serviceIds.contains(mirakurun.actualId) }
         }
     }
 
