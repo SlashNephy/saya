@@ -6,6 +6,7 @@ FROM gradle:jdk8 AS cache
 WORKDIR /app
 ENV GRADLE_USER_HOME /app/gradle
 COPY *.gradle.kts gradle.properties /app/
+COPY src/main/resources/ /app/src/main/resources/
 ## Full build if there are any deps changes
 RUN gradle shadowJar --parallel --no-daemon --quiet
 
