@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.serialization") version "1.4.30"
+    id("com.expediagroup.graphql") version "4.0.0-alpha.13"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
@@ -10,12 +11,12 @@ plugins {
 
 object Versions {
     const val Ktor = "1.5.1"
+    const val GraphQLKtor = "4.0.0-alpha.13"
     const val kaml = "0.27.0"
     const val Penicillin = "6.0.5"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
     const val Guava = "30.1-jre"
-    const val Clikt = "3.1.0"
 
     const val KotlinLogging = "2.0.4"
     const val Logback = "1.2.3"
@@ -32,13 +33,13 @@ object Libraries {
     const val KtorClientApache = "io.ktor:ktor-client-apache:${Versions.Ktor}"
     const val KtorClientSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
     const val KtorClientLogging = "io.ktor:ktor-client-logging:${Versions.Ktor}"
+    const val GraphQLKtor = "com.expediagroup:graphql-kotlin-ktor-client:${Versions.GraphQLKtor}"
 
     const val kaml = "com.charleskorn.kaml:kaml:${Versions.kaml}"
     const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
     const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
     const val Jsoup = "org.jsoup:jsoup:${Versions.Jsoup}"
     const val Guava = "com.google.guava:guava:${Versions.Guava}"
-    const val Clikt = "com.github.ajalt.clikt:clikt:${Versions.Clikt}"
 
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
     const val LogbackCore = "ch.qos.logback:logback-core:${Versions.Logback}"
@@ -51,7 +52,8 @@ object Libraries {
         "kotlin.io.path.ExperimentalPathApi",
         "kotlin.time.ExperimentalTime",
         "kotlin.ExperimentalStdlibApi",
-        "kotlinx.coroutines.FlowPreview"
+        "kotlinx.coroutines.FlowPreview",
+        "io.ktor.util.KtorExperimentalAPI"
     )
 }
 
@@ -70,13 +72,13 @@ dependencies {
     implementation(Libraries.KtorClientApache)
     implementation(Libraries.KtorClientSerialization)
     implementation(Libraries.KtorClientLogging)
+    implementation(Libraries.GraphQLKtor)
 
     implementation(Libraries.kaml)
     implementation(Libraries.Penicillin)
     implementation(Libraries.CommonsCodec)
     implementation(Libraries.Jsoup)
     implementation(Libraries.Guava)
-    implementation(Libraries.Clikt)
 
     implementation(Libraries.KotlinLogging)
     implementation(Libraries.LogbackCore)
@@ -108,6 +110,27 @@ kotlin {
             languageSettings.useExperimentalAnnotation(it)
         }
     }
+}
+
+graphql {
+    client {
+        endpoint = "https://api.annict.com/graphql"
+        packageName = "blue.starry.saya.services.annict.generated"
+        headers = mapOf("Authorization" to "bearer ${System.getenv("ANNICT_TOKEN")}")
+        queryFileDirectory = projectDir.resolve("src/main/resources/annict").toString()
+        clientType = com.expediagroup.graphql.plugin.gradle.config.GraphQLClientType.KTOR
+    }
+}
+
+tasks.named("graphqlGenerateClient") {
+    if (System.getenv("ANNICT_TOKEN") == null) {
+        projectDir.resolve("src/main/resources/annict/schema.graphql").copyTo(buildDir.resolve("schema.graphql"), true)
+    }
+}
+
+// avoid
+tasks.named("graphqlIntrospectSchema") {
+    onlyIf { System.getenv("ANNICT_TOKEN") != null }
 }
 
 /*

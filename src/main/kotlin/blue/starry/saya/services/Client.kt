@@ -7,11 +7,11 @@ import blue.starry.penicillin.core.session.config.httpClient
 import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.services.annict.AnnictClient
 import blue.starry.saya.services.gochan.GochanClient
 import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
+import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.engine.cio.*
@@ -21,9 +21,11 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.time.minutes
@@ -90,7 +92,11 @@ val SayaAnnictClient by lazy {
         return@lazy null
     }
 
-    AnnictClient(token)
+    GraphQLKtorClient(url = URL("https://api.annict.com/graphql")) {
+        defaultRequest {
+            header(HttpHeaders.Authorization, "bearer $token")
+        }
+    }
 }
 
 val SayaMiyouTVApi by lazy {

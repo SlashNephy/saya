@@ -35,3 +35,5 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          ANNICT_TOKEN: ${{ secrets.ANNICT_TOKEN }}
