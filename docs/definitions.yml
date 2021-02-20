@@ -66,6 +66,7 @@ channels:
       - '#nhktv'
     boardId: 'NHK'
     syobocalId: 1
+    annictId: 1
   - name: 'Eテレ'
     type: 'GR'
     serviceIds:
@@ -121,6 +122,7 @@ channels:
       - '#Eテレ'
     boardId: 'ETV'
     syobocalId: 2
+    annictId: 2
   - name: '日テレ'
     type: 'GR'
     serviceIds:
@@ -171,6 +173,7 @@ channels:
       - '#ntv'
     boardId: 'NTV'
     syobocalId: 4
+    annictId: 4
   - name: 'テレビ朝日'
     type: 'GR'
     serviceIds:
@@ -216,6 +219,7 @@ channels:
       - '#tvasahi'
     boardId: 'EX'
     syobocalId: 6
+    annictId: 6
   - name: 'TBS'
     type: 'GR'
     serviceIds:
@@ -265,6 +269,7 @@ channels:
       - '#tbs'
     boardId: 'TBS'
     syobocalId: 5
+    annictId: 5
   - name: 'テレビ東京'
     type: 'GR'
     serviceIds:
@@ -292,6 +297,7 @@ channels:
       - '#tvtokyo'
     boardId: 'TX'
     syobocalId: 7
+    annictId: 7
   - name: 'フジテレビ'
     type: 'GR'
     serviceIds:
@@ -340,6 +346,7 @@ channels:
       - '#fujitv'
     boardId: 'CX'
     syobocalId: 3
+    annictId: 3
 
   # 地上波 GR (ローカル)
   - name: 'TOKYO MX'
@@ -358,6 +365,7 @@ channels:
       - '#tokyomx'
     boardId: 'LOCAL'
     syobocalId: 19
+    annictId: 19
   - name: '放送大学'
     type: 'GR'
     serviceIds:
@@ -377,6 +385,7 @@ channels:
       - '#テレ玉'
     boardId: 'LOCAL'
     syobocalId: 14
+    annictId: 14
   - name: 'tvk'
     type: 'GR'
     serviceIds:
@@ -391,6 +400,7 @@ channels:
       - '#tvk'
     boardId: 'LOCAL'
     syobocalId: 8
+    annictId: 8
   - name: 'チバテレビ'
     type: 'GR'
     serviceIds:
@@ -403,6 +413,7 @@ channels:
       - '#チバテレ'
     boardId: 'LOCAL'
     syobocalId: 13
+    annictId: 13
   - name: '群馬テレビ'
     type: 'GR'
     serviceIds:
@@ -410,6 +421,7 @@ channels:
     miyoutvId: '群馬テレビ'
     boardId: 'LOCAL'
     syobocalId: 72
+    annictId: 72
   - name: 'とちぎテレビ'
     type: 'GR'
     serviceIds:
@@ -417,41 +429,49 @@ channels:
     miyoutvId: 'とちぎテレビ'
     boardId: 'LOCAL'
     syobocalId: 100
+    annictId: 100
   - name: '三重テレビ'
     type: 'GR'
     serviceIds:
       - 38960  # 三重: 三重テレビ
     syobocalId: 82
+    annictId: 82
   - name: 'ぎふチャン'
     type: 'GR'
     serviceIds:
       - 39984  # 岐阜: ぎふチャン
     syobocalId: 83
+    annictId: 83
   - name: 'KBS京都'
     type: 'GR'
     serviceIds:
       - 42032  # 京都: KBS京都
     syobocalId: 66
+    annictId: 66
   - name: 'サンテレビ'
     type: 'GR'
     serviceIds:
       - 43056  # 兵庫: サンテレビ
     syobocalId: 58
+    annictId: 58
   - name: 'テレビ和歌山'
     type: 'GR'
     serviceIds:
       - 44080  # 和歌山: テレビ和歌山
     syobocalId: 86
+    annictId: 86
   - name: '奈良テレビ'
     type: 'GR'
     serviceIds:
       - 45104  # 奈良: 奈良テレビ
     syobocalId: 74
+    annictId: 74
   - name: 'BBCびわ湖放送'
     type: 'GR'
     serviceIds:
       - 46128  # 滋賀: BBCびわ湖放送
     syobocalId: 87
+    annictId: 87
 
   # 衛星放送 BS
   - name: 'NHKBS1'
@@ -472,7 +492,8 @@ channels:
     boardId: 'BSNHK'
     threadKeywords:
       - 'BS1'
-    syobocalId: 9 # 10
+    syobocalId: 9
+    annictId: 9
   - name: 'NHKBSプレミアム'
     type: 'BS'
     serviceIds:
@@ -492,6 +513,7 @@ channels:
     threadKeywords:
       - 'BSプレミアム'
     syobocalId: 179
+    annictId: 180
   - name: 'BS日テレ'
     type: 'BS'
     serviceIds:
@@ -511,6 +533,7 @@ channels:
     threadKeywords:
       - 'BS日テレ'
     syobocalId: 71
+    annictId: 71
   - name: 'BS朝日'
     type: 'BS'
     serviceIds:
@@ -530,6 +553,7 @@ channels:
     threadKeywords:
       - 'BS朝日'
     syobocalId: 18
+    annictId: 18
   - name: 'BS-TBS'
     type: 'BS'
     serviceIds:
@@ -549,6 +573,7 @@ channels:
     threadKeywords:
       - 'BS-TBS'
     syobocalId: 16
+    annictId: 16
   - name: 'BSテレ東'
     type: 'BS'
     serviceIds:
@@ -568,6 +593,7 @@ channels:
     threadKeywords:
       - 'BSテレ東'
     syobocalId: 15
+    annictId: 15
   - name: 'BSフジ'
     type: 'BS'
     serviceIds:
@@ -586,6 +612,7 @@ channels:
     threadKeywords:
       - 'BSフジ'
     syobocalId: 17
+    annictId: 17
   - name: 'WOWOWプライム'
     type: 'BS'
     serviceIds:
@@ -600,6 +627,7 @@ channels:
     threadKeywords:
       - 'WOWOWプライム'
     syobocalId: 204
+    annictId: 205
   - name: 'WOWOWライブ'
     type: 'BS'
     serviceIds:
@@ -614,6 +642,7 @@ channels:
     threadKeywords:
       - 'WOWOWライブ'
     syobocalId: 97
+    annictId: 97
   - name: 'WOWOWシネマ'
     type: 'BS'
     serviceIds:
@@ -628,6 +657,7 @@ channels:
     threadKeywords:
       - 'WOWOWシネマ'
     syobocalId: 76
+    annictId: 76
   - name: 'スターチャンネル1'
     type: 'BS'
     serviceIds:
@@ -638,6 +668,7 @@ channels:
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 217
+    annictId: 217
   - name: 'スターチャンネル2'
     type: 'BS'
     serviceIds:
@@ -648,6 +679,7 @@ channels:
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 219
+    annictId: 220
   - name: 'スターチャンネル3'
     type: 'BS'
     serviceIds:
@@ -658,6 +690,7 @@ channels:
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 214
+    annictId: 214
   - name: 'BS11イレブン'
     type: 'BS'
     serviceIds:
@@ -675,6 +708,7 @@ channels:
     threadKeywords:
       - 'BS11'
     syobocalId: 128
+    annictId: 128
   - name: 'BS12トゥエルビ'
     type: 'BS'
     serviceIds:
@@ -693,18 +727,21 @@ channels:
       - 'BS12'
       - 'TwellV'
     syobocalId: 129
+    annictId: 129
   - name: '放送大学ex'
     type: 'BS'
     serviceIds:
       - 231
     nicojkId: 231
     syobocalId: 158
+    annictId: 158
   - name: '放送大学on'
     type: 'BS'
     serviceIds:
       - 232
     nicojkId: 231
     syobocalId: 158
+    annictId: 158
   - name: 'グリーンチャンネル'
     type: 'BS'
     serviceIds:
@@ -731,6 +768,7 @@ channels:
     threadKeywords:
       - 'アニマックス'
     syobocalId: 197
+    annictId: 167
   - name: 'FOXbs238'
     type: 'BS'
     serviceIds:
@@ -747,6 +785,7 @@ channels:
     threadKeywords:
       - 'BSスカパー！'
     syobocalId: 196
+    annictId: 197
   - name: 'J SPORTS 1'
     type: 'BS'
     serviceIds:
@@ -794,6 +833,7 @@ channels:
     threadKeywords:
       - '日本映画専門チャンネル'
     syobocalId: 40
+    annictId: 40
   - name: 'ディズニーch'
     type: 'BS'
     serviceIds:
@@ -801,6 +841,7 @@ channels:
     nicojkId: 256
     miyoutvId: 'ディズニーチャンネル'
     syobocalId: 163
+    annictId: 163
   - name: 'Dlife'
     type: 'BS'
     serviceIds:
@@ -811,12 +852,14 @@ channels:
     threadKeywords:
       - 'Dlife'
     syobocalId: 212
+    annictId: 212
   - name: '放送大学ラジオ'
     type: 'BS'
     serviceIds:
       - 531
     nicojkId: 231
     syobocalId: 159
+    annictId: 159
   - name: 'SOLiVE24'
     type: 'BS'
     serviceIds:
@@ -835,12 +878,14 @@ channels:
     threadKeywords:
       - '東映チャンネル'
     syobocalId: 39
+    annictId: 39
   - name: '衛星劇場'
     type: 'CS'
     serviceIds:
       - 219
     miyoutvId: '衛星劇場'
     syobocalId: 220
+    annictId: 221
   - name: '映画・チャンネルNECO'
     type: 'CS'
     serviceIds:
@@ -850,6 +895,7 @@ channels:
     threadKeywords:
       - 'チャンネルNECO'
     syobocalId: 26
+    annictId: 26
   - name: 'ザ・シネマ'
     type: 'CS'
     serviceIds:
@@ -865,6 +911,7 @@ channels:
       - 240
     miyoutvId: 'ムービープラス'
     syobocalId: 152
+    annictId: 152
 
   # CS: スポーツ
   - name: 'スカイA'
@@ -873,6 +920,7 @@ channels:
       - 250
     miyoutvId: 'スカイA'
     syobocalId: 84
+    annictId: 84
   - name: 'GAORA SPORTS'
     type: 'CS'
     serviceIds:
@@ -899,18 +947,21 @@ channels:
       - 321
     miyoutvId: 'スペシャプラス'
     syobocalId: 211
+    annictId: 211
   - name: 'スペースシャワーTV'
     type: 'CS'
     serviceIds:
       - 322
     miyoutvId: 'スペースシャワーTV'
     syobocalId: 194
+    annictId: 195
   - name: 'MTV'
     type: 'CS'
     serviceIds:
       - 323
     miyoutvId: 'MTV'
     syobocalId: 235
+    annictId: 242
   - name: 'ミュージック・エア'
     type: 'CS'
     serviceIds:
@@ -923,12 +974,14 @@ channels:
       - 325
     miyoutvId: 'エムオン'
     syobocalId: 151
+    annictId: 151
   - name: '歌謡ポップス'
     type: 'CS'
     serviceIds:
       - 329
     miyoutvId: '歌謡ポップス'
     syobocalId: 222
+    annictId: 223
 
   # CS: アニメ
   - name: 'キッズステーション'
@@ -940,6 +993,7 @@ channels:
     threadKeywords:
       - 'ｷｯｽﾞｽﾃｰｼｮﾝ'
     syobocalId: 22
+    annictId: 22
   - name: 'カートゥーン ネットワーク'
     type: 'CS'
     serviceIds:
@@ -949,6 +1003,7 @@ channels:
     threadKeywords:
       - 'カートゥーン'
     syobocalId: 23
+    annictId: 23
   - name: 'AT-X'
     type: 'CS'
     serviceIds:
@@ -965,11 +1020,13 @@ channels:
     threadKeywords:
       - 'AT‐X'
     syobocalId: 20
+    annictId: 20
   - name: 'ディズニーXD'
     type: 'CS'
     serviceIds:
       - 334  # 停波済み
     syobocalId: 161
+    annictId: 161
 
   # CS: 総合エンターテイメント
   - name: 'TBSチャンネル1'
@@ -981,6 +1038,7 @@ channels:
     threadKeywords:
       - 'TBSチャンネル'
     syobocalId: 52
+    annictId: 52
   - name: 'TBSチャンネル2'
     type: 'CS'
     serviceIds:
@@ -990,6 +1048,7 @@ channels:
     threadKeywords:
       - 'TBSチャンネル'
     syobocalId: 215
+    annictId: 215
   - name: 'テレ朝チャンネル1'
     type: 'CS'
     serviceIds:
@@ -999,6 +1058,7 @@ channels:
     threadKeywords:
       - 'テレ朝チャンネル'
     syobocalId: 224
+    annictId: 229
   - name: 'テレ朝チャンネル2'
     type: 'CS'
     serviceIds:
@@ -1008,6 +1068,7 @@ channels:
     threadKeywords:
       - 'テレ朝チャンネル'
     syobocalId: 243
+    annictId: 253
   - name: '日テレプラス'
     type: 'CS'
     serviceIds:
@@ -1017,6 +1078,7 @@ channels:
     threadKeywords:
       - '日テレプラス'
     syobocalId: 119
+    annictId: 119
   - name: 'エンタメ～テレ☆シネドラバラエティ'
     type: 'CS'
     serviceIds:
@@ -1041,6 +1103,7 @@ channels:
     threadKeywords:
       - 'ONE'
     syobocalId: 109
+    annictId: 109
   - name: 'フジテレビTWO'
     type: 'CS'
     serviceIds:
@@ -1050,6 +1113,7 @@ channels:
     threadKeywords:
       - 'TWO'
     syobocalId: 43
+    annictId: 43
   - name: 'フジテレビNEXT'
     type: 'CS'
     serviceIds:
@@ -1059,22 +1123,26 @@ channels:
     threadKeywords:
       - 'NEXT'
     syobocalId: 131
+    annictId: 131
   - name: 'スカチャン0'
     type: 'CS'
     serviceIds:
       - 800
     miyoutvId: 'スカサカ'
+    annictId: 150
   - name: 'スカチャン1'
     type: 'CS'
     serviceIds:
       - 801
     miyoutvId: 'スカチャン'
+    annictId: 175
   - name: 'スカチャン2'
     type: 'CS'
     serviceIds:
       - 802
     miyoutvId: 'スカチャン'
     syobocalId: 174
+    annictId: 168
   - name: 'スカチャン3'
     type: 'CS'
     serviceIds:
@@ -1088,6 +1156,7 @@ channels:
       - 310
     miyoutvId: 'スーパードラマ'
     syobocalId: 216
+    annictId: 216
   - name: 'AXN'
     type: 'CS'
     serviceIds:
@@ -1132,6 +1201,7 @@ channels:
     threadKeywords:
       - 'スカイステージ'
     syobocalId: 167
+    annictId: 169
   - name: '時代劇専門チャンネル'
     type: 'CS'
     serviceIds:
@@ -1141,6 +1211,7 @@ channels:
     threadKeywords:
       - '時代劇専門'
     syobocalId: 221
+    annictId: 222
   - name: 'ファミリー劇場'
     type: 'CS'
     serviceIds:
@@ -1150,12 +1221,14 @@ channels:
     threadKeywords:
       - 'ファミリー劇場'
     syobocalId: 42
+    annictId: 42
   - name: 'ホームドラマチャンネル'
     type: 'CS'
     serviceIds:
       - 294
     miyoutvId: 'ホームドラマ'
     syobocalId: 153
+    annictId: 153
   - name: 'MONDO TV'
     type: 'CS'
     serviceIds:
@@ -1165,11 +1238,13 @@ channels:
     threadKeywords:
       - 'MONDOTV'
     syobocalId: 47
+    annictId: 47
   - name: '旅チャンネル'
     type: 'CS'
     serviceIds:
       - 362  # 停波済み
     syobocalId: 176
+    annictId: 177
 
   # CS: ドキュメンタリー
   - name: 'ディスカバリーチャンネル'
@@ -1181,6 +1256,7 @@ channels:
     threadKeywords:
       - 'ﾃﾞｨｽｶﾊﾞ'
     syobocalId: 61
+    annictId: 61
   - name: 'アニマルプラネット'
     type: 'CS'
     serviceIds:
@@ -1190,6 +1266,7 @@ channels:
     threadKeywords:
       - 'ｱﾆﾌﾟﾗ'
     syobocalId: 56
+    annictId: 56
   - name: 'ヒストリーチャンネル'
     type: 'CS'
     serviceIds:

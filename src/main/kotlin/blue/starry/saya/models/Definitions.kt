@@ -20,7 +20,8 @@ data class Definitions(
         val twitterKeywords: Set<String> = emptySet(),
         val boardId: String? = null,
         val threadKeywords: Set<String> = emptySet(),
-        val syobocalId: Int? = null
+        val syobocalId: Int? = null,
+        val annictId: Int? = null
     ) {
         enum class Type {
             GR, BS, CS, SKY
