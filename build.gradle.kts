@@ -117,14 +117,14 @@ graphql {
         endpoint = "https://api.annict.com/graphql"
         packageName = "blue.starry.saya.services.annict.generated"
         headers = mapOf("Authorization" to "bearer ${System.getenv("ANNICT_TOKEN")}")
-        queryFileDirectory = projectDir.resolve("src/main/resources/annict").toString()
+        queryFileDirectory = projectDir.resolve("src/main/graphql/annict").toString()
         clientType = com.expediagroup.graphql.plugin.gradle.config.GraphQLClientType.KTOR
     }
 }
 
 tasks.named("graphqlGenerateClient") {
     if (System.getenv("ANNICT_TOKEN") == null) {
-        projectDir.resolve("src/main/resources/annict/schema.graphql").copyTo(buildDir.resolve("schema.graphql"), true)
+        projectDir.resolve("src/main/graphql/annict/schema.graphql").copyTo(buildDir.resolve("schema.graphql"), true)
     }
 }
 
