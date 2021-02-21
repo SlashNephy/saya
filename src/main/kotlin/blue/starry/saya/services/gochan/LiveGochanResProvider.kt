@@ -1,5 +1,6 @@
 package blue.starry.saya.services.gochan
 
+import blue.starry.saya.common.DefaultDictionary
 import blue.starry.saya.common.asThreadSafe
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
@@ -16,7 +17,7 @@ import kotlin.time.seconds
 class LiveGochanResProvider(
     override val channel: Definitions.Channel,
     private val client: GochanClient,
-    private val board: Definitions.Board
+    private val boards: List<Definitions.Board>
 ): LiveCommentProvider {
     override val queue = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
@@ -58,43 +59,51 @@ class LiveGochanResProvider(
     }
 
     private val threadLoaders = mutableMapOf<GochanThreadAddress, GochanDatThreadLoader>().asThreadSafe()
-    private val subject = mutableMapOf<GochanThreadAddress, GochanSubjectItem>().asThreadSafe()
+    private val subjects = DefaultDictionary<Definitions.Board, MutableMap<GochanThreadAddress, GochanSubjectItem>> {
+        mutableMapOf()
+    }.asThreadSafe()
 
     private suspend fun doSearchThreadsLoop() {
-        val items = AutoGochanThreadSelector.enumerate(client, channel, board, limit = threadLimit)
+        boards.forEach { board ->
+            val items = AutoGochanThreadSelector.enumerate(client, channel, board, limit = threadLimit)
 
-        subject.withLock { subject ->
-            subject.clear()
+            subjects.withLock { subjects ->
+                subjects[board].clear()
 
-            for (item in items) {
-                val address = GochanThreadAddress(board.server, board.board, item.threadId)
-                subject[address] = item
+                for (item in items) {
+                    val address = GochanThreadAddress(board.server, board.board, item.threadId)
+                    subjects[board][address] = item
 
-                logger.trace { item }
+                    logger.trace { item }
+                }
             }
         }
     }
 
     private suspend fun doCollectResLoop() {
-        subject.withLock { subject ->
-            for ((address, item) in subject) {
-                val loader = threadLoaders.withLock { safeThreadLoaders ->
-                    safeThreadLoaders.getOrPut(address) {
-                        GochanDatThreadLoader(address)
+        subjects.withLock { subjects ->
+            for ((board, map) in subjects) {
+                for ((address, item) in map) {
+                    val loader = threadLoaders.withLock { safeThreadLoaders ->
+                        safeThreadLoaders.getOrPut(address) {
+                            GochanDatThreadLoader(address)
+                        }
                     }
-                }
 
-                val now = ZonedDateTime.now()
-                loader.fetch(client).filter {
-                    it.time.plusSeconds(15).isAfter(now)
-                }.forEach {
-                    queue.send(it.toSayaComment(
-                        source = "5ch [${item.title}]",
-                        sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
-                    ))
+                    val now = ZonedDateTime.now()
+                    loader.fetch(client).filter {
+                        it.time.plusSeconds(15).isAfter(now)
+                    }.forEach {
+                        queue.send(
+                            it.toSayaComment(
+                                source = "5ch [${item.title}]",
+                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                            )
+                        )
 
-                    logger.trace { it }
-                    delay(Random.nextLong(0..300L))
+                        logger.trace { it }
+                        delay(Random.nextLong(0..300L))
+                    }
                 }
             }
         }

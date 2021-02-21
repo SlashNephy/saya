@@ -64,7 +64,8 @@ channels:
       - 'ch2646436'
     twitterKeywords:
       - '#nhktv'
-    boardId: 'NHK'
+    boardIds:
+      - 'NHK'
     syobocalId: 1
     annictId: 1
   - name: 'Eテレ'
@@ -120,7 +121,8 @@ channels:
       - 'ch2646437'
     twitterKeywords:
       - '#Eテレ'
-    boardId: 'ETV'
+    boardIds:
+      - 'ETV'
     syobocalId: 2
     annictId: 2
   - name: '日テレ'
@@ -171,7 +173,8 @@ channels:
       - 'ch2646438'
     twitterKeywords:
       - '#ntv'
-    boardId: 'NTV'
+    boardIds:
+      - 'NTV'
     syobocalId: 4
     annictId: 4
   - name: 'テレビ朝日'
@@ -217,7 +220,8 @@ channels:
       - 'ch2646439'
     twitterKeywords:
       - '#tvasahi'
-    boardId: 'EX'
+    boardIds:
+      - 'EX'
     syobocalId: 6
     annictId: 6
   - name: 'TBS'
@@ -267,7 +271,8 @@ channels:
       - 'ch2646440'
     twitterKeywords:
       - '#tbs'
-    boardId: 'TBS'
+    boardIds:
+      - 'TBS'
     syobocalId: 5
     annictId: 5
   - name: 'テレビ東京'
@@ -295,7 +300,8 @@ channels:
       - 'ch2646441'
     twitterKeywords:
       - '#tvtokyo'
-    boardId: 'TX'
+    boardIds:
+      - 'TX'
     syobocalId: 7
     annictId: 7
   - name: 'フジテレビ'
@@ -344,7 +350,8 @@ channels:
       - 'ch2646442'
     twitterKeywords:
       - '#fujitv'
-    boardId: 'CX'
+    boardIds:
+      - 'CX'
     syobocalId: 3
     annictId: 3
 
@@ -363,7 +370,8 @@ channels:
       - 'ch2646485'
     twitterKeywords:
       - '#tokyomx'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 19
     annictId: 19
   - name: '放送大学'
@@ -383,7 +391,8 @@ channels:
       - 'co5253063'
     twitterKeywords:
       - '#テレ玉'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 14
     annictId: 14
   - name: 'tvk'
@@ -398,7 +407,8 @@ channels:
       - 'co5215296'
     twitterKeywords:
       - '#tvk'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 8
     annictId: 8
   - name: 'チバテレビ'
@@ -411,7 +421,8 @@ channels:
     miyoutvId: 'チバテレ'
     twitterKeywords:
       - '#チバテレ'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 13
     annictId: 13
   - name: '群馬テレビ'
@@ -419,7 +430,8 @@ channels:
     serviceIds:
       - 25656  # 群馬: 群馬テレビ
     miyoutvId: '群馬テレビ'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 72
     annictId: 72
   - name: 'とちぎテレビ'
@@ -427,7 +439,8 @@ channels:
     serviceIds:
       - 28728  # 栃木: とちぎテレビ
     miyoutvId: 'とちぎテレビ'
-    boardId: 'LOCAL'
+    boardIds:
+      - 'LOCAL'
     syobocalId: 100
     annictId: 100
   - name: '三重テレビ'
@@ -489,7 +502,8 @@ channels:
       - 'co5214081'
     twitterKeywords:
       - '#nhkbs1'
-    boardId: 'BSNHK'
+    boardIds:
+      - 'BSNHK'
     threadKeywords:
       - 'BS1'
     syobocalId: 9
@@ -509,7 +523,8 @@ channels:
       - 'co5175227'
     twitterKeywords:
       - '#nhkbsp'
-    boardId: 'BSNHK'
+    boardIds:
+      - 'BSNHK'
     threadKeywords:
       - 'BSプレミアム'
     syobocalId: 179
@@ -529,7 +544,8 @@ channels:
       - 'co5175341'
     twitterKeywords:
       - '#BS日テレ'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BS日テレ'
     syobocalId: 71
@@ -549,7 +565,8 @@ channels:
       - 'co5175345'
     twitterKeywords:
       - '#BS朝日'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BS朝日'
     syobocalId: 18
@@ -569,7 +586,8 @@ channels:
       - 'co5176119'
     twitterKeywords:
       - '#bstbs'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BS-TBS'
     syobocalId: 16
@@ -589,7 +607,8 @@ channels:
       - 'co5176122'
     twitterKeywords:
       - '#BSテレ東'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BSテレ東'
     syobocalId: 15
@@ -608,7 +627,8 @@ channels:
       - 'co5176125'
     twitterKeywords:
       - '#BSフジ'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BSフジ'
     syobocalId: 17
@@ -623,7 +643,8 @@ channels:
     miyoutvId: 'WOWOWプライム'
     nicoliveCommunityIds:
       - 'co5251972'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'WOWOWプライム'
     syobocalId: 204
@@ -638,7 +659,8 @@ channels:
     miyoutvId: 'WOWOWライブ'
     nicoliveCommunityIds:
       - 'co5251976'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'WOWOWライブ'
     syobocalId: 97
@@ -653,7 +675,8 @@ channels:
     miyoutvId: 'WOWOWシネマ'
     nicoliveCommunityIds:
       - 'co5251983'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'WOWOWシネマ'
     syobocalId: 76
@@ -664,7 +687,8 @@ channels:
       - 200
     nicojkId: 200
     miyoutvId: 'スターチャンネル'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 217
@@ -675,7 +699,8 @@ channels:
       - 201
     nicojkId: 201
     miyoutvId: 'スターチャンネル'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 219
@@ -686,7 +711,8 @@ channels:
       - 202
     nicojkId: 202
     miyoutvId: 'スターチャンネル'
-    boardId: 'BSPAY'
+    boardIds:
+      - 'BSPAY'
     threadKeywords:
       - 'スターチャンネル'
     syobocalId: 214
@@ -704,7 +730,8 @@ channels:
       - 'ch2646846'
     twitterKeywords:
       - '#BS11'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BS11'
     syobocalId: 128
@@ -722,7 +749,8 @@ channels:
       - 'co5193029'
     twitterKeywords:
       - '#BS12'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'BS12'
       - 'TwellV'
@@ -753,7 +781,8 @@ channels:
     miyoutvId: 'グリーンチャンネル'
     nicoliveCommunityIds:
       - 'co5217651'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'グリーンチャンネル'
   - name: 'BSアニマックス'
@@ -764,7 +793,8 @@ channels:
     miyoutvId: 'BSアニマックス'
     nicoliveCommunityIds:
       - 'co5296297'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'アニマックス'
     syobocalId: 197
@@ -781,7 +811,8 @@ channels:
       - 241
     nicojkId: 241
     miyoutvId: 'BSスカパー'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'BSスカパー！'
     syobocalId: 196
@@ -829,7 +860,8 @@ channels:
       - 255
     nicojkId: 255
     miyoutvId: 'BS日本映画専門'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - '日本映画専門チャンネル'
     syobocalId: 40
@@ -848,7 +880,8 @@ channels:
       - 258  # 停波済み
     nicojkId: 258
     miyoutvId: 'ディーライフ'
-    boardId: 'BSFREE'
+    boardIds:
+      - 'BSFREE'
     threadKeywords:
       - 'Dlife'
     syobocalId: 212
@@ -874,7 +907,8 @@ channels:
     serviceIds:
       - 218
     miyoutvId: '東映チャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - '東映チャンネル'
     syobocalId: 39
@@ -891,7 +925,8 @@ channels:
     serviceIds:
       - 223
     miyoutvId: '映画・chNECO'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'チャンネルNECO'
     syobocalId: 26
@@ -931,7 +966,8 @@ channels:
     serviceIds:
       - 257
     miyoutvId: '日テレジータス'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'G+'
   - name: 'ゴルフネットワーク'
@@ -989,7 +1025,8 @@ channels:
     serviceIds:
       - 330
     miyoutvId: 'キッズステーション'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ｷｯｽﾞｽﾃｰｼｮﾝ'
     syobocalId: 22
@@ -999,7 +1036,8 @@ channels:
     serviceIds:
       - 331
     miyoutvId: 'カートゥーン'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'カートゥーン'
     syobocalId: 23
@@ -1016,7 +1054,8 @@ channels:
       - 'co5245469'
     twitterKeywords:
       - '#at_x'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'AT‐X'
     syobocalId: 20
@@ -1034,7 +1073,8 @@ channels:
     serviceIds:
       - 296
     miyoutvId: 'TBSチャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'TBSチャンネル'
     syobocalId: 52
@@ -1044,7 +1084,8 @@ channels:
     serviceIds:
       - 297
     miyoutvId: 'TBSチャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'TBSチャンネル'
     syobocalId: 215
@@ -1054,7 +1095,8 @@ channels:
     serviceIds:
       - 298
     miyoutvId: 'テレ朝チャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'テレ朝チャンネル'
     syobocalId: 224
@@ -1064,7 +1106,8 @@ channels:
     serviceIds:
       - 299
     miyoutvId: 'テレ朝チャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'テレ朝チャンネル'
     syobocalId: 243
@@ -1074,7 +1117,8 @@ channels:
     serviceIds:
       - 300
     miyoutvId: '日テレプラス'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - '日テレプラス'
     syobocalId: 119
@@ -1083,7 +1127,8 @@ channels:
     type: 'CS'
     serviceIds:
       - 301
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'エンタメ～テレ'
   - name: 'チャンネル銀河'
@@ -1091,7 +1136,8 @@ channels:
     serviceIds:
       - 305
     miyoutvId: '銀河'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - '銀河'
   - name: 'フジテレビONE'
@@ -1099,7 +1145,8 @@ channels:
     serviceIds:
       - 307
     miyoutvId: 'フジテレビONE'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ONE'
     syobocalId: 109
@@ -1109,7 +1156,8 @@ channels:
     serviceIds:
       - 308
     miyoutvId: 'フジテレビTWO'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'TWO'
     syobocalId: 43
@@ -1119,7 +1167,8 @@ channels:
     serviceIds:
       - 309
     miyoutvId: 'フジテレビNEXT'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'NEXT'
     syobocalId: 131
@@ -1197,7 +1246,8 @@ channels:
     serviceIds:
       - 290
     miyoutvId: 'SKY STAGE'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'スカイステージ'
     syobocalId: 167
@@ -1207,7 +1257,8 @@ channels:
     serviceIds:
       - 292
     miyoutvId: '時代劇専門'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - '時代劇専門'
     syobocalId: 221
@@ -1217,7 +1268,8 @@ channels:
     serviceIds:
       - 293
     miyoutvId: 'ファミリー劇場'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ファミリー劇場'
     syobocalId: 42
@@ -1234,7 +1286,8 @@ channels:
     serviceIds:
       - 295
     miyoutvId: 'MONDO TV'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'MONDOTV'
     syobocalId: 47
@@ -1252,7 +1305,8 @@ channels:
     serviceIds:
       - 340
     miyoutvId: 'ディスカバリー'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ﾃﾞｨｽｶﾊﾞ'
     syobocalId: 61
@@ -1262,7 +1316,8 @@ channels:
     serviceIds:
       - 341
     miyoutvId: 'アニマルプラネット'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ｱﾆﾌﾟﾗ'
     syobocalId: 56
@@ -1272,7 +1327,8 @@ channels:
     serviceIds:
       - 342
     miyoutvId: 'ヒストリーチャンネル'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ﾋｽﾄﾘ'
   - name: 'ナショナル ジオグラフィック'
@@ -1280,7 +1336,8 @@ channels:
     serviceIds:
       - 343
     miyoutvId: 'ナショジオ'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'ﾅｼｮｼﾞｵ'
 
@@ -1290,7 +1347,8 @@ channels:
     serviceIds:
       - 349
     miyoutvId: '日テレNEWS24'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'NEWS24'
   - name: 'TBS NEWS'
@@ -1298,7 +1356,8 @@ channels:
     serviceIds:
       - 351
     miyoutvId: 'TBSニュースバード'
-    boardId: 'SKYPER'
+    boardIds:
+      - 'SKYPER'
     threadKeywords:
       - 'TBSニュース'
   - name: 'BBCワールドニュース'

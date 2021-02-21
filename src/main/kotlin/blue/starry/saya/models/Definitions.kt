@@ -18,7 +18,7 @@ data class Definitions(
         val nicoliveCommunityIds: Set<String> = emptySet(),
         val miyoutvId: String? = null,
         val twitterKeywords: Set<String> = emptySet(),
-        val boardId: String? = null,
+        val boardIds: Set<String> = emptySet(),
         val threadKeywords: Set<String> = emptySet(),
         val syobocalId: Int? = null,
         val annictId: Int? = null

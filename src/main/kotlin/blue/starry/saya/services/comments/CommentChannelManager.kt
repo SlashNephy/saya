@@ -155,9 +155,10 @@ object CommentChannelManager {
 
         register(CommentSource.Gochan) {
             val client = Saya5chClient ?: return@register null
-            val board = Boards.find { it.id == channel.boardId } ?: return@register null
+            val ids = channel.boardIds.ifEmpty { return@register null }
+            val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
 
-            LiveGochanResProvider(channel, client, board)
+            LiveGochanResProvider(channel, client, boards)
         }
     }
 
@@ -253,9 +254,10 @@ object CommentChannelManager {
 
         register(CommentSource.Gochan) {
             val client = Saya5chClient ?: return@register null
-            val board = Boards.find { it.id == channel.boardId } ?: return@register null
+            val ids = channel.boardIds.ifEmpty { return@register null }
+            val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
 
-            TimeshiftGochanResProvider(channel, startAt, endAt, client, board)
+            TimeshiftGochanResProvider(channel, startAt, endAt, client, boards)
         }
 
         // コントロール処理 Job
