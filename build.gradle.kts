@@ -1,7 +1,10 @@
+import blue.starry.scriptextender.env
+
 plugins {
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.serialization") version "1.4.30"
     id("com.expediagroup.graphql") version "4.0.0-alpha.13"
+    id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
@@ -112,25 +115,28 @@ kotlin {
     }
 }
 
+val ANNICT_TOKEN by env
+
 graphql {
     client {
         endpoint = "https://api.annict.com/graphql"
         packageName = "blue.starry.saya.services.annict.generated"
-        headers = mapOf("Authorization" to "bearer ${System.getenv("ANNICT_TOKEN")}")
+        if (ANNICT_TOKEN.isPresent) {
+            headers = mapOf("Authorization" to "bearer ${ANNICT_TOKEN.value}")
+        }
         queryFileDirectory = projectDir.resolve("src/main/graphql/annict").toString()
         clientType = com.expediagroup.graphql.plugin.gradle.config.GraphQLClientType.KTOR
     }
 }
 
 tasks.named("graphqlGenerateClient") {
-    if (System.getenv("ANNICT_TOKEN") == null) {
+    if (!ANNICT_TOKEN.isPresent) {
         projectDir.resolve("src/main/graphql/annict/schema.graphql").copyTo(buildDir.resolve("schema.graphql"), true)
     }
 }
 
-// avoid
 tasks.named("graphqlIntrospectSchema") {
-    onlyIf { System.getenv("ANNICT_TOKEN") != null }
+    onlyIf { ANNICT_TOKEN.isPresent }
 }
 
 /*
