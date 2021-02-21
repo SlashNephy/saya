@@ -65,7 +65,7 @@ class LiveGochanResProvider(
 
     private suspend fun doSearchThreadsLoop() {
         boards.forEach { board ->
-            val items = AutoGochanThreadSelector.enumerate(client, channel, board, limit = threadLimit)
+            val items = AutoGochanThreadSelector.enumerate(client, board, limit = threadLimit)
 
             subjects.withLock { subjects ->
                 subjects[board].clear()

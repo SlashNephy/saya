@@ -24,7 +24,7 @@ class TimeshiftGochanResProvider(
         }
 
         boards.asFlow().flatMapConcat { board ->
-            AutoPastGochanThreadSelector.enumerate(client, channel, board, startAt, endAt, allowedRange)
+            AutoPastGochanThreadSelector.enumerate(client, board, startAt, endAt, allowedRange)
         }.map {
             val dat = client.get2chScDat(it.list.server, it.list.board, it.id)
 
