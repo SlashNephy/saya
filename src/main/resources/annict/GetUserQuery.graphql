@@ -1,0 +1,24 @@
+query GetUserQuery($username: String!) {
+  user(username: $username) {
+    annictId
+    avatarUrl
+    backgroundImageUrl
+    createdAt
+    description
+    email
+    followersCount
+    # id
+    name
+    notificationsCount
+    onHoldCount
+    recordsCount
+    stopWatchingCount
+    url
+    username
+    # viewerCanFollow
+    # viewerIsFollowing
+    wannaWatchCount
+    watchedCount
+    watchingCount
+  }
+}

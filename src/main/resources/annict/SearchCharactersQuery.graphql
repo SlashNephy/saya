@@ -1,0 +1,60 @@
+query SearchCharactersQuery(
+	$after: String,
+  $annictIds: [Int!],
+  $before: String,
+  $first: Int,
+  $last: Int,
+  $names: [String!],
+  $orderBy: CharacterOrder
+) {
+  searchCharacters(
+    after: $after,
+    annictIds: $annictIds,
+    before: $before,
+    first: $first,
+    last: $last,
+    names: $names,
+    orderBy: $orderBy
+  ) {
+    edges {
+      cursor
+      node {
+        age
+        # ageEn
+        annictId
+        birthday
+        # birthdayEn
+        bloodType
+        # bloodTypeEn
+        description
+        # descriptionEn
+        descriptionSource
+        # descriptionSourceEn
+        favoriteCharactersCount
+        height
+        # heightEn
+        # id
+        name
+        # nameEn
+        nameKana
+        nationality
+        # nationalityEn
+        nickname
+        # nicknameEn
+        occupation
+        # occupationEn
+        series {
+          annictId
+        }
+        weight
+        # weightEn
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

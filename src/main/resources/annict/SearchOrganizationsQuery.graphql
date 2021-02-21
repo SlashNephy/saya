@@ -1,0 +1,44 @@
+query SearchOrganizationsQuery(
+  $after: String,
+  $annictIds: [Int!],
+  $before: String,
+  $first: Int,
+  $last: Int,
+  $names: [String!],
+  $orderBy: OrganizationOrder
+) {
+  searchOrganizations(
+    after: $after,
+    annictIds: $annictIds,
+    before: $before,
+    first: $first,
+    last: $last,
+    names: $names,
+    orderBy: $orderBy
+  ) {
+    edges {
+      cursor
+      node {
+        annictId
+        favoriteOrganizationsCount
+        # id
+        name
+        # nameEn
+        nameKana
+        staffsCount
+        twitterUsername
+        # twitterUsernameEn
+        url
+        # urlEn
+        wikipediaUrl
+        # wikipediaUrlEn
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
