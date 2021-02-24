@@ -29,3 +29,7 @@ internal fun String?.toBooleanFuzzy(): Boolean {
 fun String.normalize(): String {
     return Normalizer.normalize(this, Normalizer.Form.NFKC)
 }
+
+inline fun <T> repeatMap(count: Int, block: (index: Int) -> T): List<T> {
+    return (0 until count).map(block)
+}

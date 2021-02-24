@@ -1,10 +1,13 @@
 package blue.starry.saya.services.miyoutv
 
+import blue.starry.saya.common.createSayaLogger
+import blue.starry.saya.common.repeatMap
+import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.*
+import mu.KotlinLogging
+import kotlin.time.seconds
 
 class TimeshiftMiyouTVResProvider(
     channel: Definitions.Channel,
@@ -13,29 +16,49 @@ class TimeshiftMiyouTVResProvider(
     private val api: MiyouTVApi,
     private val id: String
 ): TimeshiftCommentProviderImpl(channel, startAt, endAt) {
-    override suspend fun fetch() {
+    private val logger = KotlinLogging.createSayaLogger("saya.services.miyoutv[${channel.name}]")
+
+    override suspend fun fetch(): Unit = coroutineScope {
         comments.withLock { list ->
             list.clear()
         }
 
-        // unit 秒ずつ分割して取得
+        // 10分ずつ分割して取得
         val unit = 600
         val duration = (endAt - startAt).toInt()
 
-        (0 until duration / unit).asFlow().map { i ->
-            api.getComments(
-                id,
-                (startAt + unit * i) * 1000,
-                minOf(startAt + unit * (i + 1), endAt) * 1000
-            ).data.comments.map {
-                it.toSayaComment(
-                    seconds = it.time / 1000.0 - startAt
-                )
+        val newComments = repeatMap(duration / unit) { index ->
+            async {
+                repeat(5) {
+                    while (isActive) {
+                        try {
+                            return@async fetchCommentsInRangeOf(
+                                startAt = (startAt + unit * index) * 1000,
+                                endAt = minOf(startAt + unit * (index + 1), endAt) * 1000
+                            )
+                        } catch (e: CancellationException) {
+                            break
+                        } catch (t: Throwable) {
+                            logger.error(t) { "Failed to fetch comments. Retry in 3 sec." }
+                            delay(3.seconds)
+                        }
+                    }
+                }
+
+                null
             }
-        }.collect {
-            comments.withLock { list ->
-                list.addAll(it)
-            }
+        }.awaitAll().mapNotNull { it }.flatten()
+
+        comments.withLock { comments ->
+            comments.addAll(newComments)
+        }
+    }
+
+    private suspend fun fetchCommentsInRangeOf(startAt: Long, endAt: Long): List<Comment> {
+        return api.getComments(id, startAt, endAt).data.comments.map {
+            it.toSayaComment(
+                seconds = it.time / 1000.0 - startAt
+            )
         }
     }
 }
