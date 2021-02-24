@@ -22,15 +22,15 @@ object AutoPastGochanThreadSelector {
 
         emitAll(
             enumerateThreadList(client, board.server, board.board)
-                .first { ((startAt until endAt) intersect (it.startAt until it.endAt)).any() }
-                .let { enumerateThreads(client, it) }
+                .firstOrNull { ((startAt until endAt) intersect (it.startAt until it.endAt)).any() }
+                ?.let { enumerateThreads(client, it) }
                 // スレッド ID の重複を避ける
-                .distinctUntilChangedBy { it.id }
+                ?.distinctUntilChangedBy { it.id }
                 // スレッドキーワードが空の場合にはすべて, 空ではないならいずれかのキーワードを含むスレッドのみ
-                .filter { keywords.isEmpty() || keywords.any { keyword -> keyword in it.title } }
+                ?.filter { keywords.isEmpty() || keywords.any { keyword -> keyword in it.title } }
                 // (開始時間 - range) ~ 終了時間
-                .filter { it.id.toLong() in (startAt - range) until endAt }
-                .take(limit)
+                ?.filter { it.id.toLong() in (startAt - range) until endAt }
+                ?.take(limit) ?: emptyFlow()
         )
     }
 
