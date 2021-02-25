@@ -1,4 +1,4 @@
-# saya: API server to enhance the web-based watching experiences w/ elaina
+# saya: 📺 API server to enhance the web-based DTV watching experiences w/ elaina
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
