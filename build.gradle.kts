@@ -13,7 +13,7 @@ plugins {
 }
 
 object Versions {
-    const val Ktor = "1.5.1"
+    const val Ktor = "1.5.2"
     const val GraphQLKtor = "4.0.0-alpha.13"
     const val kaml = "0.28.3"
     const val Penicillin = "6.0.5"
