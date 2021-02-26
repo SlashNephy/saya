@@ -102,6 +102,7 @@ kotlin {
                 languageVersion = "1.4"
                 allWarningsAsErrors = true
                 verbose = true
+                useIR = true
             }
         }
     }
