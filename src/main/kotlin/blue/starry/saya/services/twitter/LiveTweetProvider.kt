@@ -7,7 +7,6 @@ import blue.starry.penicillin.endpoints.search
 import blue.starry.penicillin.endpoints.search.search
 import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
-import blue.starry.penicillin.extensions.execute
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.extensions.rateLimit
 import blue.starry.penicillin.models.Status
