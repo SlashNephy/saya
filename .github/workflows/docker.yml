@@ -14,6 +14,8 @@ on:
     types:
       - published
 
+  workflow_dispatch:
+
 env:
   DOCKER_BASE_NAME: slashnephy/saya
 
