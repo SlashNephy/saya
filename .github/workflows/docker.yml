@@ -27,8 +27,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Setup QEMU user-mode emulation
+        uses: docker/setup-qemu-action@v1
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Login to DockerHub
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -45,23 +50,14 @@ jobs:
 
       - name: Build & Push
         uses: docker/build-push-action@v2
+        env:
+          DOCKER_BUILDKIT: 1
         with:
           push: true
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
           tags: ${{ env.DOCKER_BASE_NAME }}:${{ env.DOCKER_TAG }}
-
-      - name: Build & Push (vaapi)
-        uses: docker/build-push-action@v2
-        with:
-          file: ./vaapi.Dockerfile
-          push: true
-          tags: ${{ env.DOCKER_BASE_NAME }}:${{ env.DOCKER_TAG }}-vaapi
-
-      - name: Build & Push (nvenc)
-        uses: docker/build-push-action@v2
-        with:
-          file: ./nvenc.Dockerfile
-          push: true
-          tags: ${{ env.DOCKER_BASE_NAME }}:${{ env.DOCKER_TAG }}-nvenc
+          cache-from: ${{ env.DOCKER_BASE_NAME }}:${{ env.DOCKER_TAG }}
+          build-args: BUILDKIT_INLINE_CACHE=1
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master

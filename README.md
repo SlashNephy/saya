@@ -34,8 +34,6 @@ EPGStation を使用している環境で Web ベースの視聴環境を拡張�
   - 録画番組再生時には次のソースから取得します。
     + [ニコニコ実況 過去ログ API](https://jikkyo.tsukumijima.net/)
     + 5ch 過去ログ
-- TS ファイルから EPG 情報を抽出
-- and more, coming soon...
 
 その他実装予定の機能などは [Roadmap](https://github.com/SlashNephy/saya/projects/1) をご覧ください。
 
@@ -80,12 +78,6 @@ saya は以下のプロジェクトとの併用を想定しています。
   + 開発版のため, 不安定である可能性があります。
 - `slashnephy/saya:<version>`
   + GitHub 上のリリースに対応します。
-- `slashnephy/saya:***-vaapi`
-  + Intel CPU 内蔵 GPU or AMD グラフィックカードのユーザ向けです。
-  + VAAPI によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
-- `slashnephy/saya:***-nvenc`
-  + NVIDIA グラフィックカードのユーザ向けです。
-  + NVEnc によるハードウェアエンコーディングを有効化した ffmpeg を同梱しています。
 
 ### docker-compose
 
@@ -101,8 +93,6 @@ services:
     container_name: saya
     image: slashnephy/saya:latest
     restart: always
-    # `***-nvenc` イメージを使用する場合に必要
-    # runtime: nvidia
     ports:
       - 1017:1017/tcp # いれいな
     # 環境変数で各種設定を行います
@@ -144,18 +134,7 @@ services:
       # モリタポアカウントの資格情報 (null, null)
       MORITAPO_EMAIL: xxx
       MORITAPO_PASSWORD: xxx
-      # /files エンドポイントで TS ファイルを検索するパス (null)
-      # 別途 volume マウントが必要です
-      MOUNT_POINT: /mnt
-      # mirakc-arib へのパス ("/usr/local/bin/mirakc-arib")
-      # Docker イメージを使用している場合は指定不要です
-      MIRAKC_ARIB_PATH: /path/to/mirakc-arib
-      # ffmpeg へのパス ("/usr/local/bin/ffmpeg")
-      # Docker イメージを使用している場合は指定不要です
-      FFMPEG_PATH: /path/to/ffmpeg
     volumes:
-      # 録画 TS ファイルの置き場所
-      - /mnt:/mnt:ro
       # definitions.yml を書き換えて使用したい場合
       # - ./definitions.yml:/app/docs/definitions.yml:ro
 
@@ -170,20 +149,7 @@ services:
   # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
   # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
   mirakurun:
-    container_name: Mirakurun
-    image: chinachu/mirakurun:latest
-    restart: always
-    ports:
-      - 40772:40772/tcp
-    cap_add:
-      - SYS_ADMIN
-      - SYS_NICE
   epgstation:
-    container_name: EPGStation
-    image: l3tnun/epgstation:alpine
-    restart: always
-    ports:
-      - 8888:8888/tcp
 ```
 
 このように `docker-compose.yml` を作成し, 同じディレクトリで docker-compose を実行します。Linux 環境では root 権限で実行する必要があります。

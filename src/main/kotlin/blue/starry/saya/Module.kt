@@ -70,18 +70,6 @@ fun Application.module() {
                 }
             }
 
-            route("files") {
-                getFiles()
-
-                route("{id}") {
-                    getFileById()
-
-                    route("info") {
-                        getFileInfoById()
-                    }
-                }
-            }
-
             route("definitions") {
                 route("channels") {
                     getChannelDefinitions()

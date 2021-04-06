@@ -8,7 +8,6 @@ import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.services.gochan.GochanClient
-import blue.starry.saya.services.mirakc.MirakcAribWrapper
 import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
@@ -26,8 +25,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Paths
 import kotlin.time.minutes
 
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
@@ -127,15 +124,6 @@ val SayaMirakurunApi by lazy {
         logger.info(e) { "Mirakurun/mirakc に接続できません。Mirakurun/mirakc 連携機能は提供しません。" }
         null
     }
-}
-
-val SayaMirakcAribWrapper by lazy {
-    if (!Files.exists(Paths.get(Env.MIRAKC_ARIB_PATH))) {
-        logger.info { "mirakc-arib が見つかりません。mirakc-arib 連携機能は提供しません。" }
-        return@lazy null
-    }
-
-    MirakcAribWrapper(Env.MIRAKC_ARIB_PATH)
 }
 
 val Saya5chClient by lazy {
