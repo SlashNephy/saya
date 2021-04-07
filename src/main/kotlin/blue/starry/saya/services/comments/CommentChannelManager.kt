@@ -46,17 +46,27 @@ object CommentChannelManager {
     private val logger = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
 
     suspend fun findByTarget(target: String): Definitions.Channel? {
-        return if (target.startsWith("jk")) {
+        return when {
             // jk*** から探す
+            target.startsWith("jk") -> {
+                val jk = target.removePrefix("jk").toIntOrNull() ?: return null
 
-            val jk = target.removePrefix("jk").toIntOrNull() ?: return null
-            Channels.find { it.nicojkId == jk }
-        } else {
+                Channels.find { it.nicojkId == jk }
+            }
+            // {Channel Type}_{Service ID} から探す
+            '_' in target -> {
+                val (type, sid) = target.split('_', limit = 2)
+                val serviceId = sid.toIntOrNull() ?: return null
+
+                Channels.find { it.type.name == type && serviceId in it.serviceIds }
+            }
             // Mirakurun 互換 Service ID から探す
+            else -> {
+                val serviceId = target.toLongOrNull() ?: return null
+                val mirakurun = MirakurunDataManager.Services.find { it.id == serviceId } ?: return null
 
-            val serviceId = target.toLongOrNull() ?: return null
-            val mirakurun = MirakurunDataManager.Services.find { it.id == serviceId } ?: return null
-            Channels.find { it.type == mirakurun.type && it.serviceIds.contains(mirakurun.actualId) }
+                Channels.find { it.type == mirakurun.type && mirakurun.actualId in it.serviceIds }
+            }
         }
     }
 
