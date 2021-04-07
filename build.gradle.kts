@@ -13,9 +13,9 @@ plugins {
 }
 
 object Versions {
-    const val Ktor = "1.5.2"
+    const val Ktor = "1.5.3"
     const val GraphQLKtor = "4.0.0-alpha.13"
-    const val kaml = "0.29.0"
+    const val kaml = "0.30.0"
     const val Penicillin = "6.1.0"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
