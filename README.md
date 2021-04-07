@@ -52,13 +52,12 @@ saya は以下のプロジェクトとの併用を想定しています。
              +--------------------------+     +----------------+     +----------------+     +-------------+
 ```
 
-- [Chinachu/Mirakurun](https://github.com/Chinachu/Mirakurun) or [mirakc/mirakc](https://github.com/mirakc/mirakc)
-  - チャンネル情報の取得に使用されます。
-  - Mirakurun と mirakc のどちらでも動作します。なくても動作しますが一部制約が生じます。
-- [l3tnun/EPGStation](https://github.com/l3tnun/EPGStation)
-  - saya を動作させる上では不要です。elaina 上で番組を再生する場合に必要です。
 - [ci7lus/elaina](https://github.com/ci7lus/elaina)
-  - EPGStation を介した番組プレイヤーです。saya の API をフロントエンドで利用しています。
+  - EPGStation を介した Web ベースのプレイヤーです。
+  - コメントの取得に saya を使用しています。
+- [ci7lus/MirakTest](https://github.com/ci7lus/MirakTest)
+  - Mirakurun を介した Electron ベースのプレイヤーです。 (マルチプラットフォーム TVTest のようなもの)
+  - コメントの取得に saya を使用しています。
 
 # Get Started
 
@@ -108,11 +107,7 @@ services:
       # ログレベル ("INFO")
       # 利用可能な値: ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
       SAYA_LOG: DEBUG
-      # 内部データ 更新間隔 [分] (15)
-      SAYA_UPDATE_INTERVAL_MINS: 15
-      # Mirakurun のホスト, ポート番号 ("mirakurun", 40772)
-      MIRAKURUN_HOST: mirakurun
-      MIRAKURUN_PORT: 40772
+
       # Annict のアクセストークン (null)
       # 以下, 未設定でも動作します
       ANNICT_TOKEN: xxx
@@ -137,19 +132,6 @@ services:
     volumes:
       # definitions.yml を書き換えて使用したい場合
       # - ./definitions.yml:/app/docs/definitions.yml:ro
-
-  elaina:
-    container_name: elaina
-    image: ci7lus/elaina:latest
-    restart: always
-    ports:
-      - 1234:1234/tcp
-
-  # Mirakurun/mirakc, EPGStation コンテナの構成例は
-  # https://github.com/l3tnun/docker-mirakurun-epgstation 等を参考にしてください。
-  # サービス名, ポート番号等の変更がある場合には `MIRAKURUN_HOST`, `MIRAKURUN_PORT` の修正が必要になります。
-  mirakurun:
-  epgstation:
 ```
 
 このように `docker-compose.yml` を作成し, 同じディレクトリで docker-compose を実行します。Linux 環境では root 権限で実行する必要があります。
@@ -168,7 +150,7 @@ docker-compose logs -f
 docker-compose down
 ```
 
-`up -d` すると `http://localhost:1017/` に saya が, `http://localhost:1234/` に elaina が起動しているはずです。
+`up -d` すると `http://localhost:1017/` に saya が起動しているはずです。
 
 ## 直接実行
 
@@ -211,7 +193,7 @@ saya の開発には以下のブランチモデルを採用しています。
 
 # Acknowledgments
 
-saya および [ci7lus/elaina](https://github.com/ci7lus/elaina) は次のプロジェクトを利用 / 参考にして実装しています。
+saya は次のプロジェクトを利用 / 参考にして実装しています。
 
 - [tsukumijima/TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus)
 - [tsukumijima/jikkyo-api](https://github.com/tsukumijima/jikkyo-api)

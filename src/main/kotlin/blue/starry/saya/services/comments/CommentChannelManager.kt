@@ -10,7 +10,6 @@ import blue.starry.saya.services.SayaMiyouTVApi
 import blue.starry.saya.services.SayaTwitterClient
 import blue.starry.saya.services.gochan.LiveGochanResProvider
 import blue.starry.saya.services.gochan.TimeshiftGochanResProvider
-import blue.starry.saya.services.mirakurun.MirakurunDataManager
 import blue.starry.saya.services.miyoutv.TimeshiftMiyouTVResProvider
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
 import blue.starry.saya.services.nicolive.TimeshiftNicoliveCommentProvider
@@ -45,7 +44,7 @@ object CommentChannelManager {
 
     private val logger = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
 
-    suspend fun findByTarget(target: String): Definitions.Channel? {
+    fun findByTarget(target: String): Definitions.Channel? {
         return when {
             // jk*** から探す
             target.startsWith("jk") -> {
@@ -60,13 +59,7 @@ object CommentChannelManager {
 
                 Channels.find { it.type.name == type && serviceId in it.serviceIds }
             }
-            // Mirakurun 互換 Service ID から探す
-            else -> {
-                val serviceId = target.toLongOrNull() ?: return null
-                val mirakurun = MirakurunDataManager.Services.find { it.id == serviceId } ?: return null
-
-                Channels.find { it.type == mirakurun.type && mirakurun.actualId in it.serviceIds }
-            }
+            else -> null
         }
     }
 

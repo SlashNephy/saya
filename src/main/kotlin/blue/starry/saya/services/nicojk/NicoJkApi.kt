@@ -2,10 +2,11 @@ package blue.starry.saya.services.nicojk
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.models.CommentInfo
-import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.mirakurun.MirakurunDataManager
+import blue.starry.saya.services.comments.CommentChannelManager
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
@@ -22,12 +23,17 @@ object NicoJkApi {
         CommentLog(it)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getChannels() = SayaHttpClient.get<String>("http://jk.from.tv/api/v2_app/getchannels").let {
         val source = InputSource(StringReader(it))
         val document = DocumentBuilderFactory
             .newInstance()
             .newDocumentBuilder()
-            .parse(source)
+            .run {
+                withContext(Dispatchers.IO) {
+                    parse(source)
+                }
+            }
 
         document.getElementsByTagName("channel").toList() + document.getElementsByTagName("bs_channel").toList()
     }.let { channels ->
@@ -37,7 +43,6 @@ object NicoJkApi {
 
             CommentInfo(
                 channel = jkChannel,
-                service = MirakurunDataManager.Services.find { it.actualId in jkChannel.serviceIds },
                 force = channel.getFirstElementByTagName("force").textContent.toInt(),
                 last = channel.getFirstElementByTagName("last_res").textContent
             )

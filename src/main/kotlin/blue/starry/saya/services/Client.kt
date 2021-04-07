@@ -8,7 +8,6 @@ import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.services.gochan.GochanClient
-import blue.starry.saya.services.mirakurun.MirakurunApi
 import blue.starry.saya.services.miyoutv.MiyouTVApi
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.*
@@ -108,22 +107,6 @@ val SayaMiyouTVApi by lazy {
     }
 
     MiyouTVApi(login.token)
-}
-
-val SayaMirakurunApi by lazy {
-    try {
-        val api = MirakurunApi(Env.MIRAKURUN_HOST, Env.MIRAKURUN_PORT)
-
-        // 接続テスト
-        runBlocking {
-            api.getStatus()
-        }
-
-        api
-    } catch (e: Throwable) {
-        logger.info(e) { "Mirakurun/mirakc に接続できません。Mirakurun/mirakc 連携機能は提供しません。" }
-        null
-    }
 }
 
 val Saya5chClient by lazy {

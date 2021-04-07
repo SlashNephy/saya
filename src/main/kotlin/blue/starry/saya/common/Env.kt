@@ -7,10 +7,7 @@ object Env {
     val SAYA_PORT by int { 1017 }
     val SAYA_BASE_URI by string { "/" }
     val SAYA_LOG by string { "INFO" }
-    val SAYA_UPDATE_INTERVAL_MINS by int { 15 }
 
-    val MIRAKURUN_HOST by string { "mirakurun" }
-    val MIRAKURUN_PORT by int { 40772 }
     val ANNICT_TOKEN by stringOrNull
     val TWITTER_CK by stringOrNull
     val TWITTER_CS by stringOrNull
