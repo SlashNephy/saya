@@ -33,7 +33,8 @@ class TimeshiftNicoliveCommentProvider(
                         try {
                             return@async fetchCommentsInRangeOf(
                                 startAt = startAt + unit * index,
-                                endAt = minOf(startAt + unit * (index + 1) - 1, endAt)
+                                endAt = minOf(startAt + unit * (index + 1) - 1, endAt),
+                                offset = unit * index
                             )
                         } catch (e: CancellationException) {
                             break
@@ -53,7 +54,7 @@ class TimeshiftNicoliveCommentProvider(
         }
     }
 
-    private suspend fun fetchCommentsInRangeOf(startAt: Long, endAt: Long): List<Comment> {
+    private suspend fun fetchCommentsInRangeOf(startAt: Long, endAt: Long, offset: Int): List<Comment> {
         return NicoJkApi.getComments("jk${channel.nicojkId}", startAt, endAt)
             .packets
             .asSequence()
@@ -63,7 +64,7 @@ class TimeshiftNicoliveCommentProvider(
                 it.toSayaComment(
                     source = "ニコニコ実況過去ログAPI [jk${channel.nicojkId}]",
                     sourceUrl = "https://jikkyo.tsukumijima.net/api/kakolog/jk${channel.nicojkId}?starttime=${it.date}&endtime=${it.date + 1}&format=json",
-                    seconds = ((it.date * 1000 + it.dateUsec / 1000) - startAt * 1000) / 1000.0
+                    seconds = ((it.date * 1000 + it.dateUsec / 1000) - startAt * 1000) / 1000.0 + offset
                 )
             }
             .toList()
