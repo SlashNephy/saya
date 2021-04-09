@@ -34,7 +34,8 @@ class TimeshiftMiyouTVResProvider(
                         try {
                             return@async fetchCommentsInRangeOf(
                                 startAt = (startAt + unit * index) * 1000,
-                                endAt = minOf(startAt + unit * (index + 1), endAt) * 1000
+                                endAt = minOf(startAt + unit * (index + 1), endAt) * 1000,
+                                offset = unit * index * 1000
                             )
                         } catch (e: CancellationException) {
                             break
@@ -54,10 +55,10 @@ class TimeshiftMiyouTVResProvider(
         }
     }
 
-    private suspend fun fetchCommentsInRangeOf(startAt: Long, endAt: Long): List<Comment> {
+    private suspend fun fetchCommentsInRangeOf(startAt: Long, endAt: Long, offset: Int): List<Comment> {
         return api.getComments(id, startAt, endAt).data.comments.map {
             it.toSayaComment(
-                seconds = it.time / 1000.0 - startAt
+                seconds = it.time / 1000.0 - startAt + offset
             )
         }
     }
