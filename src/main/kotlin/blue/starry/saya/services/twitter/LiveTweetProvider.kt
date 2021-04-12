@@ -24,6 +24,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
+import org.apache.http.ConnectionClosedException
 import java.time.Duration
 import java.time.Instant
 import kotlin.time.seconds
@@ -45,6 +46,8 @@ class LiveTweetProvider(
                     doStreamLoop(client, keywords)
                 } catch (e: CancellationException) {
                     return@coroutineScope
+                } catch (e: ConnectionClosedException) {
+                    break
                 // レートリミット
                 } catch (e: PenicillinException) {
                     break
