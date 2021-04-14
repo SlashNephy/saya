@@ -421,6 +421,8 @@ channels:
     nicoliveTags:
       - 'チバテレビ'
     miyoutvId: 'チバテレ'
+    nicoliveCommunityIds:
+      - 'co5359761'
     twitterKeywords:
       - '#チバテレ'
     boardIds:
