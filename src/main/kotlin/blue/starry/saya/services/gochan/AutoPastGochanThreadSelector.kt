@@ -5,6 +5,7 @@ import blue.starry.saya.models.Definitions
 import kotlinx.coroutines.flow.*
 import org.jsoup.Jsoup
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 object AutoPastGochanThreadSelector {
     private val threadRangePattern = "^(\\d+)-(\\d+)$".toRegex()
@@ -18,7 +19,7 @@ object AutoPastGochanThreadSelector {
         limit: Int = Int.MAX_VALUE
     ) = flow {
         val keywords = board.keywords.map { it.normalize() }
-        val range = allowedRange.inSeconds.toLong()
+        val range = allowedRange.toDouble(DurationUnit.SECONDS).toLong()
 
         emitAll(
             enumerateThreadList(client, board.server, board.board)

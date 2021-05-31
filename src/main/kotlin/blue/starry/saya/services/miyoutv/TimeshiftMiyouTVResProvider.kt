@@ -7,7 +7,7 @@ import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import kotlinx.coroutines.*
 import mu.KotlinLogging
-import kotlin.time.seconds
+import kotlin.time.Duration
 
 class TimeshiftMiyouTVResProvider(
     channel: Definitions.Channel,
@@ -41,7 +41,7 @@ class TimeshiftMiyouTVResProvider(
                             break
                         } catch (t: Throwable) {
                             logger.error(t) { "Failed to fetch comments. Retry in 3 sec." }
-                            delay(3.seconds)
+                            delay(Duration.seconds(3))
                         }
                     }
                 }

@@ -25,10 +25,10 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import org.apache.http.ConnectionClosedException
-import java.time.Duration
 import java.time.Instant
-import kotlin.time.seconds
+import kotlin.time.Duration
 import kotlin.time.toKotlinDuration
+import java.time.Duration as JavaDuration
 
 class LiveTweetProvider(
     override val channel: Definitions.Channel,
@@ -55,7 +55,7 @@ class LiveTweetProvider(
                     logger.error(t) { "error in doStreamLoop" }
                 }
 
-                delay(5.seconds)
+                delay(Duration.seconds(5))
             }
         }
 
@@ -68,7 +68,7 @@ class LiveTweetProvider(
                 logger.trace(t) { "error in doSearchLoop" }
             }
 
-            delay(5.seconds)
+            delay(Duration.seconds(5))
         }
     }
 
@@ -118,9 +118,9 @@ class LiveTweetProvider(
             val limit = response.rateLimit
 
             if (limit == null || limit.remaining == 0) {
-                delay(15.seconds)
+                delay(Duration.seconds(15))
             } else {
-                val duration = Duration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
+                val duration = JavaDuration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
                 val safeRate = duration / limit.remaining
                 logger.trace { "Ratelimit ${limit.remaining}/${limit.limit}: Sleep $safeRate ($keywords)" }
 

@@ -15,7 +15,6 @@ import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
 import blue.starry.saya.services.nicolive.TimeshiftNicoliveCommentProvider
 import blue.starry.saya.services.twitter.LiveTweetProvider
 import com.charleskorn.kaml.Yaml
-import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
@@ -28,7 +27,7 @@ import mu.KotlinLogging
 import java.nio.file.Paths
 import java.util.*
 import kotlin.io.path.readText
-import kotlin.time.seconds
+import kotlin.time.Duration
 
 object CommentChannelManager {
     private val definitionsPath = Paths.get("docs", "definitions.yml")
@@ -74,7 +73,7 @@ object CommentChannelManager {
      * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
      */
-    fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = GlobalScope.produce<Comment> {
+    fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = GlobalScope.produce {
         val id = UUID.randomUUID()
 
         /**
@@ -108,7 +107,7 @@ object CommentChannelManager {
                                 logger.error(t) { "error in $oldProvider" }
                             }
 
-                            delay(5.seconds)
+                            delay(Duration.seconds(5))
                         }
 
                         logger.debug { "$oldProvider is canceled." }
@@ -180,7 +179,7 @@ object CommentChannelManager {
         controls: Flow<TimeshiftCommentControl>,
         startAt: Long,
         endAt: Long
-    ) = GlobalScope.produce<Comment> {
+    ) = GlobalScope.produce {
         val providers = mutableListOf<TimeshiftCommentProvider>()
 
         /**
@@ -214,7 +213,7 @@ object CommentChannelManager {
                         logger.error(t) { "error in $provider" }
                     }
 
-                    delay(5.seconds)
+                    delay(Duration.seconds(5))
                 }
             }
 

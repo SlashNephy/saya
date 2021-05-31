@@ -24,7 +24,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.net.URL
-import kotlin.time.minutes
+import kotlin.time.Duration
 
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
 private val logger = KotlinLogging.createSayaLogger("saya.client")
@@ -39,7 +39,7 @@ val SayaHttpClient by lazy {
             serializer = KotlinxSerializer()
         }
         engine {
-            requestTimeout = 1.minutes.toLongMilliseconds()
+            requestTimeout = Duration.minutes(1).inWholeMilliseconds
         }
 
         Logging {

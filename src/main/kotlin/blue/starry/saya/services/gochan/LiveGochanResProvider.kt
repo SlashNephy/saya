@@ -12,19 +12,20 @@ import mu.KotlinLogging
 import java.time.ZonedDateTime
 import kotlin.random.Random
 import kotlin.random.nextLong
+import kotlin.time.Duration
 import kotlin.time.seconds
 
 class LiveGochanResProvider(
     override val channel: Definitions.Channel,
     private val client: GochanClient,
     private val boards: List<Definitions.Board>
-): LiveCommentProvider {
+) : LiveCommentProvider {
     override val queue = BroadcastChannel<Comment>(1)
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
-    private val threadSearchInterval = 10.seconds
-    private val resCollectInterval = 5.seconds
+    private val threadSearchInterval = Duration.seconds(10)
+    private val resCollectInterval = Duration.seconds(5)
     private val threadLimit = 5
 
     override suspend fun start() = coroutineScope {

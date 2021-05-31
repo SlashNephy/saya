@@ -8,6 +8,7 @@ import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import blue.starry.saya.services.nicojk.NicoJkApi
 import kotlinx.coroutines.*
 import mu.KotlinLogging
+import kotlin.time.Duration
 import kotlin.time.seconds
 
 class TimeshiftNicoliveCommentProvider(
@@ -40,7 +41,7 @@ class TimeshiftNicoliveCommentProvider(
                             break
                         } catch (t: Throwable) {
                             logger.error(t) { "Failed to fetch comments. Retry in 3 sec." }
-                            delay(3.seconds)
+                            delay(Duration.seconds(3))
                         }
                     }
                 }

@@ -3,7 +3,7 @@ import blue.starry.scriptextender.env
 plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.serialization") version "1.5.0"
-    id("com.expediagroup.graphql") version "4.1.1"
+    id("com.expediagroup.graphql") version "4.0.0-alpha.13"
     id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
@@ -14,7 +14,7 @@ plugins {
 
 object Versions {
     const val Ktor = "1.6.0"
-    const val GraphQLKtor = "4.1.1"
+    const val GraphQLKtor = "4.0.0-alpha.13"
     const val kaml = "0.34.0"
     const val Penicillin = "6.2.0"
     const val CommonsCodec = "1.15"
@@ -52,11 +52,12 @@ object Libraries {
 
     val ExperimentalAnnotations = setOf(
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "kotlinx.coroutines.ObsoleteCoroutinesApi",
+        "kotlinx.coroutines.DelicateCoroutinesApi",
         "kotlin.io.path.ExperimentalPathApi",
         "kotlin.time.ExperimentalTime",
         "kotlin.ExperimentalStdlibApi",
-        "kotlinx.coroutines.FlowPreview",
-        "io.ktor.util.KtorExperimentalAPI"
+        "kotlinx.coroutines.FlowPreview"
     )
 }
 
@@ -97,7 +98,7 @@ kotlin {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
                 apiVersion = "1.5"
                 languageVersion = "1.5"
-                allWarningsAsErrors = true
+                // allWarningsAsErrors = true
                 verbose = true
             }
         }

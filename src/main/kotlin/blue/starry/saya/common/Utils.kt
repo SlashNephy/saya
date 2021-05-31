@@ -1,6 +1,7 @@
 package blue.starry.saya.common
 
 import java.text.Normalizer
+import java.util.*
 
 operator fun <A, B> Pair<A, B>?.component1(): A? {
     return this?.first
@@ -22,7 +23,7 @@ internal fun String?.toBooleanFuzzy(): Boolean {
     return when {
         this == null -> false
         toIntOrNull() == 1 -> true
-        else -> toLowerCase().toBoolean()
+        else -> lowercase(Locale.getDefault()).toBoolean()
     }
 }
 
