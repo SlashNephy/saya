@@ -1,9 +1,9 @@
 import blue.starry.scriptextender.env
 
 plugins {
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.serialization") version "1.4.30"
-    id("com.expediagroup.graphql") version "4.0.0-alpha.13"
+    kotlin("jvm") version "1.5.0"
+    kotlin("plugin.serialization") version "1.5.0"
+    id("com.expediagroup.graphql") version "4.1.1"
     id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
@@ -13,19 +13,19 @@ plugins {
 }
 
 object Versions {
-    const val Ktor = "1.5.3"
-    const val GraphQLKtor = "4.0.0-alpha.13"
-    const val kaml = "0.30.0"
-    const val Penicillin = "6.1.0"
+    const val Ktor = "1.6.0"
+    const val GraphQLKtor = "4.1.1"
+    const val kaml = "0.34.0"
+    const val Penicillin = "6.2.0"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
-    const val Guava = "30.1-jre"
+    const val Guava = "30.1.1-jre"
 
-    const val KotlinLogging = "2.0.4"
+    const val KotlinLogging = "2.0.6"
     const val Logback = "1.2.3"
-    const val jansi = "1.18"
+    const val jansi = "2.3.2"
 
-    const val JUnit = "5.7.0"
+    const val JUnit = "5.7.1"
 }
 
 object Libraries {
@@ -62,9 +62,6 @@ object Libraries {
 
 repositories {
     mavenCentral()
-
-    // TODO: It should be removed by May 1, 2021. It is potentially used by kotlinx-datetime.
-    maven(url = "https://kotlin.bintray.com/kotlinx")
 }
 
 dependencies {
@@ -98,11 +95,10 @@ kotlin {
         compilations.all {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
-                apiVersion = "1.4"
-                languageVersion = "1.4"
+                apiVersion = "1.5"
+                languageVersion = "1.5"
                 allWarningsAsErrors = true
                 verbose = true
-                useIR = true
             }
         }
     }
