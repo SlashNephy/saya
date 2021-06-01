@@ -809,24 +809,28 @@ channels:
       - 242
     nicojkId: 242
     miyoutvId: 'J SPORTS'
+    syobocalId: 258
   - name: 'J SPORTS 2'
     type: 'BS'
     serviceIds:
       - 243
     nicojkId: 243
     miyoutvId: 'J SPORTS'
+    syobocalId: 259
   - name: 'J SPORTS 3'
     type: 'BS'
     serviceIds:
       - 244
     nicojkId: 244
     miyoutvId: 'J SPORTS'
+    syobocalId: 260
   - name: 'J SPORTS 4'
     type: 'BS'
     serviceIds:
       - 245
     nicojkId: 245
     miyoutvId: 'J SPORTS'
+    syobocalId: 261
   - name: 'BS釣りビジョン'
     type: 'BS'
     serviceIds:
@@ -941,6 +945,7 @@ channels:
     serviceIds:
       - 254
     miyoutvId: 'GAORA'
+    syobocalId: 265
   - name: '日テレジータス'
     type: 'CS'
     serviceIds:
@@ -1291,6 +1296,7 @@ channels:
     miyoutvId: '日テレNEWS24'
     boardIds:
       - 'SKYPER_NEWS24'
+    syobocalId: 263
   - name: 'TBS NEWS'
     type: 'CS'
     serviceIds:
