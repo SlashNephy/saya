@@ -1,6 +1,9 @@
 # DTV チャンネルと実況チャンネルの関連付け
+$schema: 'https://raw.githubusercontent.com/SlashNephy/saya/dev/docs/definitions-schema.yml'
 channels:
-  # 地上波 GR (全国)
+  # https://cal.syoboi.jp/mng?Action=ShowChList
+  # https://annict.jp/db/channels
+  # GR (全国)
   - name: 'NHK 総合'
     type: 'GR'
     serviceIds:
@@ -121,6 +124,7 @@ channels:
       - 'ch2646437'
     twitterKeywords:
       - '#Eテレ'
+      - '#etv'
     boardIds:
       - 'ETV'
     syobocalId: 2
@@ -355,12 +359,11 @@ channels:
     syobocalId: 3
     annictId: 3
 
-  # 地上波 GR (ローカル)
+  # GR (ローカル)
   - name: 'TOKYO MX'
     type: 'GR'
     serviceIds:
-      - 23608  # 東京: TOKYO MX1
-      - 23610  # 東京: TOKYO MX2
+      - 23608  # 東京: TOKYO MX
     nicojkId: 9
     nicoliveTags:
       - 'TOKYO_MX'
@@ -381,6 +384,9 @@ channels:
     serviceIds:
       - 1088  # 関東広域: 放送大学
     nicojkId: 231
+    twitterKeywords:
+      - '#放送大学'
+    syobocalId: 158
   - name: 'テレ玉'
     type: 'GR'
     serviceIds:
@@ -504,7 +510,7 @@ channels:
     syobocalId: 87
     annictId: 87
 
-  # 衛星放送 BS
+  # BS
   - name: 'NHKBS1'
     type: 'BS'
     serviceIds:
@@ -615,6 +621,7 @@ channels:
       - 'co5176122'
     twitterKeywords:
       - '#BSテレ東'
+      - '#BSジャパン'
     boardIds:
       - 'BSFREE_TX'
     syobocalId: 15
@@ -647,6 +654,8 @@ channels:
     miyoutvId: 'WOWOWプライム'
     nicoliveCommunityIds:
       - 'co5251972'
+    twitterKeywords:
+      - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWP'
     syobocalId: 204
@@ -661,6 +670,8 @@ channels:
     miyoutvId: 'WOWOWライブ'
     nicoliveCommunityIds:
       - 'co5251976'
+    twitterKeywords:
+      - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWL'
     syobocalId: 97
@@ -675,6 +686,8 @@ channels:
     miyoutvId: 'WOWOWシネマ'
     nicoliveCommunityIds:
       - 'co5251983'
+    twitterKeywords:
+      - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWC'
     syobocalId: 76
@@ -685,6 +698,8 @@ channels:
       - 200
     nicojkId: 200
     miyoutvId: 'スターチャンネル'
+    twitterKeywords:
+      - '#スターチャンネル'
     boardIds:
       - 'BSPAY_STAR'
     syobocalId: 217
@@ -695,6 +710,8 @@ channels:
       - 201
     nicojkId: 201
     miyoutvId: 'スターチャンネル'
+    twitterKeywords:
+      - '#スターチャンネル'
     boardIds:
       - 'BSPAY_STAR'
     syobocalId: 219
@@ -705,6 +722,8 @@ channels:
       - 202
     nicojkId: 202
     miyoutvId: 'スターチャンネル'
+    twitterKeywords:
+      - '#スターチャンネル'
     boardIds:
       - 'BSPAY_STAR'
     syobocalId: 214
@@ -749,6 +768,8 @@ channels:
     serviceIds:
       - 231
     nicojkId: 231
+    twitterKeywords:
+      - '#放送大学'
     boardIds:
       - 'BSFREE_OUJ'
     syobocalId: 158
@@ -757,7 +778,10 @@ channels:
     type: 'BS'
     serviceIds:
       - 232
+      - 233
     nicojkId: 231
+    twitterKeywords:
+      - '#放送大学'
     boardIds:
       - 'BSFREE_OUJ'
     syobocalId: 158
@@ -773,6 +797,8 @@ channels:
     miyoutvId: 'グリーンチャンネル'
     nicoliveCommunityIds:
       - 'co5217651'
+    twitterKeywords:
+      - '#グリーンチャンネル'
     boardIds:
       - 'SKYPER_GREEN'
   - name: 'BSアニマックス'
@@ -783,6 +809,8 @@ channels:
     miyoutvId: 'BSアニマックス'
     nicoliveCommunityIds:
       - 'co5296297'
+    twitterKeywords:
+      - '#アニマックス'
     boardIds:
       - 'SKYPER_ANIMAX'
     syobocalId: 197
@@ -808,6 +836,8 @@ channels:
     serviceIds:
       - 242
     nicojkId: 242
+    twitterKeywords:
+      - '#jsports'
     miyoutvId: 'J SPORTS'
     syobocalId: 258
   - name: 'J SPORTS 2'
@@ -815,6 +845,8 @@ channels:
     serviceIds:
       - 243
     nicojkId: 243
+    twitterKeywords:
+      - '#jsports'
     miyoutvId: 'J SPORTS'
     syobocalId: 259
   - name: 'J SPORTS 3'
@@ -822,6 +854,8 @@ channels:
     serviceIds:
       - 244
     nicojkId: 244
+    twitterKeywords:
+      - '#jsports'
     miyoutvId: 'J SPORTS'
     syobocalId: 260
   - name: 'J SPORTS 4'
@@ -829,12 +863,16 @@ channels:
     serviceIds:
       - 245
     nicojkId: 245
+    twitterKeywords:
+      - '#jsports'
     miyoutvId: 'J SPORTS'
     syobocalId: 261
   - name: 'BS釣りビジョン'
     type: 'BS'
     serviceIds:
       - 251
+    twitterKeywords:
+      - '#釣りビジョン'
     nicojkId: 251
     miyoutvId: 'BS釣りビジョン'
   - name: 'WOWOWプラス'
@@ -842,6 +880,8 @@ channels:
     serviceIds:
       - 252
     nicojkId: 252
+    twitterKeywords:
+      - '#WOWOW'
     miyoutvId: 'イマジカBS・映画'
     syobocalId: 251
   - name: '日本映画専門ch'
@@ -849,6 +889,8 @@ channels:
     serviceIds:
       - 255
     nicojkId: 255
+    twitterKeywords:
+      - '#日本映画専門CH'
     miyoutvId: 'BS日本映画専門'
     boardIds:
       - 'SKYPER_225'
@@ -859,6 +901,8 @@ channels:
     serviceIds:
       - 256
     nicojkId: 256
+    twitterKeywords:
+      - '#ディズニーチャンネル'
     miyoutvId: 'ディズニーチャンネル'
     syobocalId: 163
     annictId: 163
@@ -868,6 +912,8 @@ channels:
       - 258  # 停波済み
     nicojkId: 258
     miyoutvId: 'ディーライフ'
+    twitterKeywords:
+      - '#Dlife'
     boardIds:
       - 'BSFREE_DLIFE'
     syobocalId: 212
@@ -877,6 +923,8 @@ channels:
     serviceIds:
       - 531
     nicojkId: 231
+    twitterKeywords:
+      - '#放送大学'
     boardIds:
       - 'BSFREE_OUJ'
     syobocalId: 159
@@ -887,9 +935,17 @@ channels:
       - 910  # 停波済み
     nicojkId: 910
 
-  # 衛星放送 CS
-  # カテゴリ名は https://www.skyperfectv.co.jp/channel/list.html に準拠
-  # CS: 映画
+  # CS
+  - name: 'ショップチャンネル'
+    type: 'CS'
+    serviceIds:
+      - 55
+    miyoutvId: 'ショップチャンネル'
+  - name: 'QVC'
+    type: 'CS'
+    serviceIds:
+      - 161
+    miyoutvId: 'QVC'
   - name: '東映チャンネル'
     type: 'CS'
     serviceIds:
@@ -906,7 +962,7 @@ channels:
     miyoutvId: '衛星劇場'
     syobocalId: 220
     annictId: 221
-  - name: '映画・チャンネルNECO'
+  - name: '映画・chNECO'
     type: 'CS'
     serviceIds:
       - 223
@@ -931,8 +987,6 @@ channels:
     miyoutvId: 'ムービープラス'
     syobocalId: 152
     annictId: 152
-
-  # CS: スポーツ
   - name: 'スカイA'
     type: 'CS'
     serviceIds:
@@ -940,7 +994,7 @@ channels:
     miyoutvId: 'スカイA'
     syobocalId: 84
     annictId: 84
-  - name: 'GAORA SPORTS'
+  - name: 'GAORA'
     type: 'CS'
     serviceIds:
       - 254
@@ -953,98 +1007,55 @@ channels:
     miyoutvId: '日テレジータス'
     boardIds:
       - 'SKYPER_GTASU'
+    syobocalId: 266
   - name: 'ゴルフネットワーク'
     type: 'CS'
     serviceIds:
       - 262
     miyoutvId: 'ゴルフネット'
-
-  # CS: 音楽
-  - name: 'スペースシャワーTV プラス'
+  - name: 'SKY STAGE'
     type: 'CS'
     serviceIds:
-      - 321
-    miyoutvId: 'スペシャプラス'
-    syobocalId: 211
-    annictId: 211
-  - name: 'スペースシャワーTV'
-    type: 'CS'
-    serviceIds:
-      - 322
-    miyoutvId: 'スペースシャワーTV'
-    syobocalId: 194
-    annictId: 195
-  - name: 'MTV'
-    type: 'CS'
-    serviceIds:
-      - 323
-    miyoutvId: 'MTV'
-    syobocalId: 235
-    annictId: 242
-  - name: 'ミュージック・エア'
-    type: 'CS'
-    serviceIds:
-      - 324
-      - 326  # 停波済み
-    miyoutvId: 'ミュージック・エア'
-  - name: 'エムオン!'
-    type: 'CS'
-    serviceIds:
-      - 325
-    miyoutvId: 'エムオン'
-    syobocalId: 151
-    annictId: 151
-  - name: '歌謡ポップス'
-    type: 'CS'
-    serviceIds:
-      - 329
-    miyoutvId: '歌謡ポップス'
-    syobocalId: 222
-    annictId: 223
-
-  # CS: アニメ
-  - name: 'キッズステーション'
-    type: 'CS'
-    serviceIds:
-      - 330
-    miyoutvId: 'キッズステーション'
+      - 290
+    miyoutvId: 'SKY STAGE'
     boardIds:
-      - 'SKYPER_KIDS'
-    syobocalId: 22
-    annictId: 22
-  - name: 'カートゥーン ネットワーク'
+      - 'SKYPER_SKYSTAGE'
+    syobocalId: 167
+    annictId: 169
+  - name: '時代劇専門ch'
     type: 'CS'
     serviceIds:
-      - 331
-    miyoutvId: 'カートゥーン'
+      - 292
+    miyoutvId: '時代劇専門'
     boardIds:
-      - 'SKYPER_CARTOON'
-    syobocalId: 23
-    annictId: 23
-  - name: 'AT-X'
+      - 'SKYPER_292'
+    syobocalId: 221
+    annictId: 222
+  - name: 'ファミリー劇場'
     type: 'CS'
     serviceIds:
-      - 333
-    nicojkId: 333
-    nicoliveTags:
-      - 'AT-X'
-    miyoutvId: 'AT−X'
-    nicoliveCommunityIds:
-      - 'co5245469'
-    twitterKeywords:
-      - '#at_x'
+      - 293
+    miyoutvId: 'ファミリー劇場'
     boardIds:
-      - 'SKYPER_ATX'
-    syobocalId: 20
-    annictId: 20
-  - name: 'ディズニーXD'
+      - 'SKYPER_FAMILY'
+    syobocalId: 42
+    annictId: 42
+  - name: 'ホームドラマCH'
     type: 'CS'
     serviceIds:
-      - 334  # 停波済み
-    syobocalId: 161
-    annictId: 161
-
-  # CS: 総合エンターテイメント
+      - 294
+    miyoutvId: 'ホームドラマ'
+    syobocalId: 153
+    annictId: 153
+  - name: 'MONDO TV'
+    type: 'CS'
+    serviceIds:
+      - 295
+    miyoutvId: 'MONDO TV'
+    boardIds:
+      - 'SKYPER_MONDO'
+    syobocalId: 47
+    annictId: 47
   - name: 'TBSチャンネル1'
     type: 'CS'
     serviceIds:
@@ -1090,11 +1101,11 @@ channels:
       - 'SKYPER_NTVPLUS'
     syobocalId: 119
     annictId: 119
-  - name: 'エンタメ～テレ☆シネドラバラエティ'
+  - name: 'エンタメ〜テレ'
     type: 'CS'
     serviceIds:
       - 301
-  - name: 'チャンネル銀河'
+  - name: '銀河◆歴ドラ・サスペ'
     type: 'CS'
     serviceIds:
       - 305
@@ -1128,32 +1139,6 @@ channels:
       - 'SKYPER_CXNEXT'
     syobocalId: 131
     annictId: 131
-  - name: 'スカチャン0'
-    type: 'CS'
-    serviceIds:
-      - 800
-    miyoutvId: 'スカサカ'
-    annictId: 150
-  - name: 'スカチャン1'
-    type: 'CS'
-    serviceIds:
-      - 801
-    miyoutvId: 'スカチャン'
-    annictId: 175
-  - name: 'スカチャン2'
-    type: 'CS'
-    serviceIds:
-      - 802
-    miyoutvId: 'スカチャン'
-    syobocalId: 174
-    annictId: 168
-  - name: 'スカチャン3'
-    type: 'CS'
-    serviceIds:
-      - 805
-    miyoutvId: 'スカチャン'
-
-  # CS: 海外ドラマ・バラエティ
   - name: 'スーパー！ドラマTV'
     type: 'CS'
     serviceIds:
@@ -1163,7 +1148,7 @@ channels:
       - 'SKYPER_DRAMA'
     syobocalId: 216
     annictId: 216
-  - name: 'AXN'
+  - name: 'AXN 海外ドラマ'
     type: 'CS'
     serviceIds:
       - 311
@@ -1178,7 +1163,7 @@ channels:
     miyoutvId: 'FOX'
     boardIds:
       - 'SKYPER_DRAMA'
-  - name: '女性チャンネル♪LaLa TV'
+  - name: '女性ch/LaLa'
     type: 'CS'
     serviceIds:
       - 314
@@ -1198,64 +1183,97 @@ channels:
     type: 'CS'
     serviceIds:
       - 317
-  - name: 'M net'
+  - name: 'Mnet'
     type: 'CS'
     serviceIds:
       - 318
-
-  # CS: 国内ドラマ・バラエティ・舞台
-  - name: 'TAKARAZUKA SKY STAGE'
+  - name: 'スペシャプラス'
     type: 'CS'
     serviceIds:
-      - 290
-    miyoutvId: 'SKY STAGE'
+      - 321
+    miyoutvId: 'スペシャプラス'
+    syobocalId: 211
+    annictId: 211
+  - name: 'スペースシャワーTV'
+    type: 'CS'
+    serviceIds:
+      - 322
+    miyoutvId: 'スペースシャワーTV'
+    syobocalId: 194
+    annictId: 195
+  - name: 'MTV'
+    type: 'CS'
+    serviceIds:
+      - 323
+    miyoutvId: 'MTV'
+    syobocalId: 235
+    annictId: 242
+  - name: 'ミュージック・エア'
+    type: 'CS'
+    serviceIds:
+      - 324
+      - 326  # 停波済み
+    miyoutvId: 'ミュージック・エア'
+  - name: 'エムオン!'
+    type: 'CS'
+    serviceIds:
+      - 325
+    miyoutvId: 'エムオン'
+    syobocalId: 151
+    annictId: 151
+  - name: '歌謡ポップス'
+    type: 'CS'
+    serviceIds:
+      - 329
+    miyoutvId: '歌謡ポップス'
+    syobocalId: 222
+    annictId: 223
+  - name: 'キッズステーション'
+    type: 'CS'
+    serviceIds:
+      - 330
+    miyoutvId: 'キッズステーション'
     boardIds:
-      - 'SKYPER_SKYSTAGE'
-    syobocalId: 167
-    annictId: 169
-  - name: '時代劇専門チャンネル'
+      - 'SKYPER_KIDS'
+    syobocalId: 22
+    annictId: 22
+  - name: 'カートゥーン'
     type: 'CS'
     serviceIds:
-      - 292
-    miyoutvId: '時代劇専門'
+      - 331
+    miyoutvId: 'カートゥーン'
     boardIds:
-      - 'SKYPER_292'
-    syobocalId: 221
-    annictId: 222
-  - name: 'ファミリー劇場'
+      - 'SKYPER_CARTOON'
+    syobocalId: 23
+    annictId: 23
+  - name: 'AT-X'
     type: 'CS'
     serviceIds:
-      - 293
-    miyoutvId: 'ファミリー劇場'
+      - 333
+    nicojkId: 333
+    nicoliveTags:
+      - 'AT-X'
+    miyoutvId: 'AT−X'
+    nicoliveCommunityIds:
+      - 'co5245469'
+    twitterKeywords:
+      - '#at_x'
     boardIds:
-      - 'SKYPER_FAMILY'
-    syobocalId: 42
-    annictId: 42
-  - name: 'ホームドラマチャンネル'
+      - 'SKYPER_ATX'
+    syobocalId: 20
+    annictId: 20
+  - name: 'ディズニーXD'
     type: 'CS'
     serviceIds:
-      - 294
-    miyoutvId: 'ホームドラマ'
-    syobocalId: 153
-    annictId: 153
-  - name: 'MONDO TV'
+      - 334  # 停波済み
+    syobocalId: 161
+    annictId: 161
+  - name: 'ディズニージュニア'
     type: 'CS'
     serviceIds:
-      - 295
-    miyoutvId: 'MONDO TV'
-    boardIds:
-      - 'SKYPER_MONDO'
-    syobocalId: 47
-    annictId: 47
-  - name: '旅チャンネル'
-    type: 'CS'
-    serviceIds:
-      - 362  # 停波済み
-    syobocalId: 176
-    annictId: 177
-
-  # CS: ドキュメンタリー
-  - name: 'ディスカバリーチャンネル'
+      - 339
+    miyoutvId: 'ディズニージュニア'
+  - name: 'ディスカバリー'
     type: 'CS'
     serviceIds:
       - 340
@@ -1280,15 +1298,13 @@ channels:
     miyoutvId: 'ヒストリーチャンネル'
     boardIds:
       - 'SKYPER_HISTORY'
-  - name: 'ナショナル ジオグラフィック'
+  - name: 'ナショジオ'
     type: 'CS'
     serviceIds:
       - 343
     miyoutvId: 'ナショジオ'
     boardIds:
       - 'SKYPER_NATIONAL'
-
-  # CS: ニュース
   - name: '日テレNEWS24'
     type: 'CS'
     serviceIds:
@@ -1304,7 +1320,7 @@ channels:
     miyoutvId: 'TBSニュースバード'
     boardIds:
       - 'SKYPER_TBSNEWS'
-  - name: 'BBCワールドニュース'
+  - name: 'BBCワールド'
     type: 'CS'
     serviceIds:
       - 353
@@ -1314,35 +1330,29 @@ channels:
     serviceIds:
       - 354
     miyoutvId: 'CNNj'
-
-  # CS: 教育
-  - name: 'ディズニージュニア'
+  - name: '旅チャンネル'
     type: 'CS'
     serviceIds:
-      - 339
-    miyoutvId: 'ディズニージュニア'
+      - 362  # 停波済み
+    syobocalId: 176
+    annictId: 177
   - name: '囲碁・将棋チャンネル'
     type: 'CS'
     serviceIds:
       - 363
     miyoutvId: '囲碁・将棋チャンネル'
-
-  # CS: ショッピング
-  - name: 'ショップチャンネル'
+  - name: 'スポーツライブ+'
     type: 'CS'
     serviceIds:
-      - 55
-    miyoutvId: 'ショップチャンネル'
-  - name: 'QVC'
+      - 800
+    miyoutvId: 'スカサカ'
+    annictId: 150
+  - name: 'スカチャン1'
     type: 'CS'
     serviceIds:
-      - 161
-    miyoutvId: 'QVC'
-  - name: 'スカパー!プロモ'
-    type: 'CS'
-    serviceIds:
-      - 100
-    miyoutvId: 'スカパープロモ'
+      - 801
+    miyoutvId: 'スカチャン'
+    annictId: 175
 
 # 5ch 板と実況チャンネルの関連付け
 # boards[].id と channels[].boardIds が対応
