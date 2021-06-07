@@ -6,7 +6,6 @@ FROM --platform=$BUILDPLATFORM gradle:jdk8 AS cache
 WORKDIR /app
 ENV GRADLE_USER_HOME /app/gradle
 COPY *.gradle.kts gradle.properties /app/
-COPY src/main/graphql/ /app/src/main/graphql/
 ## Full build if there are any deps changes
 RUN gradle shadowJar --parallel --no-daemon --quiet
 
