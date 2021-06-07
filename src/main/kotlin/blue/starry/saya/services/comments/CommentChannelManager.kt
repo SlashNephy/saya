@@ -4,8 +4,8 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.models.TimeshiftCommentControl
-import blue.starry.saya.services.Saya5chClient
-import blue.starry.saya.services.SayaTwitterClient
+import blue.starry.saya.services.createSaya5chClient
+import blue.starry.saya.services.createSayaTwitterClient
 import blue.starry.saya.services.gochan.LiveGochanResProvider
 import blue.starry.saya.services.gochan.TimeshiftGochanResProvider
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
@@ -146,14 +146,14 @@ object CommentChannelManager {
         }
 
         register(CommentSource.Twitter) {
-            val client = SayaTwitterClient ?: return@register null
+            val client = createSayaTwitterClient() ?: return@register null
             val keywords = channel.twitterKeywords.ifEmpty { return@register null }
 
             LiveTweetProvider(channel, client, keywords)
         }
 
         register(CommentSource.Gochan) {
-            val client = Saya5chClient ?: return@register null
+            val client = createSaya5chClient() ?: return@register null
             val ids = channel.boardIds.ifEmpty { return@register null }
             val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
 
@@ -245,7 +245,7 @@ object CommentChannelManager {
         }
         
         register(CommentSource.Gochan) {
-            val client = Saya5chClient ?: return@register null
+            val client = createSaya5chClient() ?: return@register null
             val ids = channel.boardIds.ifEmpty { return@register null }
             val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
 

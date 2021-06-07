@@ -5,7 +5,7 @@ import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
-import blue.starry.saya.services.SayaHttpClient
+import blue.starry.saya.services.createSayaHttpClient
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.flow.collect
@@ -21,7 +21,7 @@ class NicoliveMessageWebSocket(
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
     suspend fun start() {
-        SayaHttpClient.webSocket(room.messageServer.uri) {
+        createSayaHttpClient().webSocket(room.messageServer.uri) {
             logger.debug { "mws:connect" }
 
             handshake()

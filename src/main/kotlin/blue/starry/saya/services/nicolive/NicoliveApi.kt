@@ -1,14 +1,14 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.parseObject
-import blue.starry.saya.services.SayaHttpClient
+import blue.starry.saya.services.createSayaHttpClient
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.jsoup.Jsoup
 
 object NicoliveApi {
     suspend fun getLivePrograms(tag: String): SearchPrograms {
-        return SayaHttpClient.get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&sort=startTime&limit=20&searchWord=$tag&searchTargets=tagsExact&order=desc") {
+        return createSayaHttpClient().get<String>("https://api.cas.nicovideo.jp/v2/search/programs.json?liveStatus=onair&sort=startTime&limit=20&searchWord=$tag&searchTargets=tagsExact&order=desc") {
             header("X-Frontend-Id", "89")
             header("X-Model-Name", "iPhone10,1")
             header("X-Connection-Environment", "wifi")
@@ -20,7 +20,7 @@ object NicoliveApi {
     }
 
     suspend fun getEmbeddedData(url: String): EmbeddedData {
-        return SayaHttpClient.get<String>(url)
+        return createSayaHttpClient().get<String>(url)
             .let {
                 Jsoup.parse(it)
             }
