@@ -6,4 +6,3 @@ build/*
 hs_err_pid*
 
 src/test/*
-.graphqlconfig

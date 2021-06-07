@@ -7,8 +7,7 @@ object Env {
     val SAYA_PORT by int { 1017 }
     val SAYA_BASE_URI by string { "/" }
     val SAYA_LOG by string { "INFO" }
-
-    val ANNICT_TOKEN by stringOrNull
+    
     val TWITTER_CK by stringOrNull
     val TWITTER_CS by stringOrNull
     val TWITTER_AT by stringOrNull
@@ -19,8 +18,6 @@ object Env {
     val GOCHAN_AUTH_UA by stringOrNull
     val GOCHAN_AUTH_X_2CH_UA by stringOrNull
     val GOCHAN_UA by stringOrNull
-    val MORITAPO_EMAIL by stringOrNull
-    val MORITAPO_PASSWORD by stringOrNull
 }
 
 private fun boolean(default: () -> Boolean): ReadOnlyProperty<Env, Boolean> = ReadOnlyProperty { _, property ->

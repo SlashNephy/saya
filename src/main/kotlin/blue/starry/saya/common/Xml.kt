@@ -9,10 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun Document.getFirstElementByTagName(tagName: String): Element? {
-    return documentElement.getFirstElementByTagName(tagName)
-}
-
 fun Element.getFirstElementByTagName(tagName: String): Element? {
     return getElementsByTagName(tagName).asSequence().firstOrNull() as? Element
 }
@@ -47,7 +43,5 @@ inline fun <T> XmlModel.delegate(tagName: String? = null, crossinline block: (El
 }
 
 fun XmlModel.string(tagName: String? = null) = delegate(tagName) { it.textContent!! }
-fun XmlModel.stringOrNull(tagName: String? = null) = delegate(tagName) { it.textContent ?: null }
 
 fun XmlModel.int(tagName: String? = null) = delegate(tagName) { it.textContent.toInt() }
-fun XmlModel.intOrNull(tagName: String? = null) = delegate(tagName) { it.textContent?.toIntOrNull() }

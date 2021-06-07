@@ -8,8 +8,6 @@ import blue.starry.penicillin.core.session.config.token
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.services.gochan.GochanClient
-import blue.starry.saya.services.miyoutv.MiyouTVApi
-import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.engine.cio.*
@@ -19,11 +17,8 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
-import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import java.net.URL
 import kotlin.time.Duration
 
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
@@ -79,34 +74,6 @@ val SayaTwitterClient by lazy {
             }
         }
     }
-}
-
-val SayaAnnictClient by lazy {
-    val token = Env.ANNICT_TOKEN
-    if (token == null) {
-        logger.info { "Annict の資格情報が設定されていません。Annict 連携機能は提供しません。" }
-        return@lazy null
-    }
-
-    GraphQLKtorClient(url = URL("https://api.annict.com/graphql")) {
-        defaultRequest {
-            header(HttpHeaders.Authorization, "bearer $token")
-        }
-    }
-}
-
-val SayaMiyouTVApi by lazy {
-    val (email, pass) = Env.MORITAPO_EMAIL to Env.MORITAPO_PASSWORD
-    if (email == null || pass == null) {
-        logger.info { "MiyouTV の資格情報が設定されていません。MiyouTV 連携機能は提供しません。" }
-        return@lazy null
-    }
-
-    val login = runBlocking {
-        MiyouTVApi.login(email, pass)
-    }
-
-    MiyouTVApi(login.token)
 }
 
 val Saya5chClient by lazy {

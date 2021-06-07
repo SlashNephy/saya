@@ -10,11 +10,6 @@ data class GochanRes(
     val text: String
 )
 
-data class GochanThread(
-    val id: String,
-    val title: String
-)
-
 data class GochanSubjectItem(
     val threadId: String,
     val title: String,

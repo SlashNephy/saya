@@ -1,16 +1,13 @@
 package blue.starry.saya.services.comments
 
 import blue.starry.saya.common.createSayaLogger
-import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.models.TimeshiftCommentControl
 import blue.starry.saya.services.Saya5chClient
-import blue.starry.saya.services.SayaMiyouTVApi
 import blue.starry.saya.services.SayaTwitterClient
 import blue.starry.saya.services.gochan.LiveGochanResProvider
 import blue.starry.saya.services.gochan.TimeshiftGochanResProvider
-import blue.starry.saya.services.miyoutv.TimeshiftMiyouTVResProvider
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
 import blue.starry.saya.services.nicolive.TimeshiftNicoliveCommentProvider
 import blue.starry.saya.services.twitter.LiveTweetProvider
@@ -246,14 +243,7 @@ object CommentChannelManager {
         register(CommentSource.Nicolive) {
             TimeshiftNicoliveCommentProvider(channel, startAt, endAt)
         }
-
-        register(CommentSource.Gochan) {
-            val api = SayaMiyouTVApi ?: return@register null
-            val id = channel.miyoutvId ?: return@register null
-
-            TimeshiftMiyouTVResProvider(channel, startAt, endAt, api, id)
-        }
-
+        
         register(CommentSource.Gochan) {
             val client = Saya5chClient ?: return@register null
             val ids = channel.boardIds.ifEmpty { return@register null }

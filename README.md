@@ -108,9 +108,6 @@ services:
       # 利用可能な値: ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
       SAYA_LOG: DEBUG
 
-      # Annict のアクセストークン (null)
-      # 以下, 未設定でも動作します
-      ANNICT_TOKEN: xxx
       # Twitter の資格情報 (null, null, null, null)
       TWITTER_CK: xxx
       TWITTER_CS: xxx
@@ -126,9 +123,6 @@ services:
       GOCHAN_AUTH_UA: xxx
       GOCHAN_AUTH_X_2CH_UA: xxx
       GOCHAN_UA: xxx
-      # モリタポアカウントの資格情報 (null, null)
-      MORITAPO_EMAIL: xxx
-      MORITAPO_PASSWORD: xxx
     volumes:
       # definitions.yml を書き換えて使用したい場合
       # - ./definitions.yml:/app/docs/definitions.yml:ro

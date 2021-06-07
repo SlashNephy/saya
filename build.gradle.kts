@@ -1,27 +1,23 @@
-import blue.starry.scriptextender.env
-
 plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.serialization") version "1.5.0"
-    id("com.expediagroup.graphql") version "4.0.0-alpha.13"
     id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("com.adarshr.test-logger") version "3.0.0"
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
 }
 
 object Versions {
     const val Ktor = "1.6.0"
-    const val GraphQLKtor = "4.0.0-alpha.13"
     const val kaml = "0.34.0"
     const val Penicillin = "6.2.0"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
     const val Guava = "30.1.1-jre"
 
-    const val KotlinLogging = "2.0.6"
+    const val KotlinLogging = "2.0.8"
     const val Logback = "1.2.3"
     const val jansi = "2.3.2"
 
@@ -36,7 +32,6 @@ object Libraries {
     const val KtorClientApache = "io.ktor:ktor-client-apache:${Versions.Ktor}"
     const val KtorClientSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
     const val KtorClientLogging = "io.ktor:ktor-client-logging:${Versions.Ktor}"
-    const val GraphQLKtor = "com.expediagroup:graphql-kotlin-ktor-client:${Versions.GraphQLKtor}"
 
     const val kaml = "com.charleskorn.kaml:kaml:${Versions.kaml}"
     const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
@@ -73,7 +68,6 @@ dependencies {
     implementation(Libraries.KtorClientApache)
     implementation(Libraries.KtorClientSerialization)
     implementation(Libraries.KtorClientLogging)
-    implementation(Libraries.GraphQLKtor)
 
     implementation(Libraries.kaml)
     implementation(Libraries.Penicillin)
@@ -111,30 +105,6 @@ kotlin {
             languageSettings.useExperimentalAnnotation(it)
         }
     }
-}
-
-val ANNICT_TOKEN by env
-
-graphql {
-    client {
-        endpoint = "https://api.annict.com/graphql"
-        packageName = "blue.starry.saya.services.annict.generated"
-        if (ANNICT_TOKEN.isPresent) {
-            headers = mapOf("Authorization" to "bearer ${ANNICT_TOKEN.value}")
-        }
-        queryFileDirectory = projectDir.resolve("src/main/graphql/annict").toString()
-        clientType = com.expediagroup.graphql.plugin.gradle.config.GraphQLClientType.KTOR
-    }
-}
-
-tasks.named("graphqlGenerateClient") {
-    if (!ANNICT_TOKEN.isPresent) {
-        projectDir.resolve("src/main/graphql/annict/schema.graphql").copyTo(buildDir.resolve("schema.graphql"), true)
-    }
-}
-
-tasks.named("graphqlIntrospectSchema") {
-    onlyIf { ANNICT_TOKEN.isPresent }
 }
 
 /*
