@@ -20,11 +20,14 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
     suspend fun start() {
-        createSayaHttpClient().webSocket(data.site.relive.webSocketUrl) {
-            logger.debug { "ws:connect" }
+        val client = createSayaHttpClient()
+        client.use {
+            it.webSocket(data.site.relive.webSocketUrl) {
+                logger.debug { "ws:connect" }
 
-            handshake()
-            consumeFrames()
+                handshake()
+                consumeFrames()
+            }
         }
     }
 

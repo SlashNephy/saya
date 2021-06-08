@@ -5,7 +5,6 @@ import blue.starry.saya.models.CommentSource
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.models.TimeshiftCommentControl
 import blue.starry.saya.services.createSaya5chClient
-import blue.starry.saya.services.createSayaTwitterClient
 import blue.starry.saya.services.gochan.LiveGochanResProvider
 import blue.starry.saya.services.gochan.TimeshiftGochanResProvider
 import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
@@ -148,10 +147,9 @@ object CommentChannelManager {
         }
 
         register(CommentSource.Twitter) {
-            val client = createSayaTwitterClient() ?: return@register null
             val keywords = channel.twitterKeywords.ifEmpty { return@register null }
 
-            LiveTweetProvider(channel, client, keywords)
+            LiveTweetProvider(channel, keywords)
         }
 
         register(CommentSource.Gochan) {

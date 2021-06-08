@@ -57,7 +57,7 @@ fun createSayaHttpClient(): HttpClient {
     }
 }
 
-fun createSayaTwitterClient(): ApiClient? {
+fun createSayaTwitterClient(apache: Boolean = false): ApiClient? {
     val (ck, cs) = Env.TWITTER_CK to Env.TWITTER_CS
     val (at, ats) = Env.TWITTER_AT to Env.TWITTER_ATS
     if (ck == null || cs == null || at == null || ats == null) {
@@ -71,7 +71,7 @@ fun createSayaTwitterClient(): ApiClient? {
             token(at, ats)
         }
         // For streaming API stability
-        httpClient(Apache) {
+        httpClient(if (apache) Apache else CIO) {
             install(HttpTimeout) {
                 socketTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
             }

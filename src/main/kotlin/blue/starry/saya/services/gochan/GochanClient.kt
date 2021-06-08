@@ -29,9 +29,12 @@ class GochanClient(
             append("ID", "")
             append("PW", "")
         }
-        val response = createSayaHttpClient().submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
-            userAgent(authUA)
-            header("X-2ch-UA", authX2chUA)
+        val client = createSayaHttpClient()
+        val response = client.use {
+            it.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
+                userAgent(authUA)
+                header("X-2ch-UA", authX2chUA)
+            }
         }
 
         if (':' !in response) {
@@ -58,10 +61,13 @@ class GochanClient(
             append("appkey", appKey)
         }
 
-        return createSayaHttpClient().submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
-            userAgent(ua)
-            headers.appendAll(additionalHeaders)
-            expectSuccess = false
+        val client = createSayaHttpClient()
+        return client.use {
+            it.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
+                userAgent(ua)
+                headers.appendAll(additionalHeaders)
+                expectSuccess = false
+            }
         }
     }
 
@@ -69,20 +75,29 @@ class GochanClient(
      * スレッド一覧を取得する
      */
     suspend fun getSubject(server: String, board: String): String {
-        return createSayaHttpClient().get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
-            userAgent(ua)
-        }.toString(defaultCharset)
+        val client = createSayaHttpClient()
+        return client.use {
+            it.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
+                userAgent(ua)
+            }.toString(defaultCharset)
+        }
     }
 
     suspend fun get2chScDat(server: String, board: String, threadId: String): String {
-        return createSayaHttpClient().get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
-            userAgent(ua)
-        }.toString(defaultCharset)
+        val client = createSayaHttpClient()
+        return client.use {
+            it.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
+                userAgent(ua)
+            }.toString(defaultCharset)
+        }
     }
 
     suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
-        return createSayaHttpClient().get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
-            userAgent(ua)
+        val client = createSayaHttpClient()
+        return client.use {
+            it.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
+                userAgent(ua)
+            }
         }
     }
 }

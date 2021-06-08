@@ -9,12 +9,14 @@ import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.extensions.rateLimit
+import blue.starry.penicillin.extensions.use
 import blue.starry.penicillin.models.Status
 import blue.starry.saya.common.Env
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.LiveCommentProvider
+import blue.starry.saya.services.createSayaTwitterClient
 import io.ktor.util.date.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -32,7 +34,6 @@ import java.time.Duration as JavaDuration
 
 class LiveTweetProvider(
     override val channel: Definitions.Channel,
-    private val client: ApiClient,
     private val keywords: Set<String>
 ): LiveCommentProvider {
     override val queue = BroadcastChannel<Comment>(1)
@@ -42,8 +43,12 @@ class LiveTweetProvider(
     override suspend fun start() = coroutineScope {
         if (Env.TWITTER_PREFER_STREAMING_API) {
             while (isActive) {
+                val client = createSayaTwitterClient(true) ?: return@coroutineScope
+                
                 try {
-                    doStreamLoop(client, keywords)
+                    client.use {
+                        doStreamLoop(it, keywords)
+                    }
                 } catch (e: CancellationException) {
                     return@coroutineScope
                 } catch (e: ConnectionClosedException) {
@@ -53,6 +58,7 @@ class LiveTweetProvider(
                     break
                 } catch (t: Throwable) {
                     logger.error(t) { "error in doStreamLoop" }
+                    break
                 }
 
                 delay(Duration.seconds(5))
@@ -60,8 +66,12 @@ class LiveTweetProvider(
         }
 
         while (isActive) {
+            val client = createSayaTwitterClient() ?: return@coroutineScope
+            
             try {
-                doSearchLoop(client, keywords)
+                client.use {
+                    doSearchLoop(it, keywords)
+                }
             } catch (e: CancellationException) {
                 break
             } catch (t: Throwable) {

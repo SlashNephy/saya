@@ -21,11 +21,14 @@ class NicoliveMessageWebSocket(
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
     suspend fun start() {
-        createSayaHttpClient().webSocket(room.messageServer.uri) {
-            logger.debug { "mws:connect" }
+        val client = createSayaHttpClient()
+        client.use {
+            it.webSocket(room.messageServer.uri) {
+                logger.debug { "mws:connect" }
 
-            handshake()
-            consumeFrames()
+                handshake()
+                consumeFrames()
+            }
         }
     }
 
