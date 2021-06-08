@@ -12,6 +12,7 @@ import blue.starry.saya.services.nicolive.LiveNicoliveCommentProvider
 import blue.starry.saya.services.nicolive.TimeshiftNicoliveCommentProvider
 import blue.starry.saya.services.twitter.LiveTweetProvider
 import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlConfiguration
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
@@ -33,7 +34,8 @@ object CommentChannelManager {
     val Boards: List<Definitions.Board>
 
     init {
-        val definitions = Yaml.default.decodeFromString<Definitions>(definitionsPath.readText())
+        val yaml = Yaml(configuration = YamlConfiguration(strictMode = false))
+        val definitions = yaml.decodeFromString<Definitions>(definitionsPath.readText())
         Channels = definitions.channels
         Boards = definitions.boards
     }
