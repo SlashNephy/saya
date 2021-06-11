@@ -53,10 +53,16 @@ object CommentChannelManager {
             '_' in target -> {
                 val (type, sid) = target.split('_', limit = 2)
                 val serviceId = sid.toIntOrNull() ?: return null
+                val channelType = Definitions.Channel.Type.values().find { it.name == type } ?: Definitions.Channel.Type.GR
 
-                Channels.find { it.type.name == type && serviceId in it.serviceIds }
+                Channels.find { it.type == channelType && serviceId in it.serviceIds }
             }
-            else -> null
+            // {Service ID} から探す
+            else -> {
+                val serviceId = target.toIntOrNull() ?: return null
+
+                Channels.find { serviceId in it.serviceIds }
+            }
         }
     }
 

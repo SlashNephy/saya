@@ -8,7 +8,6 @@ import blue.starry.saya.models.TimeshiftCommentControl
 import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.nicojk.NicoJkApi
 import io.ktor.application.*
-import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.response.*
 import io.ktor.routing.*
