@@ -71,93 +71,95 @@ object CommentChannelManager {
      * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
      */
-    fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = GlobalScope.produce {
-        val id = UUID.randomUUID()
+    suspend fun subscribeLiveComments(channel: Definitions.Channel, sources: List<CommentSource>) = coroutineScope { 
+        produce {
+            val id = UUID.randomUUID()
 
-        /**
-         * 実況チャンネル [Definitions.Channel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
-         *
-         * 外側の produce が終了したときに購読数が 0 なら自動で処理も停止させる
-         *
-         * @param source コメント配信元 [CommentSource]
-         * @param block リアルタイムコメントを取得する [LiveCommentProvider]
-         */
-        suspend fun register(source: CommentSource, block: () -> LiveCommentProvider?) {
-            if (source !in sources) {
-                return
-            }
-
-            val (provider, job) = liveProvidersLock.withLock {
-                val (oldProvider, oldJob) = liveProviders.getOrPut(channel to source) {
-                    (block() ?: return) to null
+            /**
+             * 実況チャンネル [Definitions.Channel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
+             *
+             * 外側の produce が終了したときに購読数が 0 なら自動で処理も停止させる
+             *
+             * @param source コメント配信元 [CommentSource]
+             * @param block リアルタイムコメントを取得する [LiveCommentProvider]
+             */
+            suspend fun register(source: CommentSource, block: () -> LiveCommentProvider?) {
+                if (source !in sources) {
+                    return
                 }
 
-                // 取得 Job
-                // 前回の Job が走っていなければ再生成
-                if (oldJob == null || !oldJob.isActive) {
-                    liveProviders[channel to source] = oldProvider to GlobalScope.launch {
-                        while (isActive) {
-                            try {
-                                oldProvider.start()
-                            } catch (e: CancellationException) {
-                                break
-                            } catch (t: Throwable) {
-                                logger.error(t) { "error in $oldProvider" }
+                val (provider, job) = liveProvidersLock.withLock {
+                    val (oldProvider, oldJob) = liveProviders.getOrPut(channel to source) {
+                        (block() ?: return) to null
+                    }
+
+                    // 取得 Job
+                    // 前回の Job が走っていなければ再生成
+                    if (oldJob == null || !oldJob.isActive) {
+                        liveProviders[channel to source] = oldProvider to launch {
+                            while (isActive) {
+                                try {
+                                    oldProvider.start()
+                                } catch (e: CancellationException) {
+                                    break
+                                } catch (t: Throwable) {
+                                    logger.error(t) { "error in $oldProvider" }
+                                }
+
+                                delay(Duration.seconds(5))
                             }
 
-                            delay(Duration.seconds(5))
+                            logger.debug { "$oldProvider is canceled." }
+                        }
+                    }
+
+                    liveProviders[channel to source]!!
+                }
+
+                // 配信 Job
+                // クライアントが接続を閉じると終了する
+                launch {
+                    try {
+                        provider.subscription.create(id)
+                        logger.debug { "create id: $id [${channel.name}, $source]" }
+
+                        provider.queue.openSubscription().consumeEach {
+                            send(it)
+                        }
+                    } finally {
+                        provider.subscription.remove(id)
+                        logger.debug { "remove id: $id [${channel.name}, $source]" }
+
+                        if (provider.subscription.isEmpty()) {
+                            logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
+                            job!!.cancel()
                         }
 
-                        logger.debug { "$oldProvider is canceled." }
+                        logger.debug { "$this is closing... ($id) [${channel.name}, $source]" }
                     }
                 }
-
-                liveProviders[channel to source]!!
             }
 
-            // 配信 Job
-            // クライアントが接続を閉じると終了する
-            launch {
-                try {
-                    provider.subscription.create(id)
-                    logger.debug { "create id: $id [${channel.name}, $source]" }
+            register(CommentSource.Nicolive) {
+                // チャンネル名をタグ名として追加
+                val tags = channel.nicoliveTags.plus(channel.name)
 
-                    provider.queue.openSubscription().consumeEach {
-                        send(it)
-                    }
-                } finally {
-                    provider.subscription.remove(id)
-                    logger.debug { "remove id: $id [${channel.name}, $source]" }
-
-                    if (provider.subscription.isEmpty()) {
-                        logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
-                        job!!.cancel()
-                    }
-
-                    logger.debug { "$this is closing... ($id) [${channel.name}, $source]" }
-                }
+                LiveNicoliveCommentProvider(channel, tags)
             }
-        }
 
-        register(CommentSource.Nicolive) {
-            // チャンネル名をタグ名として追加
-            val tags = channel.nicoliveTags.plus(channel.name)
+            register(CommentSource.Twitter) {
+                val keywords = channel.twitterKeywords.ifEmpty { return@register null }
 
-            LiveNicoliveCommentProvider(channel, tags)
-        }
+                LiveTweetProvider(channel, keywords)
+            }
 
-        register(CommentSource.Twitter) {
-            val keywords = channel.twitterKeywords.ifEmpty { return@register null }
+            register(CommentSource.Gochan) {
+                val client = createSaya5chClient() ?: return@register null
+                val ids = channel.boardIds.ifEmpty { return@register null }
+                val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
 
-            LiveTweetProvider(channel, keywords)
-        }
-
-        register(CommentSource.Gochan) {
-            val client = createSaya5chClient() ?: return@register null
-            val ids = channel.boardIds.ifEmpty { return@register null }
-            val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
-
-            LiveGochanResProvider(channel, client, boards)
+                LiveGochanResProvider(channel, client, boards)
+            }
         }
     }
 
@@ -170,136 +172,138 @@ object CommentChannelManager {
      * @param startAt タイムシフト開始時刻 (エポック秒)
      * @param endAt タイムシフト終了時刻 (エポック秒)
      */
-    fun subscribeTimeshiftComments(
+    suspend fun subscribeTimeshiftComments(
         channel: Definitions.Channel,
         sources: List<CommentSource>,
         controls: Flow<TimeshiftCommentControl>,
         startAt: Long,
         endAt: Long
-    ) = GlobalScope.produce {
-        val providers = mutableListOf<TimeshiftCommentProvider>()
-
-        /**
-         * 実況チャンネル [Definitions.Channel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
-         *
-         * 外側の produce が終了したときに自動で処理も停止させる
-         *
-         * @param source コメント配信元 [CommentSource]
-         * @param block タイムシフトコメントを取得する [TimeshiftCommentProvider]
-         */
-        suspend fun register(source: CommentSource, block: () -> TimeshiftCommentProvider?) {
-            if (source !in sources) {
-                return
+    ) = coroutineScope {
+        produce {
+            val providers = mutableListOf<TimeshiftCommentProvider>()
+    
+            /**
+             * 実況チャンネル [Definitions.Channel] と コメント配信元 [CommentSource] を紐付け, コメントの取得処理を開始する
+             *
+             * 外側の produce が終了したときに自動で処理も停止させる
+             *
+             * @param source コメント配信元 [CommentSource]
+             * @param block タイムシフトコメントを取得する [TimeshiftCommentProvider]
+             */
+            suspend fun register(source: CommentSource, block: () -> TimeshiftCommentProvider?) {
+                if (source !in sources) {
+                    return
+                }
+    
+                val provider = block() ?: return
+                providers += provider
+    
+                // 取得 Job
+                launch {
+                    while (isActive) {
+                        try {
+                            provider.fetch()
+    
+                            logger.debug { "Fetch Job: $provider is done." }
+                            break
+                        } catch (e: CancellationException) {
+                            logger.debug { "Fetch Job: $provider is canceled." }
+                            break
+                        } catch (t: Throwable) {
+                            logger.error(t) { "error in $provider" }
+                        }
+    
+                        delay(Duration.seconds(5))
+                    }
+                }
+    
+                // シーク Job
+                launch {
+                    while (isActive) {
+                        try {
+                            provider.start()
+                        } catch (e: CancellationException) {
+                            break
+                        } catch (t: Throwable) {
+                            logger.error(t) { "error in $provider" }
+                        }
+                    }
+    
+                    logger.debug { "Seek Job: $provider is canceled." }
+                }
+    
+                // 配信 Job
+                launch {
+                    provider.use { provider ->
+                        provider.queue.consumeEach {
+                            send(it)
+                            logger.trace { "Timeshift: $it" }
+                        }
+                    }
+                }
             }
-
-            val provider = block() ?: return
-            providers += provider
-
-            // 取得 Job
+    
+            register(CommentSource.Nicolive) {
+                TimeshiftNicoliveCommentProvider(channel, startAt, endAt)
+            }
+    
+            register(CommentSource.Gochan) {
+                val client = createSaya5chClient() ?: return@register null
+                val ids = channel.boardIds.ifEmpty { return@register null }
+                val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
+    
+                TimeshiftGochanResProvider(channel, startAt, endAt, client, boards)
+            }
+    
+            // コントロール処理 Job
             launch {
-                while (isActive) {
-                    try {
-                        provider.fetch()
-
-                        logger.debug { "Fetch Job: $provider is done." }
-                        break
-                    } catch (e: CancellationException) {
-                        logger.debug { "Fetch Job: $provider is canceled." }
-                        break
-                    } catch (t: Throwable) {
-                        logger.error(t) { "error in $provider" }
+                controls.collect { control ->
+                    when (control.action) {
+                        /**
+                         * クライアントの準備ができ, コメントの配信を開始する命令
+                         *   {"action": "Ready"}
+                         *
+                         * コメントの配信を再開する命令
+                         *   {"action": "Resume"}
+                         */
+                        TimeshiftCommentControl.Action.Ready,
+                        TimeshiftCommentControl.Action.Resume -> {
+                            providers.map {
+                                launch {
+                                    it.resume()
+                                }
+                            }.joinAll()
+                        }
+    
+                        /**
+                         * コメントの配信を一時停止する命令
+                         *   {"action": "Pause"}
+                         */
+                        //
+                        TimeshiftCommentControl.Action.Pause -> {
+                            providers.map {
+                                launch {
+                                    it.pause()
+                                }
+                            }.joinAll()
+                        }
+    
+                        /**
+                         * コメントの位置を同期する命令
+                         *   {"action": "Sync", "seconds": 10.0}
+                         */
+                        TimeshiftCommentControl.Action.Sync -> {
+                            providers.map {
+                                launch {
+                                    it.seek(control.seconds)
+                                    it.resume()
+                                }
+                            }.joinAll()
+                        }
                     }
-
-                    delay(Duration.seconds(5))
+    
+                    logger.debug { "TimeshiftCommentControl: $control" }
                 }
-            }
-
-            // シーク Job
-            launch {
-                while (isActive) {
-                    try {
-                        provider.start()
-                    } catch (e: CancellationException) {
-                        break
-                    } catch (t: Throwable) {
-                        logger.error(t) { "error in $provider" }
-                    }
-                }
-
-                logger.debug { "Seek Job: $provider is canceled." }
-            }
-
-            // 配信 Job
-            launch {
-                provider.use { provider ->
-                    provider.queue.consumeEach {
-                        send(it)
-                        logger.trace { "Timeshift: $it" }
-                    }
-                }
-            }
-        }
-
-        register(CommentSource.Nicolive) {
-            TimeshiftNicoliveCommentProvider(channel, startAt, endAt)
-        }
-        
-        register(CommentSource.Gochan) {
-            val client = createSaya5chClient() ?: return@register null
-            val ids = channel.boardIds.ifEmpty { return@register null }
-            val boards = Boards.filter { it.id in ids }.ifEmpty { return@register null }
-
-            TimeshiftGochanResProvider(channel, startAt, endAt, client, boards)
-        }
-
-        // コントロール処理 Job
-        launch {
-            controls.collect { control ->
-                when (control.action) {
-                    /**
-                     * クライアントの準備ができ, コメントの配信を開始する命令
-                     *   {"action": "Ready"}
-                     *
-                     * コメントの配信を再開する命令
-                     *   {"action": "Resume"}
-                     */
-                    TimeshiftCommentControl.Action.Ready,
-                    TimeshiftCommentControl.Action.Resume -> {
-                        providers.map {
-                            launch {
-                                it.resume()
-                            }
-                        }.joinAll()
-                    }
-
-                    /**
-                     * コメントの配信を一時停止する命令
-                     *   {"action": "Pause"}
-                     */
-                    //
-                    TimeshiftCommentControl.Action.Pause -> {
-                        providers.map {
-                            launch {
-                                it.pause()
-                            }
-                        }.joinAll()
-                    }
-
-                    /**
-                     * コメントの位置を同期する命令
-                     *   {"action": "Sync", "seconds": 10.0}
-                     */
-                    TimeshiftCommentControl.Action.Sync -> {
-                        providers.map {
-                            launch {
-                                it.seek(control.seconds)
-                                it.resume()
-                            }
-                        }.joinAll()
-                    }
-                }
-
-                logger.debug { "TimeshiftCommentControl: $control" }
             }
         }
     }
