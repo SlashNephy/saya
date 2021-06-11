@@ -48,6 +48,7 @@ object Libraries {
     val ExperimentalAnnotations = setOf(
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         "kotlinx.coroutines.ObsoleteCoroutinesApi",
+        "kotlinx.coroutines.DelicateCoroutinesApi",
         "kotlin.io.path.ExperimentalPathApi",
         "kotlin.time.ExperimentalTime",
         "kotlin.ExperimentalStdlibApi",
