@@ -8,6 +8,7 @@ import blue.starry.saya.models.TimeshiftCommentControl
 import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.nicojk.NicoJkApi
 import io.ktor.application.*
+import io.ktor.client.features.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -66,7 +67,11 @@ fun Route.wsTimeshiftCommentsByTarget() {
 fun Route.getCommentInfo() {
     get {
         call.respond(
-            NicoJkApi.getChannels().toList()
+            try {
+                NicoJkApi.getChannels().toList()
+            } catch (e: ResponseException) {
+                emptyList()
+            }
         )
     }
 }
@@ -78,7 +83,11 @@ fun Route.getCommentInfoByTarget() {
         call.respondOr404 {
             val channel = CommentChannelManager.findByTarget(target) ?: return@respondOr404 null
 
-            NicoJkApi.getChannels().find { it.channel.nicojkId == channel.nicojkId }
+            try {
+                NicoJkApi.getChannels().find { it.channel.nicojkId == channel.nicojkId }
+            } catch (e: ResponseException) {
+                null
+            }
         }
     }
 }
