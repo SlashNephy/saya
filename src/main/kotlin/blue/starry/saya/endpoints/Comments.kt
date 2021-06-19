@@ -21,13 +21,16 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import mu.KLogger
 import mu.KotlinLogging
 import org.xml.sax.SAXParseException
 
-private val logger = KotlinLogging.createSayaLogger("saya.endpoints")
-private val jsonWithDefault = Json {
-    encodeDefaults = true
-}
+private val logger: KLogger
+    get() = KotlinLogging.createSayaLogger("saya.endpoints")
+private val jsonWithDefault: Json
+    get() = Json {
+        encodeDefaults = true
+    }
 
 fun Route.wsLiveCommentsByTarget() {
     webSocket {

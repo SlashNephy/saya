@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.decodeFromString
+import mu.KLogger
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.util.*
@@ -27,19 +28,20 @@ import kotlin.io.path.readText
 import kotlin.time.Duration
 
 object CommentChannelManager {
-    private val definitionsPath = Paths.get("docs", "definitions.yml")
-
     val Channels: List<Definitions.Channel>
     val Boards: List<Definitions.Board>
 
     init {
+        val definitionsPath = Paths.get("docs", "definitions.yml")
         val yaml = Yaml(configuration = YamlConfiguration(strictMode = false))
         val definitions = yaml.decodeFromString<Definitions>(definitionsPath.readText())
+
         Channels = definitions.channels
         Boards = definitions.boards
     }
 
-    private val logger = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
+    private val logger: KLogger
+        get() = KotlinLogging.createSayaLogger("saya.CommentChannelManager")
 
     fun findByTarget(target: String): Definitions.Channel? {
         return when {
@@ -249,7 +251,7 @@ object CommentChannelManager {
         register(CommentSource.Nicolive) {
             TimeshiftNicoliveCommentProvider(channel, startAt, endAt)
         }
-        
+
         register(CommentSource.Gochan) {
             val client = createSaya5chClient() ?: return@register null
             val ids = channel.boardIds.ifEmpty { return@register null }
