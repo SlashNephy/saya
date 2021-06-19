@@ -58,6 +58,8 @@ channels:
       - 61440  # 大分: NHK総合・大分
       - 62464  # 佐賀: NHK総合・佐賀
       - 63488  # 沖縄: NHK総合・沖縄
+    networkId: 15
+    flag: 1
     nicojkId: 1
     nicoliveTags:
       - 'NHK総合'
@@ -115,6 +117,8 @@ channels:
       - 61448  # 大分: NHKEテレ大分
       - 62472  # 佐賀: NHKEテレ佐賀
       - 63496  # 沖縄: NHKEテレ沖縄
+    networkId: 15
+    flag: 2
     nicojkId: 2
     nicoliveTags:
       - 'NHK_Eテレ'
@@ -168,6 +172,8 @@ channels:
       - 58408  # 長崎: NIB長崎国際テレビ
       - 59432  # 鹿児島: KYT鹿児島読売TV
       - 61464  # 大分: TOSテレビ大分
+    networkId: 15
+    flag: 4
     nicojkId: 4
     nicoliveTags:
       - '日本テレビ'
@@ -215,6 +221,8 @@ channels:
       - 59424  # 鹿児島: KKB鹿児島放送
       - 61472  # 大分: OAB大分朝日放送
       - 63520  # 沖縄: QAB琉球朝日放送
+    networkId: 15
+    flag: 32
     nicojkId: 5
     nicoliveTags:
       - 'テレビ朝日'
@@ -266,6 +274,8 @@ channels:
       - 60432  # 宮崎: MRT宮崎放送
       - 61456  # 大分: OBS大分放送
       - 63504  # 沖縄: RBCテレビ
+    networkId: 15
+    flag: 8
     nicojkId: 6
     nicoliveTags:
       - 'TBSテレビ'
@@ -295,6 +305,8 @@ channels:
       - 33840  # 愛知: テレビ愛知
       - 41008  # 大阪: テレビ大阪
       - 56360  # 福岡: TVQ九州放送
+    networkId: 15
+    flag: 64
     nicojkId: 7
     nicoliveTags:
       - 'テレビ東京'
@@ -345,6 +357,8 @@ channels:
       - 60440  # 宮崎: UMKテレビ宮崎
       - 62480  # 佐賀: STSサガテレビ
       - 63544  # 沖縄: 沖縄テレビ(OTV)
+    networkId: 15
+    flag: 16
     nicojkId: 8
     nicoliveTags:
       - 'フジテレビ'
@@ -364,6 +378,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 23608  # 東京: TOKYO MX
+    networkId: 15
     nicojkId: 9
     nicoliveTags:
       - 'TOKYO_MX'
@@ -383,6 +398,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 1088  # 関東広域: 放送大学
+    networkId: 15
     nicojkId: 231
     twitterKeywords:
       - '#放送大学'
@@ -391,6 +407,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 29752  # 埼玉: テレ玉
+    networkId: 15
     nicojkId: 10
     nicoliveTags:
       - 'テレ玉'
@@ -407,6 +424,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 24632  # 神奈川: tvk
+    networkId: 15
     nicojkId: 11
     nicoliveTags:
       - 'tvk'
@@ -423,6 +441,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 27704  # 千葉: チバテレビ
+    networkId: 15
     nicojkId: 12
     nicoliveTags:
       - 'チバテレビ'
@@ -439,6 +458,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 25656  # 群馬: 群馬テレビ
+    networkId: 15
     miyoutvId: '群馬テレビ'
     boardIds:
       - 'LOCAL_GTV'
@@ -448,6 +468,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 28728  # 栃木: とちぎテレビ
+    networkId: 15
     miyoutvId: 'とちぎテレビ'
     boardIds:
       - 'LOCAL_GYT'
@@ -457,6 +478,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 38960  # 三重: 三重テレビ
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 82
@@ -465,6 +487,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 39984  # 岐阜: ぎふチャン
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 83
@@ -473,6 +496,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 42032  # 京都: KBS京都
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 66
@@ -481,6 +505,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 43056  # 兵庫: サンテレビ
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 58
@@ -489,6 +514,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 44080  # 和歌山: テレビ和歌山
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 86
@@ -497,6 +523,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 45104  # 奈良: 奈良テレビ
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 74
@@ -505,6 +532,7 @@ channels:
     type: 'GR'
     serviceIds:
       - 46128  # 滋賀: BBCびわ湖放送
+    networkId: 15
     boardIds:
       - 'LOCAL_WEST'
     syobocalId: 87
@@ -516,6 +544,7 @@ channels:
     serviceIds:
       - 101
       - 102
+    networkId: 4
     nicojkId: 101
     nicoliveTags:
       - 'NHKBS-1'
@@ -535,6 +564,7 @@ channels:
     serviceIds:
       - 103
       - 104
+    networkId: 4
     nicojkId: 103
     nicoliveTags:
       - 'NHK_BSプレミアム'
@@ -555,6 +585,7 @@ channels:
       - 141
       - 142
       - 143
+    networkId: 4
     nicojkId: 141
     nicoliveTags:
       - 'BS_日テレ'
@@ -574,6 +605,7 @@ channels:
       - 151
       - 152
       - 153
+    networkId: 4
     nicojkId: 151
     nicoliveTags:
       - 'BS_朝日'
@@ -593,6 +625,7 @@ channels:
       - 161
       - 162
       - 163
+    networkId: 4
     nicojkId: 161
     nicoliveTags:
       - 'BS-TBS'
@@ -612,6 +645,7 @@ channels:
       - 171
       - 172
       - 173
+    networkId: 4
     nicojkId: 171
     nicoliveTags:
       - 'BSジャパン'
@@ -632,6 +666,7 @@ channels:
       - 181
       - 182
       - 183
+    networkId: 4
     nicojkId: 181
     nicoliveTags:
       - 'BSフジ'
@@ -648,6 +683,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 191
+    networkId: 4
     nicojkId: 191
     nicoliveTags:
       - 'WOWOW_PRIME'
@@ -664,6 +700,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 192
+    networkId: 4
     nicojkId: 192
     nicoliveTags:
       - 'WOWOW_LIVE'
@@ -680,6 +717,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 193
+    networkId: 4
     nicojkId: 193
     nicoliveTags:
       - 'WOWOW_CINEMA'
@@ -696,6 +734,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 200
+    networkId: 4
     nicojkId: 200
     miyoutvId: 'スターチャンネル'
     twitterKeywords:
@@ -708,6 +747,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 201
+    networkId: 4
     nicojkId: 201
     miyoutvId: 'スターチャンネル'
     twitterKeywords:
@@ -720,6 +760,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 202
+    networkId: 4
     nicojkId: 202
     miyoutvId: 'スターチャンネル'
     twitterKeywords:
@@ -732,6 +773,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 211
+    networkId: 4
     nicojkId: 211
     nicoliveTags:
       - 'BS11'
@@ -750,6 +792,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 222
+    networkId: 4
     nicojkId: 222
     nicoliveTags:
       - 'TwellV'
@@ -767,6 +810,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 231
+    networkId: 4
     nicojkId: 231
     twitterKeywords:
       - '#放送大学'
@@ -779,6 +823,7 @@ channels:
     serviceIds:
       - 232
       - 233
+    networkId: 4
     nicojkId: 231
     twitterKeywords:
       - '#放送大学'
@@ -790,6 +835,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 234
+    networkId: 4
     nicojkId: 234
     nicoliveTags:
       - 'BSグリーンチャンネル'
@@ -805,6 +851,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 236
+    networkId: 4
     nicojkId: 236
     miyoutvId: 'BSアニマックス'
     nicoliveCommunityIds:
@@ -819,12 +866,14 @@ channels:
     type: 'BS'
     serviceIds:
       - 238  # 停波済み
+    networkId: 4
     nicojkId: 238
     miyoutvId: 'FOXスポーツエンタ'
   - name: 'BSスカパー!'
     type: 'BS'
     serviceIds:
       - 241
+    networkId: 4
     nicojkId: 241
     miyoutvId: 'BSスカパー'
     boardIds:
@@ -835,6 +884,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 242
+    networkId: 4
     nicojkId: 242
     twitterKeywords:
       - '#jsports'
@@ -844,6 +894,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 243
+    networkId: 4
     nicojkId: 243
     twitterKeywords:
       - '#jsports'
@@ -853,6 +904,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 244
+    networkId: 4
     nicojkId: 244
     twitterKeywords:
       - '#jsports'
@@ -862,6 +914,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 245
+    networkId: 4
     nicojkId: 245
     twitterKeywords:
       - '#jsports'
@@ -871,6 +924,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 251
+    networkId: 4
     twitterKeywords:
       - '#釣りビジョン'
     nicojkId: 251
@@ -879,6 +933,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 252
+    networkId: 4
     nicojkId: 252
     twitterKeywords:
       - '#WOWOW'
@@ -888,6 +943,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 255
+    networkId: 4
     nicojkId: 255
     twitterKeywords:
       - '#日本映画専門CH'
@@ -900,6 +956,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 256
+    networkId: 4
     nicojkId: 256
     twitterKeywords:
       - '#ディズニーチャンネル'
@@ -910,6 +967,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 258  # 停波済み
+    networkId: 4
     nicojkId: 258
     miyoutvId: 'ディーライフ'
     twitterKeywords:
@@ -922,6 +980,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 531
+    networkId: 4
     nicojkId: 231
     twitterKeywords:
       - '#放送大学'
@@ -933,6 +992,7 @@ channels:
     type: 'BS'
     serviceIds:
       - 910  # 停波済み
+    networkId: 4
     nicojkId: 910
 
   # CS
@@ -940,16 +1000,19 @@ channels:
     type: 'CS'
     serviceIds:
       - 55
+    networkId: 6
     miyoutvId: 'ショップチャンネル'
   - name: 'QVC'
     type: 'CS'
     serviceIds:
       - 161
+    networkId: 7
     miyoutvId: 'QVC'
   - name: '東映チャンネル'
     type: 'CS'
     serviceIds:
       - 218
+    networkId: 6
     miyoutvId: '東映チャンネル'
     boardIds:
       - 'SKYPER_218'
@@ -959,6 +1022,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 219
+    networkId: 6
     miyoutvId: '衛星劇場'
     syobocalId: 220
     annictId: 221
@@ -966,6 +1030,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 223
+    networkId: 7
     miyoutvId: '映画・chNECO'
     boardIds:
       - 'SKYPER_NECO'
@@ -975,15 +1040,18 @@ channels:
     type: 'CS'
     serviceIds:
       - 227
+    networkId: 7
     miyoutvId: 'ザ・シネマ'
   - name: 'FOXムービー'
     type: 'CS'
     serviceIds:
       - 229  # 停波済み
+    networkId: 6
   - name: 'ムービープラス'
     type: 'CS'
     serviceIds:
       - 240
+    networkId: 7
     miyoutvId: 'ムービープラス'
     syobocalId: 152
     annictId: 152
@@ -991,6 +1059,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 250
+    networkId: 7
     miyoutvId: 'スカイA'
     syobocalId: 84
     annictId: 84
@@ -998,12 +1067,14 @@ channels:
     type: 'CS'
     serviceIds:
       - 254
+    networkId: 7
     miyoutvId: 'GAORA'
     syobocalId: 265
   - name: '日テレジータス'
     type: 'CS'
     serviceIds:
       - 257
+    networkId: 7
     miyoutvId: '日テレジータス'
     boardIds:
       - 'SKYPER_GTASU'
@@ -1012,11 +1083,13 @@ channels:
     type: 'CS'
     serviceIds:
       - 262
+    networkId: 7
     miyoutvId: 'ゴルフネット'
   - name: 'SKY STAGE'
     type: 'CS'
     serviceIds:
       - 290
+    networkId: 7
     miyoutvId: 'SKY STAGE'
     boardIds:
       - 'SKYPER_SKYSTAGE'
@@ -1026,6 +1099,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 292
+    networkId: 7
     miyoutvId: '時代劇専門'
     boardIds:
       - 'SKYPER_292'
@@ -1035,6 +1109,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 293
+    networkId: 7
     miyoutvId: 'ファミリー劇場'
     boardIds:
       - 'SKYPER_FAMILY'
@@ -1044,6 +1119,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 294
+    networkId: 7
     miyoutvId: 'ホームドラマ'
     syobocalId: 153
     annictId: 153
@@ -1051,6 +1127,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 295
+    networkId: 7
     miyoutvId: 'MONDO TV'
     boardIds:
       - 'SKYPER_MONDO'
@@ -1060,6 +1137,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 296
+    networkId: 6
     miyoutvId: 'TBSチャンネル'
     boardIds:
       - 'SKYPER_TBS'
@@ -1069,6 +1147,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 297
+    networkId: 7
     miyoutvId: 'TBSチャンネル'
     boardIds:
       - 'SKYPER_TBS'
@@ -1078,6 +1157,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 298
+    networkId: 6
     miyoutvId: 'テレ朝チャンネル'
     boardIds:
       - 'SKYPER_ANB'
@@ -1087,6 +1167,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 299
+    networkId: 6
     miyoutvId: 'テレ朝チャンネル'
     boardIds:
       - 'SKYPER_ANB'
@@ -1096,6 +1177,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 300
+    networkId: 7
     miyoutvId: '日テレプラス'
     boardIds:
       - 'SKYPER_NTVPLUS'
@@ -1105,10 +1187,12 @@ channels:
     type: 'CS'
     serviceIds:
       - 301
+    networkId: 7
   - name: '銀河◆歴ドラ・サスペ'
     type: 'CS'
     serviceIds:
       - 305
+    networkId: 7
     miyoutvId: '銀河'
     boardIds:
       - 'SKYPER_GINGA'
@@ -1116,6 +1200,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 307
+    networkId: 7
     miyoutvId: 'フジテレビONE'
     boardIds:
       - 'SKYPER_CXONE'
@@ -1125,6 +1210,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 308
+    networkId: 7
     miyoutvId: 'フジテレビTWO'
     boardIds:
       - 'SKYPER_CXTWO'
@@ -1134,6 +1220,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 309
+    networkId: 7
     miyoutvId: 'フジテレビNEXT'
     boardIds:
       - 'SKYPER_CXNEXT'
@@ -1143,6 +1230,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 310
+    networkId: 7
     miyoutvId: 'スーパードラマ'
     boardIds:
       - 'SKYPER_DRAMA'
@@ -1152,6 +1240,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 311
+    networkId: 7
     miyoutvId: 'AXN 海外ドラマ'
     boardIds:
       - 'SKYPER_DRAMA'
@@ -1160,6 +1249,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 312
+    networkId: 7
     miyoutvId: 'FOX'
     boardIds:
       - 'SKYPER_DRAMA'
@@ -1167,15 +1257,18 @@ channels:
     type: 'CS'
     serviceIds:
       - 314
+    networkId: 7
     miyoutvId: '女性ch/LaLa'
   - name: 'FOXプラス'
     type: 'CS'
     serviceIds:
       - 315  # 停波済み
+    networkId: 6
   - name: 'AXNミステリー'
     type: 'CS'
     serviceIds:
       - 316
+    networkId: 7
     miyoutvId: 'AXNミステリー'
     boardIds:
       - 'SKYPER_DRAMA'
@@ -1183,14 +1276,17 @@ channels:
     type: 'CS'
     serviceIds:
       - 317
+    networkId: 6
   - name: 'Mnet'
     type: 'CS'
     serviceIds:
       - 318
+    networkId: 6
   - name: 'スペシャプラス'
     type: 'CS'
     serviceIds:
       - 321
+    networkId: 7
     miyoutvId: 'スペシャプラス'
     syobocalId: 211
     annictId: 211
@@ -1198,6 +1294,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 322
+    networkId: 7
     miyoutvId: 'スペースシャワーTV'
     syobocalId: 194
     annictId: 195
@@ -1205,6 +1302,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 323
+    networkId: 7
     miyoutvId: 'MTV'
     syobocalId: 235
     annictId: 242
@@ -1213,11 +1311,13 @@ channels:
     serviceIds:
       - 324
       - 326  # 停波済み
+    networkId: 7
     miyoutvId: 'ミュージック・エア'
   - name: 'エムオン!'
     type: 'CS'
     serviceIds:
       - 325
+    networkId: 7
     miyoutvId: 'エムオン'
     syobocalId: 151
     annictId: 151
@@ -1225,6 +1325,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 329
+    networkId: 7
     miyoutvId: '歌謡ポップス'
     syobocalId: 222
     annictId: 223
@@ -1232,6 +1333,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 330
+    networkId: 7
     miyoutvId: 'キッズステーション'
     boardIds:
       - 'SKYPER_KIDS'
@@ -1241,6 +1343,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 331
+    networkId: 7
     miyoutvId: 'カートゥーン'
     boardIds:
       - 'SKYPER_CARTOON'
@@ -1250,6 +1353,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 333
+    networkId: 7
     nicojkId: 333
     nicoliveTags:
       - 'AT-X'
@@ -1266,17 +1370,20 @@ channels:
     type: 'CS'
     serviceIds:
       - 334  # 停波済み
+    networkId: 6
     syobocalId: 161
     annictId: 161
   - name: 'ディズニージュニア'
     type: 'CS'
     serviceIds:
       - 339
+    networkId: 6
     miyoutvId: 'ディズニージュニア'
   - name: 'ディスカバリー'
     type: 'CS'
     serviceIds:
       - 340
+    networkId: 7
     miyoutvId: 'ディスカバリー'
     boardIds:
       - 'SKYPER_DISCOVERY'
@@ -1286,6 +1393,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 341
+    networkId: 7
     miyoutvId: 'アニマルプラネット'
     boardIds:
       - 'SKYPER_ANIMAL'
@@ -1295,6 +1403,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 342
+    networkId: 7
     miyoutvId: 'ヒストリーチャンネル'
     boardIds:
       - 'SKYPER_HISTORY'
@@ -1302,6 +1411,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 343
+    networkId: 7
     miyoutvId: 'ナショジオ'
     boardIds:
       - 'SKYPER_NATIONAL'
@@ -1309,6 +1419,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 349
+    networkId: 6
     miyoutvId: '日テレNEWS24'
     boardIds:
       - 'SKYPER_NEWS24'
@@ -1317,6 +1428,7 @@ channels:
     type: 'CS'
     serviceIds:
       - 351
+    networkId: 7
     miyoutvId: 'TBSニュースバード'
     boardIds:
       - 'SKYPER_TBSNEWS'
@@ -1324,33 +1436,39 @@ channels:
     type: 'CS'
     serviceIds:
       - 353
+    networkId: 7
     miyoutvId: 'BBCワールド'
   - name: 'CNNj'
     type: 'CS'
     serviceIds:
       - 354
+    networkId: 7
     miyoutvId: 'CNNj'
   - name: '旅チャンネル'
     type: 'CS'
     serviceIds:
       - 362  # 停波済み
+    networkId: 6
     syobocalId: 176
     annictId: 177
   - name: '囲碁・将棋チャンネル'
     type: 'CS'
     serviceIds:
       - 363
+    networkId: 7
     miyoutvId: '囲碁・将棋チャンネル'
   - name: 'スポーツライブ+'
     type: 'CS'
     serviceIds:
       - 800
+    networkId: 6
     miyoutvId: 'スカサカ'
     annictId: 150
   - name: 'スカチャン1'
     type: 'CS'
     serviceIds:
       - 801
+    networkId: 6
     miyoutvId: 'スカチャン'
     annictId: 175
 

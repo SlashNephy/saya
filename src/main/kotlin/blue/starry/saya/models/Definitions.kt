@@ -12,6 +12,8 @@ data class Definitions(
         val name: String,
         val type: Type,
         val serviceIds: Set<Int>,
+        val networkId: Int,
+        val flag: Int? = null,
         val nicojkId: Int? = null,
         val hasOfficialNicolive: Boolean = false,
         val nicoliveTags: Set<String> = emptySet(),
