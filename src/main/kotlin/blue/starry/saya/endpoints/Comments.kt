@@ -22,6 +22,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import org.xml.sax.SAXParseException
 
 private val logger = KotlinLogging.createSayaLogger("saya.endpoints")
 private val jsonWithDefault = Json {
@@ -71,6 +72,8 @@ fun Route.getCommentInfo() {
                 NicoJkApi.getChannels().toList()
             } catch (e: ResponseException) {
                 emptyList()
+            } catch (e: SAXParseException) {
+                emptyList()
             }
         )
     }
@@ -86,6 +89,8 @@ fun Route.getCommentInfoByTarget() {
             try {
                 NicoJkApi.getChannels().find { it.channel.nicojkId == channel.nicojkId }
             } catch (e: ResponseException) {
+                null
+            } catch (e: SAXParseException) {
                 null
             }
         }
