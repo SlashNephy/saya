@@ -71,6 +71,7 @@ channels:
       - '#nhktv'
     boardIds:
       - 'NHK'
+      - 'NANJ_NHK'
     syobocalId: 1
     annictId: 1
   - name: 'Eテレ'
@@ -185,6 +186,7 @@ channels:
       - '#ntv'
     boardIds:
       - 'NTV'
+      - 'NANJ_NTV'
     syobocalId: 4
     annictId: 4
   - name: 'テレビ朝日'
@@ -234,6 +236,7 @@ channels:
       - '#tvasahi'
     boardIds:
       - 'ANB'
+      - 'NANJ_ANB'
     syobocalId: 6
     annictId: 6
   - name: 'TBS'
@@ -287,6 +290,7 @@ channels:
       - '#tbs'
     boardIds:
       - 'TBS'
+      - 'NANJ_TBS'
     syobocalId: 5
     annictId: 5
   - name: 'テレビ東京'
@@ -318,6 +322,7 @@ channels:
       - '#tvtokyo'
     boardIds:
       - 'TX'
+      - 'NANJ_TX'
     syobocalId: 7
     annictId: 7
   - name: 'フジテレビ'
@@ -370,6 +375,7 @@ channels:
       - '#fujitv'
     boardIds:
       - 'CX'
+      - 'NANJ_CX'
     syobocalId: 3
     annictId: 3
 
@@ -392,6 +398,7 @@ channels:
       - 'MX'
       - 'LOCAL_MX'
       - 'ANIME_MX'
+      - 'NANJ_MX'
     syobocalId: 19
     annictId: 19
   - name: '放送大学'
@@ -435,6 +442,7 @@ channels:
       - '#tvk'
     boardIds:
       - 'LOCAL_TVK'
+      - 'NANJ_TVK'
     syobocalId: 8
     annictId: 8
   - name: 'チバテレビ'
@@ -508,6 +516,7 @@ channels:
     networkId: 15
     boardIds:
       - 'LOCAL_WEST'
+      - 'NANJ_SUN'
     syobocalId: 58
     annictId: 58
   - name: 'テレビ和歌山'
@@ -557,6 +566,7 @@ channels:
       - '#nhkbs1'
     boardIds:
       - 'BSNHK_BS1'
+      - 'NANJ_NHKBS1'
     syobocalId: 9
     annictId: 9
   - name: 'NHKBSプレミアム'
@@ -577,6 +587,7 @@ channels:
       - '#nhkbsp'
     boardIds:
       - 'BSNHK_BSP'
+      - 'NANJ_NHKBSP'
     syobocalId: 179
     annictId: 180
   - name: 'BS日テレ'
@@ -597,6 +608,7 @@ channels:
       - '#BS日テレ'
     boardIds:
       - 'BSFREE_NTV'
+      - 'NANJ_BSNTV'
     syobocalId: 71
     annictId: 71
   - name: 'BS朝日'
@@ -617,6 +629,7 @@ channels:
       - '#BS朝日'
     boardIds:
       - 'BSFREE_ANB'
+      - 'NANJ_BSANB'
     syobocalId: 18
     annictId: 18
   - name: 'BS-TBS'
@@ -637,6 +650,7 @@ channels:
       - '#bstbs'
     boardIds:
       - 'BSFREE_TBS'
+      - 'NANJ_BSTBS'
     syobocalId: 16
     annictId: 16
   - name: 'BSテレ東'
@@ -658,6 +672,7 @@ channels:
       - '#BSジャパン'
     boardIds:
       - 'BSFREE_TX'
+      - 'NANJ_BSTX'
     syobocalId: 15
     annictId: 15
   - name: 'BSフジ'
@@ -677,6 +692,7 @@ channels:
       - '#BSフジ'
     boardIds:
       - 'BSFREE_CX'
+      - 'NANJ_BSCX'
     syobocalId: 17
     annictId: 17
   - name: 'WOWOWプライム'
@@ -786,6 +802,7 @@ channels:
     boardIds:
       - 'BSFREE_BS11'
       - 'ANIME_BS11'
+      - 'NANJ_BS11'
     syobocalId: 128
     annictId: 128
   - name: 'BS12トゥエルビ'
@@ -804,6 +821,7 @@ channels:
       - '#BS12'
     boardIds:
       - 'BSFREE_BS12'
+      - 'NANJ_BS12'
     syobocalId: 129
     annictId: 129
   - name: '放送大学ex'
@@ -888,6 +906,8 @@ channels:
     nicojkId: 242
     twitterKeywords:
       - '#jsports'
+    boardIds:
+      - 'NANJ_JSPORTS'
     miyoutvId: 'J SPORTS'
     syobocalId: 258
   - name: 'J SPORTS 2'
@@ -898,6 +918,8 @@ channels:
     nicojkId: 243
     twitterKeywords:
       - '#jsports'
+    boardIds:
+      - 'NANJ_JSPORTS'
     miyoutvId: 'J SPORTS'
     syobocalId: 259
   - name: 'J SPORTS 3'
@@ -908,6 +930,8 @@ channels:
     nicojkId: 244
     twitterKeywords:
       - '#jsports'
+    boardIds:
+      - 'NANJ_JSPORTS'
     miyoutvId: 'J SPORTS'
     syobocalId: 260
   - name: 'J SPORTS 4'
@@ -918,6 +942,8 @@ channels:
     nicojkId: 245
     twitterKeywords:
       - '#jsports'
+    boardIds:
+      - 'NANJ_JSPORTS'
     miyoutvId: 'J SPORTS'
     syobocalId: 261
   - name: 'BS釣りビジョン'
@@ -1214,6 +1240,7 @@ channels:
     miyoutvId: 'フジテレビTWO'
     boardIds:
       - 'SKYPER_CXTWO'
+      - 'NANJ_CXTWO'
     syobocalId: 43
     annictId: 43
   - name: 'フジテレビNEXT'
@@ -1423,6 +1450,7 @@ channels:
     miyoutvId: '日テレNEWS24'
     boardIds:
       - 'SKYPER_NEWS24'
+      - 'NANJ_NEWS24'
     syobocalId: 263
   - name: 'TBS NEWS'
     type: 'CS'
@@ -1852,3 +1880,134 @@ boards:
     keywords:
       - '関西ローカル'
       - 'ｱﾆﾒ関西ﾛｰｶﾙ'
+
+  # https://swallow.5ch.net/livejupiter
+  - id: 'NANJ_NHK'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'NHK'
+  - id: 'NANJ_NTV'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - '日テレ'
+  - id: 'NANJ_TBS'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'TBS'
+  - id: 'NANJ_CX'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'フジ'
+  - id: 'NANJ_ANB'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'テレ朝'
+  - id: 'NANJ_TX'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'テレ東'
+  - id: 'NANJ_MX'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'MX'
+  - id: 'NANJ_TVK'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'TVK'
+  - id: 'NANJ_SUN'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'SUN'
+  - id: 'NANJ_NHKBS1'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS1'
+  - id: 'NANJ_NHKBSP'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BSプレミアム'
+  - id: 'NANJ_BSNTV'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS日テレ'
+  - id: 'NANJ_BSANB'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS朝日'
+  - id: 'NANJ_BSTBS'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BSTBS'
+  - id: 'NANJ_BSTX'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BSテレ東'
+      - 'BSジャパン'
+  - id: 'NANJ_BSCX'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BSフジ'
+  - id: 'NANJ_BS11'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS11'
+  - id: 'NANJ_BS12'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS12'
+      - 'TwellV'
+  - id: 'NANJ_JSPORTS'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'J SPORTS'
+      - 'Jスポ'
+  - id: 'NANJ_CXTWO'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'TWO'
+  - id: 'NANJ_NEWS24'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'NEWS24'
