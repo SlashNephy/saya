@@ -925,6 +925,7 @@ channels:
       - '#jsports'
     boardIds:
       - 'NANJ_JSPORTS'
+      - 'NANJ_JSPORTS1'
     miyoutvId: 'J SPORTS'
     syobocalId: 258
   - name: 'J SPORTS 2'
@@ -936,7 +937,7 @@ channels:
     twitterKeywords:
       - '#jsports'
     boardIds:
-      - 'NANJ_JSPORTS'
+      - 'NANJ_JSPORTS2'
     miyoutvId: 'J SPORTS'
     syobocalId: 259
   - name: 'J SPORTS 3'
@@ -948,7 +949,7 @@ channels:
     twitterKeywords:
       - '#jsports'
     boardIds:
-      - 'NANJ_JSPORTS'
+      - 'NANJ_JSPORTS3'
     miyoutvId: 'J SPORTS'
     syobocalId: 260
   - name: 'J SPORTS 4'
@@ -960,7 +961,7 @@ channels:
     twitterKeywords:
       - '#jsports'
     boardIds:
-      - 'NANJ_JSPORTS'
+      - 'NANJ_JSPORTS4'
     miyoutvId: 'J SPORTS'
     syobocalId: 261
   - name: 'BS釣りビジョン'
@@ -1970,6 +1971,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'テレ東'
+      - 'TX'
   - id: 'NANJ_MX'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2049,6 +2051,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'BS11'
+      - 'BS12'
       - 'BS13'
       - 'BS14'
       - 'BS15'
@@ -2069,6 +2072,30 @@ boards:
     keywords:
       - 'J SPORTS'
       - 'Jスポ'
+  - id: 'NANJ_JSPORTS1'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'Jスポ1'
+  - id: 'NANJ_JSPORTS2'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'Jスポ2'
+  - id: 'NANJ_JSPORTS3'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'Jスポ3'
+  - id: 'NANJ_JSPORTS4'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'Jスポ4'
   - id: 'NANJ_CXONE'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
