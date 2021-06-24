@@ -1041,6 +1041,7 @@ channels:
     nicojkId: 910
     boardIds:
       - 'ENDLESS_WNI'
+      - 'NANU_WNI'
 
   # CS
   - name: 'ショップチャンネル'
@@ -1915,6 +1916,14 @@ boards:
     name: '実況ch'
     server: 'mao'
     board: 'endless'
+    keywords:
+      - 'WNI'
+
+  # https://fate.5ch.net/liveuranus
+  - id: 'NANU_WNI'
+    name: 'なんでも実況U'
+    server: 'fate'
+    board: 'liveuranus'
     keywords:
       - 'WNI'
 
