@@ -132,6 +132,7 @@ channels:
       - '#etv'
     boardIds:
       - 'ETV'
+      - 'NANJ_ETV'
     syobocalId: 2
     annictId: 2
   - name: '日テレ'
@@ -547,6 +548,18 @@ channels:
     syobocalId: 87
     annictId: 87
 
+  # GR (CATV)
+  - name: 'J:COM HD'
+    type: 'GR'
+    serviceIds:
+      - 23656  # J:COM HD
+      - 23672  # J:COM
+    networkId: 15
+    boardIds:
+      - 'ENDLESS_JCOM'
+    syobocalId: 245
+    annictId: 255
+
   # BS
   - name: 'NHKBS1'
     type: 'BS'
@@ -567,6 +580,7 @@ channels:
     boardIds:
       - 'BSNHK_BS1'
       - 'NANJ_NHKBS1'
+      - 'NANJ_NHKBS2'
     syobocalId: 9
     annictId: 9
   - name: 'NHKBSプレミアム'
@@ -710,6 +724,7 @@ channels:
       - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWP'
+      - 'NANJ_WOWOW'
     syobocalId: 204
     annictId: 205
   - name: 'WOWOWライブ'
@@ -727,6 +742,7 @@ channels:
       - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWL'
+      - 'NANJ_WOWOW'
     syobocalId: 97
     annictId: 97
   - name: 'WOWOWシネマ'
@@ -744,6 +760,7 @@ channels:
       - '#WOWOW'
     boardIds:
       - 'BSPAY_WOWOWC'
+      - 'NANJ_WOWOW'
     syobocalId: 76
     annictId: 76
   - name: 'スターチャンネル1'
@@ -963,6 +980,8 @@ channels:
     nicojkId: 252
     twitterKeywords:
       - '#WOWOW'
+    boardIds:
+      - 'NANJ_WOWOW'
     miyoutvId: 'イマジカBS・映画'
     syobocalId: 251
   - name: '日本映画専門ch'
@@ -1020,6 +1039,8 @@ channels:
       - 910  # 停波済み
     networkId: 4
     nicojkId: 910
+    boardIds:
+      - 'ENDLESS_WNI'
 
   # CS
   - name: 'ショップチャンネル'
@@ -1230,6 +1251,7 @@ channels:
     miyoutvId: 'フジテレビONE'
     boardIds:
       - 'SKYPER_CXONE'
+      - 'NANJ_CXONE'
     syobocalId: 109
     annictId: 109
   - name: 'フジテレビTWO'
@@ -1251,6 +1273,7 @@ channels:
     miyoutvId: 'フジテレビNEXT'
     boardIds:
       - 'SKYPER_CXNEXT'
+      - 'NANJ_CXNEXT'
     syobocalId: 131
     annictId: 131
   - name: 'スーパー！ドラマTV'
@@ -1881,6 +1904,20 @@ boards:
       - '関西ローカル'
       - 'ｱﾆﾒ関西ﾛｰｶﾙ'
 
+  # https://mao.5ch.net/endless
+  - id: 'ENDLESS_JCOM'
+    name: '実況ch'
+    server: 'mao'
+    board: 'endless'
+    keywords:
+      - 'J:COM'
+  - id: 'ENDLESS_WNI'
+    name: '実況ch'
+    server: 'mao'
+    board: 'endless'
+    keywords:
+      - 'WNI'
+
   # https://swallow.5ch.net/livejupiter
   - id: 'NANJ_NHK'
     name: 'なんでも実況(ジュピター)'
@@ -1888,6 +1925,12 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'NHK'
+  - id: 'NANJ_ETV'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'Eテレ'
   - id: 'NANJ_NTV'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -1942,6 +1985,12 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'BS1'
+  - id: 'NANJ_NHKBS2'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'BS2'
   - id: 'NANJ_NHKBSP'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -1979,12 +2028,24 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'BSフジ'
+  - id: 'NANJ_WOWOW'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'WOWOW'
   - id: 'NANJ_BS11'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'BS11'
+      - 'BS13'
+      - 'BS14'
+      - 'BS15'
+      - 'BS16'
+      - 'BS17'
+      - 'BS18'
   - id: 'NANJ_BS12'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -1999,12 +2060,24 @@ boards:
     keywords:
       - 'J SPORTS'
       - 'Jスポ'
+  - id: 'NANJ_CXONE'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'ONE'
   - id: 'NANJ_CXTWO'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'TWO'
+  - id: 'NANJ_CXNEXT'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'NEXT'
   - id: 'NANJ_NEWS24'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
