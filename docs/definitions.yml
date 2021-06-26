@@ -548,6 +548,29 @@ channels:
     syobocalId: 87
     annictId: 87
 
+  - name: 'MBS毎日放送'
+    type: 'GR'
+    serviceIds:
+      - 2064   # 近畿広域: MBS毎日放送
+    networkId: 15
+    flag: 8
+    nicojkId: 6
+    nicoliveTags:
+      - 'TBSテレビ'
+    hasOfficialNicolive: true
+    miyoutvId: 'TBS'
+    nicoliveCommunityIds:
+      - 'ch2646440'
+    twitterKeywords:
+      - '#tbs'
+      - '#mbs'
+    boardIds:
+      - 'TBS'
+      - 'NANJ_TBS'
+      - 'NANJ_MBS'
+    syobocalId: 5
+    annictId: 5
+
   # GR (CATV)
   - name: 'J:COM HD'
     type: 'GR'
@@ -1112,6 +1135,8 @@ channels:
     miyoutvId: 'スカイA'
     syobocalId: 84
     annictId: 84
+    boardIds:
+      - 'NANJ_SKYA'
   - name: 'GAORA'
     type: 'CS'
     serviceIds:
@@ -1990,6 +2015,12 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'SUN'
+  - id: 'NANJ_MBS'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'MBS'
   - id: 'NANJ_NHKBS1'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2008,6 +2039,8 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'BSプレミアム'
+      - 'BSP'
+      - 'BS3'
   - id: 'NANJ_BSNTV'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2070,7 +2103,7 @@ boards:
     server: 'swallow'
     board: 'livejupiter'
     keywords:
-      - 'J SPORTS'
+      - 'JSPORTS'
       - 'Jスポ'
   - id: 'NANJ_JSPORTS1'
     name: 'なんでも実況(ジュピター)'
@@ -2120,3 +2153,9 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'NEWS24'
+  - id: 'NANJ_SKYA'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'スカイA'
