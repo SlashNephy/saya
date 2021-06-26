@@ -553,7 +553,6 @@ channels:
     serviceIds:
       - 2064   # 近畿広域: MBS毎日放送
     networkId: 15
-    flag: 8
     nicojkId: 6
     nicoliveTags:
       - 'TBSテレビ'
