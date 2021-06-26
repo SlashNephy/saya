@@ -1983,12 +1983,14 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'フジ'
+      - 'CX'
   - id: 'NANJ_ANB'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'テレ朝'
+      - 'EX'
   - id: 'NANJ_TX'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2090,6 +2092,7 @@ boards:
       - 'BS16'
       - 'BS17'
       - 'BS18'
+      - 'BS19'
   - id: 'NANJ_BS12'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
