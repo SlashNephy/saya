@@ -1965,12 +1965,14 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'Eテレ'
+      - 'ETV'
   - id: 'NANJ_NTV'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - '日テレ'
+      - 'NTV'
   - id: 'NANJ_TBS'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -1991,6 +1993,7 @@ boards:
     keywords:
       - 'テレ朝'
       - 'EX'
+      - 'ﾆﾁｱｻ'
   - id: 'NANJ_TX'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2079,6 +2082,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'WOWOW'
+      - 'wowwow'
   - id: 'NANJ_BS11'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
