@@ -71,6 +71,7 @@ channels:
       - '#nhktv'
     boardIds:
       - 'NHK'
+      - 'LOVELIVE_NHK'
       - 'NANJ_NHK'
     syobocalId: 1
     annictId: 1
@@ -132,6 +133,7 @@ channels:
       - '#etv'
     boardIds:
       - 'ETV'
+      - 'LOVELIVE_ETV'
       - 'NANJ_ETV'
     syobocalId: 2
     annictId: 2
@@ -1863,24 +1865,28 @@ boards:
     board: 'liveskyp'
     keywords:
       - 'ﾃﾞｨｽｶﾊﾞ'
+      - 'ディスカバ'
   - id: 'SKYPER_ANIMAL'
     name: 'スカパー実況'
     server: 'himawari'
     board: 'liveskyp'
     keywords:
       - 'ｱﾆﾌﾟﾗ'
+      - 'アニプラ'
   - id: 'SKYPER_HISTORY'
     name: 'スカパー実況'
     server: 'himawari'
     board: 'liveskyp'
     keywords:
       - 'ﾋｽﾄﾘ'
+      - 'ヒストリ'
   - id: 'SKYPER_NATIONAL'
     name: 'スカパー実況'
     server: 'himawari'
     board: 'liveskyp'
     keywords:
       - 'ﾅｼｮｼﾞｵ'
+      - 'ナショジオ'
   - id: 'SKYPER_NEWS24'
     name: 'スカパー実況'
     server: 'himawari'
@@ -1989,6 +1995,21 @@ boards:
     keywords:
       - 'WNI'
 
+  # https://fate.5ch.net/lovelive
+  - id: 'LOVELIVE_NHK'
+    name: 'ラブライブ！'
+    server: 'fate'
+    board: 'lovelive'
+    keywords:
+      - 'NHK'
+  - id: 'LOVELIVE_ETV'
+    name: 'ラブライブ！'
+    server: 'fate'
+    board: 'lovelive'
+    keywords:
+      - 'Eテレ'
+      - 'ETV'
+
   # https://swallow.5ch.net/livejupiter
   - id: 'NANJ_NHK'
     name: 'なんでも実況(ジュピター)'
@@ -2029,7 +2050,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'テレ朝'
-      - 'EX'
+      - '【EX】'
       - 'ﾆﾁｱｻ'
   - id: 'NANJ_TX'
     name: 'なんでも実況(ジュピター)'
@@ -2125,7 +2146,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'WOWOW'
-      - 'wowwow'
+      - '【wowwow】'
   - id: 'NANJ_BS11'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
