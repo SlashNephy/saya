@@ -570,6 +570,29 @@ channels:
     syobocalId: 5
     annictId: 5
 
+  - name: 'CBC'
+    type: 'GR'
+    serviceIds:
+      - 3096   # 中京広域: CBC
+    networkId: 15
+    nicojkId: 6
+    nicoliveTags:
+      - 'TBSテレビ'
+    hasOfficialNicolive: true
+    miyoutvId: 'TBS'
+    nicoliveCommunityIds:
+      - 'ch2646440'
+    twitterKeywords:
+      - '#tbs'
+      - '#cbc'
+    boardIds:
+      - 'TBS'
+      - 'LOCAL_TOKAI'
+      - 'NANJ_TBS'
+      - 'NANJ_CBC'
+    syobocalId: 5
+    annictId: 5
+
   # GR (CATV)
   - name: 'J:COM HD'
     type: 'GR'
@@ -1004,6 +1027,7 @@ channels:
     twitterKeywords:
       - '#WOWOW'
     boardIds:
+      - 'SKYPER_WOWOWPLUS'
       - 'NANJ_WOWOW'
     miyoutvId: 'イマジカBS・映画'
     syobocalId: 251
@@ -1716,6 +1740,12 @@ boards:
     board: 'liveskyp'
     keywords:
       - 'アニマックス'
+  - id: 'SKYPER_WOWOWPLUS'
+    name: 'スカパー実況'
+    server: 'himawari'
+    board: 'liveskyp'
+    keywords:
+      - 'WOWOWプラス'
   - id: 'SKYPER_225'
     name: 'スカパー実況'
     server: 'himawari'
@@ -1790,6 +1820,7 @@ boards:
     board: 'liveskyp'
     keywords:
       - 'ONE'
+      - 'ゲームセンターCX'
   - id: 'SKYPER_CXTWO'
     name: 'スカパー実況'
     server: 'himawari'
@@ -1920,6 +1951,12 @@ boards:
     board: 'weekly'
     keywords:
       - 'とちぎ'
+  - id: 'LOCAL_TOKAI'
+    name: '番組ch'
+    server: 'himawari'
+    board: 'weekly'
+    keywords:
+      - '東海'
 
   # https://himawari.5ch.net/livewkwest
   - id: 'LOCAL_WEST'
@@ -2025,6 +2062,12 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'MBS'
+  - id: 'NANJ_CBC'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'CBC'
   - id: 'NANJ_NHKBS1'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2111,30 +2154,40 @@ boards:
     keywords:
       - 'JSPORTS'
       - 'Jスポ'
+      - 'SPORTS'
+      - 'Jspo'
   - id: 'NANJ_JSPORTS1'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'Jスポ1'
+      - 'SPORTS1'
+      - 'Jspo1'
   - id: 'NANJ_JSPORTS2'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'Jスポ2'
+      - 'SPORTS2'
+      - 'Jspo2'
   - id: 'NANJ_JSPORTS3'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'Jスポ3'
+      - 'SPORTS3'
+      - 'Jspo3'
   - id: 'NANJ_JSPORTS4'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'Jスポ4'
+      - 'SPORTS4'
+      - 'Jspo4'
   - id: 'NANJ_CXONE'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
