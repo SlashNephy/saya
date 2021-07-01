@@ -604,6 +604,7 @@ channels:
     networkId: 15
     boardIds:
       - 'ENDLESS_JCOM'
+      - 'NANJ_JCOM'
     syobocalId: 245
     annictId: 255
 
@@ -1177,6 +1178,7 @@ channels:
     miyoutvId: '日テレジータス'
     boardIds:
       - 'SKYPER_GTASU'
+      - 'NANJ_GTASU'
     syobocalId: 266
   - name: 'ゴルフネットワーク'
     type: 'CS'
@@ -1240,6 +1242,7 @@ channels:
     miyoutvId: 'TBSチャンネル'
     boardIds:
       - 'SKYPER_TBS'
+      - 'NANJ_TBSCH'
     syobocalId: 52
     annictId: 52
   - name: 'TBSチャンネル2'
@@ -1250,6 +1253,7 @@ channels:
     miyoutvId: 'TBSチャンネル'
     boardIds:
       - 'SKYPER_TBS'
+      - 'NANJ_TBSCH'
     syobocalId: 215
     annictId: 215
   - name: 'テレ朝チャンネル1'
@@ -1566,6 +1570,8 @@ channels:
       - 800
     networkId: 6
     miyoutvId: 'スカサカ'
+    boardIds:
+      - 'NANJ_SLPLUS'
     annictId: 150
   - name: 'スカチャン1'
     type: 'CS'
@@ -2077,6 +2083,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'SUN'
+      - 'サンテレビ'
   - id: 'NANJ_MBS'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2089,12 +2096,19 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'CBC'
+  - id: 'NANJ_JCOM'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'JCOM'
   - id: 'NANJ_NHKBS1'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'BS1'
+      - 'NHKBS'
   - id: 'NANJ_NHKBS2'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2109,12 +2123,14 @@ boards:
       - 'BSプレミアム'
       - 'BSP'
       - 'BS3'
+      - 'bsシネマ'
   - id: 'NANJ_BSNTV'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
     board: 'livejupiter'
     keywords:
       - 'BS日テレ'
+      - 'BS4'
   - id: 'NANJ_BSANB'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2127,6 +2143,7 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'BSTBS'
+      - 'BS-TBS'
   - id: 'NANJ_BSTX'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2168,6 +2185,7 @@ boards:
     keywords:
       - 'BS12'
       - 'TwellV'
+      - 'BS十二'
   - id: 'NANJ_JSPORTS'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2239,3 +2257,21 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'スカイA'
+  - id: 'NANJ_GTASU'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'G+'
+  - id: 'NANJ_TBSCH'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'TBSch'
+  - id: 'NANJ_SLPLUS'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'SL+'
