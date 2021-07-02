@@ -7,6 +7,7 @@ import blue.starry.penicillin.endpoints.search
 import blue.starry.penicillin.endpoints.search.search
 import blue.starry.penicillin.endpoints.stream
 import blue.starry.penicillin.endpoints.stream.filter
+import blue.starry.penicillin.extensions.lang
 import blue.starry.penicillin.extensions.models.text
 import blue.starry.penicillin.extensions.rateLimit
 import blue.starry.penicillin.extensions.use
@@ -89,6 +90,10 @@ class LiveTweetProvider(
             }
 
             override suspend fun onStatus(status: Status) {
+                if (status.lang.value != "ja" && status.lang.value != "und") {
+                    return
+                }
+
                 val comment = status.toSayaComment("Twitter Filter", keywords)
                 queue.emit(comment)
 
@@ -116,7 +121,7 @@ class LiveTweetProvider(
             ).execute()
 
             if (lastId != null) {
-                for (status in response.result.statuses) {
+                for (status in response.result.statuses.filter { it.lang.value == "ja" || it.lang.value == "und" }) {
                     val comment = status.toSayaComment("Twitter 検索", keywords)
                     queue.emit(comment)
 
