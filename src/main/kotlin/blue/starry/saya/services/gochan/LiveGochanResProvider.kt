@@ -32,8 +32,10 @@ class LiveGochanResProvider(
             launch {
                 while (isActive) {
                     try {
+                        ensureActive()
                         doSearchThreadsLoop()
                     } catch (e: CancellationException) {
+                        logger.debug { "cancel: doSearchThreadsLoop" }
                         break
                     } catch (t: Throwable) {
                         logger.error(t) { "error in doSearchThreadsLoop" }
@@ -45,8 +47,10 @@ class LiveGochanResProvider(
             launch {
                 while (isActive) {
                     try {
+                        ensureActive()
                         doCollectResLoop()
                     } catch (e: CancellationException) {
+                        logger.debug { "cancel: doCollectResLoop" }
                         break
                     } catch (t: Throwable) {
                         logger.error(t) { "error in doCollectResLoop" }

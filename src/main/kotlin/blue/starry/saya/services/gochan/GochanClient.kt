@@ -62,12 +62,10 @@ class GochanClient(
             append("appkey", appKey)
         }
 
-        return httpClient.use {
-            it.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
-                userAgent(ua)
-                headers.appendAll(additionalHeaders)
-                expectSuccess = false
-            }
+        return httpClient.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
+            userAgent(ua)
+            headers.appendAll(additionalHeaders)
+            expectSuccess = false
         }
     }
 
@@ -75,26 +73,20 @@ class GochanClient(
      * スレッド一覧を取得する
      */
     suspend fun getSubject(server: String, board: String): String {
-        return httpClient.use {
-            it.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
-                userAgent(ua)
-            }.toString(defaultCharset)
-        }
+        return httpClient.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
+            userAgent(ua)
+        }.toString(defaultCharset)
     }
 
     suspend fun get2chScDat(server: String, board: String, threadId: String): String {
-        return httpClient.use {
-            it.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
-                userAgent(ua)
-            }.toString(defaultCharset)
-        }
+        return httpClient.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
+            userAgent(ua)
+        }.toString(defaultCharset)
     }
 
     suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
-        return httpClient.use {
-            it.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
-                userAgent(ua)
-            }
+        return httpClient.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
+            userAgent(ua)
         }
     }
 
