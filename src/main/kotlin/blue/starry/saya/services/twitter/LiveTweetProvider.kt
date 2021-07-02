@@ -89,7 +89,7 @@ class LiveTweetProvider(
             }
 
             override suspend fun onStatus(status: Status) {
-                val comment = status.toSayaComment("Twitter Filter", keywords) ?: return
+                val comment = status.toSayaComment("Twitter Filter", keywords)
                 queue.emit(comment)
 
                 logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
@@ -117,7 +117,7 @@ class LiveTweetProvider(
 
             if (lastId != null) {
                 for (status in response.result.statuses) {
-                    val comment = status.toSayaComment("Twitter 検索", keywords) ?: continue
+                    val comment = status.toSayaComment("Twitter 検索", keywords)
                     queue.emit(comment)
 
                     logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
