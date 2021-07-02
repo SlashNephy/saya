@@ -8,6 +8,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import org.apache.commons.codec.digest.HmacAlgorithms
 import org.apache.commons.codec.digest.HmacUtils
+import java.io.Closeable
 
 class GochanClient(
     private val hmKey: String,
@@ -15,7 +16,8 @@ class GochanClient(
     private val authUA: String,
     private val authX2chUA: String,
     private val ua: String
-) {
+): Closeable {
+    private val httpClient = createSayaHttpClient()
     private var sessionId: String? = null
     private val defaultCharset = charset("MS932")
 
@@ -29,8 +31,7 @@ class GochanClient(
             append("ID", "")
             append("PW", "")
         }
-        val client = createSayaHttpClient()
-        val response = client.use {
+        val response = httpClient.use {
             it.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
                 userAgent(authUA)
                 header("X-2ch-UA", authX2chUA)
@@ -61,8 +62,7 @@ class GochanClient(
             append("appkey", appKey)
         }
 
-        val client = createSayaHttpClient()
-        return client.use {
+        return httpClient.use {
             it.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
                 userAgent(ua)
                 headers.appendAll(additionalHeaders)
@@ -75,8 +75,7 @@ class GochanClient(
      * スレッド一覧を取得する
      */
     suspend fun getSubject(server: String, board: String): String {
-        val client = createSayaHttpClient()
-        return client.use {
+        return httpClient.use {
             it.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
                 userAgent(ua)
             }.toString(defaultCharset)
@@ -84,8 +83,7 @@ class GochanClient(
     }
 
     suspend fun get2chScDat(server: String, board: String, threadId: String): String {
-        val client = createSayaHttpClient()
-        return client.use {
+        return httpClient.use {
             it.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
                 userAgent(ua)
             }.toString(defaultCharset)
@@ -93,11 +91,14 @@ class GochanClient(
     }
 
     suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
-        val client = createSayaHttpClient()
-        return client.use {
+        return httpClient.use {
             it.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
                 userAgent(ua)
             }
         }
+    }
+
+    override fun close() {
+        httpClient.close()
     }
 }

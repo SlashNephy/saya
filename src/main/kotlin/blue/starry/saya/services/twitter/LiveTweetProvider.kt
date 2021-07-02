@@ -19,9 +19,9 @@ import blue.starry.saya.services.comments.LiveCommentProvider
 import blue.starry.saya.services.createSayaTwitterClient
 import io.ktor.util.date.*
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -36,7 +36,7 @@ class LiveTweetProvider(
     override val channel: Definitions.Channel,
     private val keywords: Set<String>
 ): LiveCommentProvider {
-    override val queue = BroadcastChannel<Comment>(1)
+    override val queue = MutableSharedFlow<Comment>()
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter[${channel.name}]")
 
@@ -44,7 +44,7 @@ class LiveTweetProvider(
         if (Env.TWITTER_PREFER_STREAMING_API) {
             while (isActive) {
                 val client = createSayaTwitterClient(true) ?: return@coroutineScope
-                
+
                 try {
                     client.use {
                         doStreamLoop(it, keywords)
@@ -67,7 +67,7 @@ class LiveTweetProvider(
 
         while (isActive) {
             val client = createSayaTwitterClient() ?: return@coroutineScope
-            
+
             try {
                 client.use {
                     doSearchLoop(it, keywords)
@@ -90,7 +90,7 @@ class LiveTweetProvider(
 
             override suspend fun onStatus(status: Status) {
                 val comment = status.toSayaComment("Twitter Filter", keywords) ?: return
-                queue.send(comment)
+                queue.emit(comment)
 
                 logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
             }
@@ -118,7 +118,7 @@ class LiveTweetProvider(
             if (lastId != null) {
                 for (status in response.result.statuses) {
                     val comment = status.toSayaComment("Twitter 検索", keywords) ?: continue
-                    queue.send(comment)
+                    queue.emit(comment)
 
                     logger.trace { "${status.user.name} @${status.user.screenName}: ${status.text}" }
                 }

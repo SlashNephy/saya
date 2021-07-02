@@ -4,15 +4,18 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.LiveCommentProvider
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 class LiveNicoliveCommentProvider(
     override val channel: Definitions.Channel,
     private val tags: Set<String>
 ): LiveCommentProvider {
-    override val queue = BroadcastChannel<Comment>(1)
+    override val queue = MutableSharedFlow<Comment>()
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${channel.name}]")

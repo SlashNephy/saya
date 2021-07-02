@@ -46,13 +46,16 @@ object Libraries {
     const val JUnitJupiter = "org.junit.jupiter:junit-jupiter:${Versions.JUnit}"
 
     val ExperimentalAnnotations = setOf(
-        "kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "kotlinx.coroutines.ObsoleteCoroutinesApi",
-        "kotlinx.coroutines.DelicateCoroutinesApi",
-        "kotlin.io.path.ExperimentalPathApi",
+        // Duration#toJavaDuration()
         "kotlin.time.ExperimentalTime",
+        // buildList {}
         "kotlin.ExperimentalStdlibApi",
-        "kotlinx.coroutines.FlowPreview"
+        // flowOf()
+        "kotlinx.coroutines.FlowPreview",
+        // CoroutineScope#produce {}
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        // GlobalScope
+        "kotlinx.coroutines.DelicateCoroutinesApi"
     )
 }
 
@@ -92,7 +95,7 @@ kotlin {
                 jvmTarget = JavaVersion.VERSION_11.toString()
                 apiVersion = "1.5"
                 languageVersion = "1.5"
-                // allWarningsAsErrors = true
+                allWarningsAsErrors = true
                 verbose = true
             }
         }

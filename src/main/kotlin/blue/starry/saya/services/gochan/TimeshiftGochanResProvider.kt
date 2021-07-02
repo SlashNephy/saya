@@ -51,4 +51,9 @@ class TimeshiftGochanResProvider(
             }
         }
     }
+
+    override fun close() {
+        super.close()
+        client.close()
+    }
 }
