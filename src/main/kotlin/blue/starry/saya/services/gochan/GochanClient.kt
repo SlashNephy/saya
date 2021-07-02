@@ -31,11 +31,9 @@ class GochanClient(
             append("ID", "")
             append("PW", "")
         }
-        val response = httpClient.use {
-            it.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
-                userAgent(authUA)
-                header("X-2ch-UA", authX2chUA)
-            }
+        val response = httpClient.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
+            userAgent(authUA)
+            header("X-2ch-UA", authX2chUA)
         }
 
         if (':' !in response) {
