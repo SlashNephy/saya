@@ -14,7 +14,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapNotNull
@@ -39,7 +39,7 @@ fun Route.wsLiveCommentsByTarget() {
 
         val channel = CommentChannelManager.findByTarget(target) ?: return@webSocket rejectWs { "Parameter target is invalid." }
 
-        CommentChannelManager.subscribeLiveComments(channel, sources).consumeEach {
+        CommentChannelManager.subscribeLiveComments(channel, sources).collect {
             send(jsonWithDefault.encodeToString(it))
         }
     }
@@ -62,7 +62,7 @@ fun Route.wsTimeshiftCommentsByTarget() {
             }
         }
 
-        CommentChannelManager.subscribeTimeshiftComments(channel, sources, controls, startAt, endAt).consumeEach {
+        CommentChannelManager.subscribeTimeshiftComments(channel, sources, controls, startAt, endAt).collect {
             send(jsonWithDefault.encodeToString(it))
         }
     }

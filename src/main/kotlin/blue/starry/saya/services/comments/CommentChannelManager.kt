@@ -14,10 +14,9 @@ import blue.starry.saya.services.twitter.LiveTweetProvider
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -70,13 +69,14 @@ object CommentChannelManager {
         }
     }
 
-    private val liveProviders = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Pair<LiveCommentProvider, Job?>>()
+    private val liveProviders = mutableMapOf<Pair<Definitions.Channel, CommentSource>, LiveCommentProvider>()
     private val liveProvidersLock = Mutex()
+    private val liveJobs = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Job>()
+    private val liveJobsLock = Mutex()
 
     /**
-     * リアルタイムコメント配信を購読する
-     *
-     * 購読数が 0 になると自動でコメントの取得 [Job] がキャンセルされる
+     * リアルタイムコメント配信を購読する。
+     * コメントはクライアント間で共有される。
      *
      * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
@@ -84,8 +84,8 @@ object CommentChannelManager {
     fun subscribeLiveComments(
         channel: Definitions.Channel,
         sources: List<CommentSource>
-    ): ReceiveChannel<Comment> {
-        return GlobalScope.produce {
+    ): Flow<Comment> {
+        return channelFlow {
             val id = UUID.randomUUID()
 
             /**
@@ -101,61 +101,73 @@ object CommentChannelManager {
                     return
                 }
 
-                val (provider, job) = liveProvidersLock.withLock {
-                    val (oldProvider, oldJob) = liveProviders.getOrPut(channel to source) {
-                        (block() ?: return) to null
+                // リアルタイムコメントを取得する LiveCommentProvider
+                val provider = liveProvidersLock.withLock {
+                    liveProviders.getOrPut(channel to source) {
+                        block() ?: return
+                    }
+                }
+
+                // コメント取得 Job
+                // 前回の Job が走っていなければ再生成
+                val job = liveJobsLock.withLock {
+                    val previousJob = liveJobs.entries.firstOrNull { it.key == channel to source && it.value.isActive }?.value
+                    if (previousJob != null) {
+                        return@withLock previousJob
                     }
 
-                    // 取得 Job
-                    // 前回の Job が走っていなければ再生成
-                    if (oldJob == null || !oldJob.isActive) {
-                        // 取得 Job はクライアント間で共有されるため GlobalScope を用いる
-                        liveProviders[channel to source] = oldProvider to GlobalScope.launch {
-                            while (isActive) {
-                                try {
-                                    ensureActive()
-                                    oldProvider.start()
-                                } catch (e: CancellationException) {
-                                    break
-                                } catch (t: Throwable) {
-                                    logger.error(t) { "error in $oldProvider" }
-                                }
-
-                                delay(Duration.seconds(5))
+                    // 取得 Job はクライアント間で共有されるため GlobalScope を用いる
+                    val newJob = GlobalScope.launch {
+                        while (isActive) {
+                            try {
+                                ensureActive()
+                                provider.start()
+                            } catch (e: CancellationException) {
+                                logger.debug { "Fetch Job: $provider is canceled." }
+                                throw e
+                            } catch (t: Throwable) {
+                                logger.error(t) { "Fetch Job: error in $provider" }
                             }
 
-                            logger.debug { "$oldProvider is canceled." }
+                            delay(Duration.seconds(5))
                         }
                     }
-
-                    liveProviders[channel to source]!!
+                    liveJobs[channel to source] = newJob
+                    return@withLock newJob
                 }
 
                 // 配信 Job
-                // クライアントが接続を閉じると終了する
+                // クライアントが切断すると終了する
+                // クライアントがすべて切断したときにコメント取得 Job を停止する
                 launch {
                     try {
                         provider.subscription.create(id)
-                        logger.debug { "create id: $id [${channel.name}, $source]" }
+                        logger.debug { "Collect Job: create id: $id [${channel.name}, $source]" }
 
                         provider.queue.collect {
                             send(it)
                         }
                     } finally {
                         provider.subscription.remove(id)
-                        logger.debug { "remove id: $id [${channel.name}, $source]" }
+                        logger.debug { "Collect Job: remove id: $id [${channel.name}, $source]" }
 
                         if (provider.subscription.isEmpty()) {
-                            logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
-                            job!!.cancel()
+                            logger.debug { "Collect Job: There is no subscriptions on [${channel.name}, $source]." }
 
+                            // 取得 Job の停止
+                            job.cancel()
+                            liveJobsLock.withLock {
+                                liveJobs.remove(channel to source)
+                            }
+
+                            // LiveCommentProvider のクリーンアップ
                             provider.close()
                             liveProvidersLock.withLock {
                                 liveProviders.remove(channel to source)
                             }
                         }
 
-                        logger.debug { "$this is closing... ($id) [${channel.name}, $source]" }
+                        logger.debug { "Collect Job: $this is closing... ($id) [${channel.name}, $source]" }
                     }
                 }
             }
@@ -184,7 +196,8 @@ object CommentChannelManager {
     }
 
     /**
-     * タイムシフトコメント配信を購読する
+     * タイムシフトコメント配信を購読する。
+     * クライアント間でコメントは共有されない。
      *
      * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
@@ -198,8 +211,8 @@ object CommentChannelManager {
         controls: Flow<TimeshiftCommentControl>,
         startAt: Long,
         endAt: Long
-    ): ReceiveChannel<Comment> {
-        return GlobalScope.produce {
+    ): Flow<Comment> {
+        return channelFlow {
             val providers = mutableListOf<TimeshiftCommentProvider>()
 
             /**
@@ -231,7 +244,7 @@ object CommentChannelManager {
                             logger.debug { "Fetch Job: $provider is canceled." }
                             break
                         } catch (t: Throwable) {
-                            logger.error(t) { "error in $provider" }
+                            logger.error(t) { "Fetch Job: error in $provider" }
                         }
 
                         delay(Duration.seconds(5))
@@ -242,15 +255,20 @@ object CommentChannelManager {
                 launch {
                     while (isActive) {
                         try {
+                            ensureActive()
                             provider.start()
+
+                            logger.debug { "Seek Job: $provider is done." }
+                            break
                         } catch (e: CancellationException) {
+                            logger.debug { "Seek Job: $provider is canceled." }
                             break
                         } catch (t: Throwable) {
-                            logger.error(t) { "error in $provider" }
+                            logger.error(t) { "Seek Job: error in $provider" }
                         }
-                    }
 
-                    logger.debug { "Seek Job: $provider is canceled." }
+                        delay(Duration.seconds(5))
+                    }
                 }
 
                 // 配信 Job
@@ -258,7 +276,7 @@ object CommentChannelManager {
                     provider.use { provider ->
                         provider.queue.consumeEach {
                             send(it)
-                            logger.trace { "Timeshift: $it" }
+                            logger.trace { "Collect Job: Timeshift: $it" }
                         }
                     }
                 }
@@ -287,6 +305,13 @@ object CommentChannelManager {
                          * コメントの配信を再開する命令
                          *   {"action": "Resume"}
                          */
+                        /**
+                         * クライアントの準備ができ, コメントの配信を開始する命令
+                         *   {"action": "Ready"}
+                         *
+                         * コメントの配信を再開する命令
+                         *   {"action": "Resume"}
+                         */
                         TimeshiftCommentControl.Action.Ready,
                         TimeshiftCommentControl.Action.Resume -> {
                             providers.map {
@@ -295,6 +320,11 @@ object CommentChannelManager {
                                 }
                             }.joinAll()
                         }
+
+                        /**
+                         * コメントの配信を一時停止する命令
+                         *   {"action": "Pause"}
+                         */
 
                         /**
                          * コメントの配信を一時停止する命令
@@ -312,6 +342,11 @@ object CommentChannelManager {
                          * コメントの位置を同期する命令
                          *   {"action": "Sync", "seconds": 10.0}
                          */
+
+                        /**
+                         * コメントの位置を同期する命令
+                         *   {"action": "Sync", "seconds": 10.0}
+                         */
                         TimeshiftCommentControl.Action.Sync -> {
                             providers.map {
                                 launch {
@@ -322,7 +357,7 @@ object CommentChannelManager {
                         }
                     }
 
-                    logger.debug { "TimeshiftCommentControl: $control" }
+                    logger.debug { "Control Job: TimeshiftCommentControl: $control" }
                 }
             }
         }
