@@ -4,7 +4,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 object GochanDatParser {
-    fun parse(text: String): List<GochanRes> {
+    fun parse(text: String): Sequence<GochanRes> {
         return text.trim()
             .lineSequence()
             .map { it.split("<>") }
@@ -20,7 +20,6 @@ object GochanDatParser {
                     text = removeHtml(res[3])
                 )
             }
-            .toList()
     }
 
     private val DatePattern = "(\\d+)/(\\d+)/(\\d+)[^ ]* (\\d+):(\\d+):(\\d+)\\.(\\d+)".toRegex()

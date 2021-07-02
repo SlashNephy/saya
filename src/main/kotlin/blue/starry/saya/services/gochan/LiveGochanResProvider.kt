@@ -23,9 +23,6 @@ class LiveGochanResProvider(
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
-    private val threadSearchInterval = Duration.seconds(10)
-    private val resCollectInterval = Duration.seconds(5)
-    private val threadLimit = 5
 
     override suspend fun start() = coroutineScope {
         joinAll(
@@ -41,7 +38,7 @@ class LiveGochanResProvider(
                         logger.error(t) { "error in doSearchThreadsLoop" }
                     }
 
-                    delay(threadSearchInterval)
+                    delay(Duration.seconds(5))
                 }
             },
             launch {
@@ -56,7 +53,7 @@ class LiveGochanResProvider(
                         logger.error(t) { "error in doCollectResLoop" }
                     }
 
-                    delay(resCollectInterval)
+                    delay(Duration.seconds(5))
                 }
             }
         )
@@ -67,49 +64,55 @@ class LiveGochanResProvider(
         mutableMapOf()
     }.asThreadSafe()
 
-    private suspend fun doSearchThreadsLoop() {
-        boards.forEach { board ->
-            val items = AutoGochanThreadSelector.enumerate(client, board, limit = threadLimit)
+    private suspend fun doSearchThreadsLoop(): Unit = coroutineScope {
+        boards.map { board ->
+            launch {
+                val newItems = AutoGochanThreadSelector.enumerate(client, board)
+                    .map { item ->
+                        val address = GochanThreadAddress(board.server, board.board, item.threadId)
+                        address to item
+                    }.toMap()
 
-            subjects.withLock { subjects ->
-                subjects[board].clear()
-
-                for (item in items) {
-                    val address = GochanThreadAddress(board.server, board.board, item.threadId)
-                    subjects[board][address] = item
-
-                    logger.trace { item }
+                subjects.withLock { subjects ->
+                    subjects[board].clear()
+                    subjects[board].putAll(newItems)
                 }
+
+                logger.trace { newItems }
             }
-        }
+        }.joinAll()
     }
 
-    private suspend fun doCollectResLoop() {
+    private suspend fun doCollectResLoop(): Unit = coroutineScope {
         subjects.withLock { subjects ->
-            for ((board, map) in subjects) {
-                for ((address, item) in map) {
+            subjects.flatMap { (board, items) ->
+                items.map { (address, item) ->
                     val loader = threadLoaders.withLock { safeThreadLoaders ->
                         safeThreadLoaders.getOrPut(address) {
                             GochanDatThreadLoader(address)
                         }
                     }
 
-                    val now = ZonedDateTime.now()
-                    loader.fetch(client).filter {
-                        it.time.plusSeconds(15).isAfter(now)
-                    }.forEach {
-                        queue.emit(
-                            it.toSayaComment(
-                                source = "5ch [${item.title}]",
-                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
-                            )
-                        )
+                    launch {
+                        val now = ZonedDateTime.now()
+                        loader.fetch(client)
+                            .filter {
+                                it.time.plusSeconds(15).isAfter(now)
+                            }
+                            .forEach {
+                                queue.emit(
+                                    it.toSayaComment(
+                                        source = "5ch [${item.title}]",
+                                        sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                                    )
+                                )
 
-                        logger.trace { it }
-                        delay(Random.nextLong(0..300L))
+                                logger.trace { it }
+                                delay(Random.nextLong(0..500L))
+                            }
                     }
                 }
-            }
+            }.joinAll()
         }
     }
 

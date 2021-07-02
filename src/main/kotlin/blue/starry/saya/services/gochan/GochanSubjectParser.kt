@@ -3,27 +3,24 @@ package blue.starry.saya.services.gochan
 import blue.starry.saya.common.normalize
 
 object GochanSubjectParser {
-    private val ResCountPattern = "\\((\\d+)\\)$".toRegex()
+    private val pattern = "^(\\d+).dat<>(.+)\\s{2}\\((\\d+)\\)$".toRegex()
 
-    fun parse(text: String) = sequence {
-        text.lineSequence()
-            .filter { "<>" in it }
-            .map { it.split("<>") }
-            .filter { it.size == 2 }
+    fun parse(text: String): Sequence<GochanSubjectItem> {
+        return text.lineSequence()
+            .mapNotNull { pattern.matchEntire(it)?.destructured }
             // line = 1612958146.dat<>ホンマでっか!?TV★1  (835)
-            .forEach { (first, second) ->
+            .map { (threadId, title, resCount) ->
                 // first = 1612958146.dat
                 // second = ホンマでっか!?TV★1  (835)
 
-                yield(GochanSubjectItem(
+                GochanSubjectItem(
                     // id = 1612958146
-                    threadId = first.removeSuffix(".dat"),
+                    threadId = threadId,
                     // title = ホンマでっか!?TV★1
-                    title = ResCountPattern.replace(second, "").trim().normalize(),
+                    title = title.trim().normalize(),
                     // resCount = 835
-                    resCount = ResCountPattern.find(second)?.groupValues?.get(1)?.toIntOrNull()
-                        ?: throw GochanParseException(GochanParseException.Type.Subject, second)
-                ))
+                    resCount = resCount.toInt()
+                )
             }
     }
 }
