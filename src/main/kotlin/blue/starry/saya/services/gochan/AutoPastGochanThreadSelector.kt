@@ -28,7 +28,7 @@ object AutoPastGochanThreadSelector {
                 // スレッド ID の重複を避ける
                 ?.distinctUntilChangedBy { it.id }
                 // スレッドキーワードが空の場合にはすべて, 空ではないならいずれかのキーワードを含むスレッドのみ
-                ?.filter { keywords.isEmpty() || keywords.any { keyword -> keyword in it.title } }
+                ?.filter { keywords.isEmpty() || keywords.any { keyword -> it.title.contains(keyword, true) } }
                 // (開始時間 - range) ~ 終了時間
                 ?.filter { it.id.toLong() in (startAt - range) until endAt }
                 ?.take(limit) ?: emptyFlow()
