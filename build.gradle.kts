@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.5.0"
-    kotlin("plugin.serialization") version "1.5.0"
+    kotlin("jvm") version "1.5.20"
+    kotlin("plugin.serialization") version "1.5.20"
     id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
@@ -10,7 +10,7 @@ plugins {
 }
 
 object Versions {
-    const val Ktor = "1.6.0"
+    const val Ktor = "1.6.1"
     const val kaml = "0.34.0"
     const val Penicillin = "6.2.0"
     const val CommonsCodec = "1.15"
@@ -89,7 +89,7 @@ kotlin {
     target {
         compilations.all {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
+                jvmTarget = JavaVersion.VERSION_11.toString()
                 apiVersion = "1.5"
                 languageVersion = "1.5"
                 // allWarningsAsErrors = true
