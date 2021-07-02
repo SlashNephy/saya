@@ -73,6 +73,7 @@ fun createSayaTwitterClient(apache: Boolean = false): ApiClient? {
         // For streaming API stability
         httpClient(if (apache) Apache else CIO) {
             install(HttpTimeout) {
+                requestTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
                 socketTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
             }
         }
