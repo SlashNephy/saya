@@ -109,6 +109,7 @@ object CommentChannelManager {
                     // 取得 Job
                     // 前回の Job が走っていなければ再生成
                     if (oldJob == null || !oldJob.isActive) {
+                        // 取得 Job はクライアント間で共有されるため GlobalScope を用いる
                         liveProviders[channel to source] = oldProvider to GlobalScope.launch {
                             while (isActive) {
                                 try {
@@ -137,10 +138,8 @@ object CommentChannelManager {
                         provider.subscription.create(id)
                         logger.debug { "create id: $id [${channel.name}, $source]" }
 
-                        provider.use { provider ->
-                            provider.queue.collect {
-                                send(it)
-                            }
+                        provider.queue.collect {
+                            send(it)
                         }
                     } finally {
                         provider.subscription.remove(id)
@@ -149,6 +148,11 @@ object CommentChannelManager {
                         if (provider.subscription.isEmpty()) {
                             logger.debug { "There is no subscriptions on [${channel.name}, $source]. Job: $job is stopping..." }
                             job!!.cancel()
+
+                            provider.close()
+                            liveProvidersLock.withLock {
+                                liveProviders.remove(channel to source)
+                            }
                         }
 
                         logger.debug { "$this is closing... ($id) [${channel.name}, $source]" }
