@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import java.time.ZonedDateTime
 import kotlin.random.Random
-import kotlin.random.nextLong
 import kotlin.time.Duration
 
 class LiveGochanResProvider(
@@ -53,7 +52,7 @@ class LiveGochanResProvider(
                         logger.error(t) { "error in doCollectResLoop" }
                     }
 
-                    delay(Duration.seconds(5))
+                    delay(Duration.seconds(3))
                 }
             }
         )
@@ -122,7 +121,7 @@ class LiveGochanResProvider(
                                         )
 
                                         logger.trace { it }
-                                        delay(Random.nextLong(0..500L))
+                                        delay(Random.nextLong(2000L))
                                     }
                                 }.toList().joinAll()
 
