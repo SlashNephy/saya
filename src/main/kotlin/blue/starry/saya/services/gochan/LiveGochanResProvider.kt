@@ -63,6 +63,7 @@ class LiveGochanResProvider(
     private val subjects = DefaultDictionary<Definitions.Board, MutableMap<GochanThreadAddress, GochanSubjectItem>> {
         mutableMapOf()
     }.asThreadSafe()
+    private val resCountCache = mutableMapOf<GochanThreadAddress, Int>().asThreadSafe()
 
     private suspend fun doSearchThreadsLoop(): Unit = coroutineScope {
         boards.map { board ->
@@ -86,11 +87,16 @@ class LiveGochanResProvider(
     private suspend fun doCollectResLoop(): Unit = coroutineScope {
         subjects.withLock { subjects ->
             subjects.flatMap { (board, items) ->
-                items.map { (address, item) ->
+                items.mapNotNull { (address, item) ->
                     val loader = threadLoaders.withLock { safeThreadLoaders ->
                         safeThreadLoaders.getOrPut(address) {
                             GochanDatThreadLoader(address)
                         }
+                    }
+
+                    val lastResCount = resCountCache.withLock { it[address] }
+                    if (lastResCount == item.resCount) {
+                        return@mapNotNull null
                     }
 
                     launch {
@@ -113,6 +119,10 @@ class LiveGochanResProvider(
                                     delay(Random.nextLong(0..500L))
                                 }
                             }.toList().joinAll()
+
+                        resCountCache.withLock {
+                            it[address] = item.resCount
+                        }
                     }
                 }
             }.joinAll()
