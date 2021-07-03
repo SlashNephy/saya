@@ -73,6 +73,8 @@ class LiveGochanResProvider(
                             val address = GochanThreadAddress(board.server, board.board, item.threadId)
                             address to item
                         }.toMap()
+                } catch (e: CancellationException) {
+                    return@launch
                 } catch (t: Throwable) {
                     logger.error(t) { "error in doSearchThreadsLoop" }
                     return@launch
@@ -128,6 +130,7 @@ class LiveGochanResProvider(
                             resCountCache.withLock {
                                 it[address] = item.resCount
                             }
+                        } catch (e: CancellationException) {
                         } catch (t: Throwable) {
                             logger.error(t) { "error in doCollectResLoop" }
                         }

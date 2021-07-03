@@ -103,7 +103,7 @@ class LiveTweetProvider(
             override suspend fun onDisconnect(cause: Throwable?) {
                 logger.debug(cause) { "disconnect" }
 
-                if (cause != null) {
+                if (cause != null && cause !is CancellationException) {
                     throw cause
                 }
             }
