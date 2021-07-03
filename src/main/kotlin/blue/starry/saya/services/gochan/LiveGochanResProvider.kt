@@ -117,7 +117,7 @@ class LiveGochanResProvider(
                                         queue.emit(
                                             it.toSayaComment(
                                                 source = "5ch [${item.title}]",
-                                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}/-${item.resCount}"
                                             )
                                         )
 
