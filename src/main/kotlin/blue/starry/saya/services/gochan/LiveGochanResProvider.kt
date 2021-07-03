@@ -95,21 +95,24 @@ class LiveGochanResProvider(
 
                     launch {
                         val now = ZonedDateTime.now()
+
                         loader.fetch(client)
                             .filter {
                                 it.time.plusSeconds(15).isAfter(now)
                             }
-                            .forEach {
-                                queue.emit(
-                                    it.toSayaComment(
-                                        source = "5ch [${item.title}]",
-                                        sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                            .map {
+                                launch {
+                                    queue.emit(
+                                        it.toSayaComment(
+                                            source = "5ch [${item.title}]",
+                                            sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                                        )
                                     )
-                                )
 
-                                logger.trace { it }
-                                delay(Random.nextLong(0..500L))
-                            }
+                                    logger.trace { it }
+                                    delay(Random.nextLong(0..500L))
+                                }
+                            }.toList().joinAll()
                     }
                 }
             }.joinAll()
