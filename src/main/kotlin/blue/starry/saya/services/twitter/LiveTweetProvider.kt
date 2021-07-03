@@ -1,6 +1,8 @@
 package blue.starry.saya.services.twitter
 
 import blue.starry.penicillin.core.exceptions.PenicillinException
+import blue.starry.penicillin.core.exceptions.PenicillinTwitterApiException
+import blue.starry.penicillin.core.exceptions.TwitterApiError
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.listener.FilterStreamListener
 import blue.starry.penicillin.endpoints.search
@@ -76,6 +78,12 @@ class LiveTweetProvider(
             } catch (e: CancellationException) {
                 break
             } catch (t: Throwable) {
+                // レートリミット
+                if (t is PenicillinTwitterApiException && t.error == TwitterApiError.RateLimitExceeded) {
+                    delay(Duration.seconds(15))
+                    continue
+                }
+
                 logger.trace(t) { "error in doSearchLoop" }
             }
 
