@@ -68,11 +68,16 @@ class LiveGochanResProvider(
     private suspend fun doSearchThreadsLoop(): Unit = coroutineScope {
         boards.map { board ->
             launch {
-                val newItems = AutoGochanThreadSelector.enumerate(client, board)
-                    .map { item ->
-                        val address = GochanThreadAddress(board.server, board.board, item.threadId)
-                        address to item
-                    }.toMap()
+                val newItems = try {
+                    AutoGochanThreadSelector.enumerate(client, board)
+                        .map { item ->
+                            val address = GochanThreadAddress(board.server, board.board, item.threadId)
+                            address to item
+                        }.toMap()
+                } catch (t: Throwable) {
+                    logger.error(t) { "error in doSearchThreadsLoop" }
+                    return@launch
+                }
 
                 subjects.withLock { subjects ->
                     subjects[board].clear()
@@ -102,26 +107,30 @@ class LiveGochanResProvider(
                     launch {
                         val now = ZonedDateTime.now()
 
-                        loader.fetch(client)
-                            .filter {
-                                it.time.plusSeconds(15).isAfter(now)
-                            }
-                            .map {
-                                launch {
-                                    queue.emit(
-                                        it.toSayaComment(
-                                            source = "5ch [${item.title}]",
-                                            sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
-                                        )
-                                    )
-
-                                    logger.trace { it }
-                                    delay(Random.nextLong(0..500L))
+                        try {
+                            loader.fetch(client)
+                                .filter {
+                                    it.time.plusSeconds(15).isAfter(now)
                                 }
-                            }.toList().joinAll()
+                                .map {
+                                    launch {
+                                        queue.emit(
+                                            it.toSayaComment(
+                                                source = "5ch [${item.title}]",
+                                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
+                                            )
+                                        )
 
-                        resCountCache.withLock {
-                            it[address] = item.resCount
+                                        logger.trace { it }
+                                        delay(Random.nextLong(0..500L))
+                                    }
+                                }.toList().joinAll()
+
+                            resCountCache.withLock {
+                                it[address] = item.resCount
+                            }
+                        } catch (t: Throwable) {
+                            logger.error(t) { "error in doCollectResLoop" }
                         }
                     }
                 }
