@@ -1,102 +1,146 @@
 package blue.starry.saya.services.gochan
 
+import blue.starry.saya.common.DefaultDictionary
 import blue.starry.saya.common.asThreadSafe
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.LiveCommentProvider
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import java.time.ZonedDateTime
 import kotlin.random.Random
-import kotlin.random.nextLong
-import kotlin.time.seconds
+import kotlin.time.Duration
 
 class LiveGochanResProvider(
     override val channel: Definitions.Channel,
     private val client: GochanClient,
-    private val board: Definitions.Board
-): LiveCommentProvider {
-    override val queue = BroadcastChannel<Comment>(1)
+    private val boards: List<Definitions.Board>
+) : LiveCommentProvider {
+    override val queue = MutableSharedFlow<Comment>()
     override val subscription = LiveCommentProvider.Subscription()
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
-    private val threadSearchInterval = 10.seconds
-    private val resCollectInterval = 5.seconds
-    private val threadLimit = 5
 
     override suspend fun start() = coroutineScope {
         joinAll(
             launch {
                 while (isActive) {
                     try {
+                        ensureActive()
                         doSearchThreadsLoop()
                     } catch (e: CancellationException) {
+                        logger.debug { "cancel: doSearchThreadsLoop" }
                         break
                     } catch (t: Throwable) {
                         logger.error(t) { "error in doSearchThreadsLoop" }
                     }
 
-                    delay(threadSearchInterval)
+                    delay(Duration.seconds(5))
                 }
             },
             launch {
                 while (isActive) {
                     try {
+                        ensureActive()
                         doCollectResLoop()
                     } catch (e: CancellationException) {
+                        logger.debug { "cancel: doCollectResLoop" }
                         break
                     } catch (t: Throwable) {
                         logger.error(t) { "error in doCollectResLoop" }
                     }
 
-                    delay(resCollectInterval)
+                    delay(Duration.seconds(3))
                 }
             }
         )
     }
 
     private val threadLoaders = mutableMapOf<GochanThreadAddress, GochanDatThreadLoader>().asThreadSafe()
-    private val subject = mutableMapOf<GochanThreadAddress, GochanSubjectItem>().asThreadSafe()
+    private val subjects = DefaultDictionary<Definitions.Board, MutableMap<GochanThreadAddress, GochanSubjectItem>> {
+        mutableMapOf()
+    }.asThreadSafe()
+    private val resCountCache = mutableMapOf<GochanThreadAddress, Int>().asThreadSafe()
 
-    private suspend fun doSearchThreadsLoop() {
-        val items = AutoGochanThreadSelector.enumerate(client, channel, board, limit = threadLimit)
+    private suspend fun doSearchThreadsLoop(): Unit = coroutineScope {
+        boards.map { board ->
+            launch {
+                val newItems = try {
+                    AutoGochanThreadSelector.enumerate(client, board)
+                        .map { item ->
+                            val address = GochanThreadAddress(board.server, board.board, item.threadId)
+                            address to item
+                        }.toMap()
+                } catch (e: CancellationException) {
+                    return@launch
+                } catch (t: Throwable) {
+                    logger.error(t) { "error in doSearchThreadsLoop" }
+                    return@launch
+                }
 
-        subject.withLock { subject ->
-            subject.clear()
+                subjects.withLock { subjects ->
+                    subjects[board].clear()
+                    subjects[board].putAll(newItems)
+                }
 
-            for (item in items) {
-                val address = GochanThreadAddress(board.server, board.board, item.threadId)
-                subject[address] = item
-
-                logger.trace { item }
+                logger.trace { newItems }
             }
+        }.joinAll()
+    }
+
+    private suspend fun doCollectResLoop(): Unit = coroutineScope {
+        subjects.withLock { subjects ->
+            subjects.flatMap { (board, items) ->
+                items.mapNotNull { (address, item) ->
+                    val loader = threadLoaders.withLock { safeThreadLoaders ->
+                        safeThreadLoaders.getOrPut(address) {
+                            GochanDatThreadLoader(address)
+                        }
+                    }
+
+                    val lastResCount = resCountCache.withLock { it[address] }
+                    if (lastResCount == item.resCount) {
+                        return@mapNotNull null
+                    }
+
+                    launch {
+                        val now = ZonedDateTime.now()
+
+                        try {
+                            loader.fetch(client)
+                                .filter {
+                                    it.time.plusSeconds(15).isAfter(now)
+                                }
+                                .map {
+                                    launch {
+                                        queue.emit(
+                                            it.toSayaComment(
+                                                source = "5ch [${item.title}]",
+                                                sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}/-${item.resCount}"
+                                            )
+                                        )
+
+                                        logger.trace { it }
+                                        delay(Random.nextLong(2000L))
+                                    }
+                                }.toList().joinAll()
+
+                            resCountCache.withLock {
+                                it[address] = item.resCount
+                            }
+                        } catch (e: CancellationException) {
+                        } catch (t: Throwable) {
+                            logger.error(t) { "error in doCollectResLoop" }
+                        }
+                    }
+                }
+            }.joinAll()
         }
     }
 
-    private suspend fun doCollectResLoop() {
-        subject.withLock { subject ->
-            for ((address, item) in subject) {
-                val loader = threadLoaders.withLock { safeThreadLoaders ->
-                    safeThreadLoaders.getOrPut(address) {
-                        GochanDatThreadLoader(address)
-                    }
-                }
-
-                val now = ZonedDateTime.now()
-                loader.fetch(client).filter {
-                    it.time.plusSeconds(15).isAfter(now)
-                }.forEach {
-                    queue.send(it.toSayaComment(
-                        source = "5ch [${item.title}]",
-                        sourceUrl = "https://${board.server}.5ch.net/test/read.cgi/${board.board}/${item.threadId}"
-                    ))
-
-                    logger.trace { it }
-                    delay(Random.nextLong(0..300L))
-                }
-            }
-        }
+    override fun close() {
+        client.close()
     }
 }

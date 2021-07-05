@@ -4,24 +4,30 @@ import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
-import blue.starry.saya.services.SayaHttpClient
+import blue.starry.saya.services.createSayaHttpClient
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider, private val data: EmbeddedData) {
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
 
     suspend fun start() {
-        SayaHttpClient.webSocket(data.site.relive.webSocketUrl) {
-            logger.debug { "ws:connect" }
+        val client = createSayaHttpClient()
+        client.use {
+            it.webSocket(data.site.relive.webSocketUrl) {
+                logger.debug { "ws:connect" }
 
-            handshake()
-            consumeFrames()
+                handshake()
+                consumeFrames()
+            }
         }
     }
 

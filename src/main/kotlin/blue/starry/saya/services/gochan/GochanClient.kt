@@ -1,6 +1,6 @@
 package blue.starry.saya.services.gochan
 
-import blue.starry.saya.services.SayaHttpClient
+import blue.starry.saya.services.createSayaHttpClient
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
@@ -8,6 +8,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import org.apache.commons.codec.digest.HmacAlgorithms
 import org.apache.commons.codec.digest.HmacUtils
+import java.io.Closeable
 
 class GochanClient(
     private val hmKey: String,
@@ -15,8 +16,10 @@ class GochanClient(
     private val authUA: String,
     private val authX2chUA: String,
     private val ua: String
-) {
+): Closeable {
+    private val httpClient = createSayaHttpClient()
     private var sessionId: String? = null
+    private val defaultCharset = charset("MS932")
 
     private fun calculateHash(message: String): String {
         return HmacUtils(HmacAlgorithms.HMAC_SHA_256, hmKey).hmacHex(message)
@@ -28,7 +31,7 @@ class GochanClient(
             append("ID", "")
             append("PW", "")
         }
-        val response = SayaHttpClient.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
+        val response = httpClient.submitForm<String>("https://api.5ch.net/v1/auth/", parameters) {
             userAgent(authUA)
             header("X-2ch-UA", authX2chUA)
         }
@@ -57,7 +60,7 @@ class GochanClient(
             append("appkey", appKey)
         }
 
-        return SayaHttpClient.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
+        return httpClient.submitForm("https://api.5ch.net/v1/$server/$board/$threadId", parameters) {
             userAgent(ua)
             headers.appendAll(additionalHeaders)
             expectSuccess = false
@@ -68,8 +71,24 @@ class GochanClient(
      * スレッド一覧を取得する
      */
     suspend fun getSubject(server: String, board: String): String {
-        return SayaHttpClient.get<HttpResponse>("https://$server.5ch.net/$board/subject.txt") {
+        return httpClient.get<ByteArray>("https://$server.5ch.net/$board/subject.txt") {
             userAgent(ua)
-        }.readText(charset("MS932"))
+        }.toString(defaultCharset)
+    }
+
+    suspend fun get2chScDat(server: String, board: String, threadId: String): String {
+        return httpClient.get<ByteArray>("http://$server.2ch.sc/$board/dat/$threadId.dat") {
+            userAgent(ua)
+        }.toString(defaultCharset)
+    }
+
+    suspend fun getKakologList(server: String, board: String, filename: String? = null): String {
+        return httpClient.get("https://$server.5ch.net/$board/kako/${filename.orEmpty()}") {
+            userAgent(ua)
+        }
+    }
+
+    override fun close() {
+        httpClient.close()
     }
 }

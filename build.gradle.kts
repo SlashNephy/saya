@@ -1,29 +1,27 @@
 plugins {
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.serialization") version "1.4.30"
+    kotlin("jvm") version "1.5.20"
+    kotlin("plugin.serialization") version "1.5.20"
+    id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
-    id("com.adarshr.test-logger") version "2.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("com.adarshr.test-logger") version "3.0.0"
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
 }
 
 object Versions {
-    const val Ktor = "1.5.1"
-    const val kaml = "0.27.0"
-    const val Penicillin = "6.0.5"
+    const val Ktor = "1.6.1"
+    const val kaml = "0.34.0"
+    const val Penicillin = "6.2.0"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
+    const val Guava = "30.1.1-jre"
 
-    const val AnnictKt = "2.4.2"
-    // const val KtorSwagger = "0.7.0"
-    // const val Clikt = "3.1.0"
-
-    const val KotlinLogging = "2.0.4"
+    const val KotlinLogging = "2.0.8"
     const val Logback = "1.2.3"
-    const val jansi = "1.18"
+    const val jansi = "2.3.2"
 
-    const val JUnit = "5.7.0"
+    const val JUnit = "5.7.1"
 }
 
 object Libraries {
@@ -39,10 +37,7 @@ object Libraries {
     const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
     const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
     const val Jsoup = "org.jsoup:jsoup:${Versions.Jsoup}"
-
-    const val AnnictKt = "jp.annict:annict-kt:${Versions.AnnictKt}"
-    // const val KtorSwagger = "com.github.nielsfalk:ktor-swagger:${Versions.KtorSwagger}"
-    // const val Clikt = "com.github.ajalt.clikt:clikt:${Versions.Clikt}"
+    const val Guava = "com.google.guava:guava:${Versions.Guava}"
 
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
     const val LogbackCore = "ch.qos.logback:logback-core:${Versions.Logback}"
@@ -51,22 +46,21 @@ object Libraries {
     const val JUnitJupiter = "org.junit.jupiter:junit-jupiter:${Versions.JUnit}"
 
     val ExperimentalAnnotations = setOf(
-        "kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "kotlin.io.path.ExperimentalPathApi",
+        // Duration#toJavaDuration()
         "kotlin.time.ExperimentalTime",
-        "kotlin.ExperimentalStdlibApi"
+        // buildList {}
+        "kotlin.ExperimentalStdlibApi",
+        // flowOf()
+        "kotlinx.coroutines.FlowPreview",
+        // CoroutineScope#produce {}
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        // GlobalScope
+        "kotlinx.coroutines.DelicateCoroutinesApi"
     )
 }
 
 repositories {
     mavenCentral()
-    // for ktor-swagger
-    // maven(url = "https://jitpack.io")
-
-    // TODO: It should be removed by May 1, 2021. It is potentially used by kotlinx-datetime.
-    maven(url = "https://kotlin.bintray.com/kotlinx")
-    // TODO: It should be removed by May 1, 2021. It is potentially used by annict-kt.
-    maven(url = "https://dl.bintray.com/riptakagi/maven")
 }
 
 dependencies {
@@ -82,10 +76,7 @@ dependencies {
     implementation(Libraries.Penicillin)
     implementation(Libraries.CommonsCodec)
     implementation(Libraries.Jsoup)
-
-    implementation(Libraries.AnnictKt)
-    // implementation(Libraries.KtorSwagger)
-    // implementation(Libraries.Clikt)
+    implementation(Libraries.Guava)
 
     implementation(Libraries.KotlinLogging)
     implementation(Libraries.LogbackCore)
@@ -101,9 +92,9 @@ kotlin {
     target {
         compilations.all {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
-                apiVersion = "1.4"
-                languageVersion = "1.4"
+                jvmTarget = JavaVersion.VERSION_11.toString()
+                apiVersion = "1.5"
+                languageVersion = "1.5"
                 allWarningsAsErrors = true
                 verbose = true
             }

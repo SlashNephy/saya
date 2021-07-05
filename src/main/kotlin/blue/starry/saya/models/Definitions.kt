@@ -12,14 +12,17 @@ data class Definitions(
         val name: String,
         val type: Type,
         val serviceIds: Set<Int>,
+        val networkId: Int,
+        val flag: Int? = null,
         val nicojkId: Int? = null,
         val hasOfficialNicolive: Boolean = false,
         val nicoliveTags: Set<String> = emptySet(),
         val nicoliveCommunityIds: Set<String> = emptySet(),
         val miyoutvId: String? = null,
         val twitterKeywords: Set<String> = emptySet(),
-        val boardId: String? = null,
-        val threadKeywords: Set<String> = emptySet()
+        val boardIds: Set<String> = emptySet(),
+        val syobocalId: Int? = null,
+        val annictId: Int? = null
     ) {
         enum class Type {
             GR, BS, CS, SKY

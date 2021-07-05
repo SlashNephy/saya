@@ -10,11 +10,6 @@ data class GochanRes(
     val text: String
 )
 
-data class GochanThread(
-    val id: String,
-    val title: String
-)
-
 data class GochanSubjectItem(
     val threadId: String,
     val title: String,
@@ -25,4 +20,20 @@ data class GochanThreadAddress(
     val server: String,
     val board: String,
     val id: String
+)
+
+data class GochanKakologThreadList(
+    val server: String,
+    val board: String,
+    val filename: String?,
+    val startAt: Long,
+    val endAt: Long
+)
+
+data class GochanKakologThread(
+    val list: GochanKakologThreadList,
+    val id: String,
+    val title: String,
+    val url: String,
+    val lines: Int
 )

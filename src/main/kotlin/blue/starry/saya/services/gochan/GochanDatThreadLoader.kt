@@ -15,7 +15,7 @@ class GochanDatThreadLoader(private val address: GochanThreadAddress) {
      *
      * @param client
      */
-    suspend fun fetch(client: GochanClient): List<GochanRes> {
+    suspend fun fetch(client: GochanClient): Sequence<GochanRes> {
         mutex.withLock {
             val headers = Headers.build {
                 if (loadedNumBytes > 0) {
@@ -34,7 +34,7 @@ class GochanDatThreadLoader(private val address: GochanThreadAddress) {
             when (response.status) {
                 // 変更なし
                 HttpStatusCode.NotModified -> {
-                    return emptyList()
+                    return emptySequence()
                 }
                 // 全件取得
                 HttpStatusCode.OK -> {

@@ -13,14 +13,6 @@ fun <T: Any> T.asThreadSafe() = object: ScopedMutex<T> {
     }
 }
 
-fun <T: Any> Mutex.bindTo(obj: T) = object: ScopedMutex<T> {
-    override suspend fun <R> withLock(block: suspend (safeObj: T) -> R): R {
-        return this@bindTo.withLock {
-            block(obj)
-        }
-    }
-}
-
 interface ScopedMutex<T: Any> {
     suspend fun <R> withLock(block: suspend (T) -> R): R
 }

@@ -2,15 +2,16 @@ package blue.starry.saya.services.comments
 
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.io.Closeable
 import java.util.*
 
 /**
  * コメントを配信する共通インターフェース
  */
-interface LiveCommentProvider {
+interface LiveCommentProvider: Closeable {
     /**
      * 実況チャンネル
      */
@@ -19,7 +20,7 @@ interface LiveCommentProvider {
     /**
      * コメントキュー
      */
-    val queue: BroadcastChannel<Comment>
+    val queue: SharedFlow<Comment>
 
     /**
      * 購読
@@ -30,6 +31,9 @@ interface LiveCommentProvider {
      * コメントの取得を開始する
      */
     suspend fun start()
+
+    override fun close() {
+    }
 
     class Subscription {
         private val collection = mutableSetOf<UUID>()

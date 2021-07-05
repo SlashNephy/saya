@@ -1,0 +1,78 @@
+$schema: 'http://json-schema.org/draft/2019-09/schema#'
+title: 'saya チャンネル定義ファイル'
+type: 'object'
+required:
+  - 'channels'
+  - 'boards'
+properties:
+  channels:
+    type: 'array'
+    items:
+      type: 'object'
+      required:
+        - 'name'
+        - 'type'
+        - 'serviceIds'
+        - 'networkId'
+      properties:
+        name:
+          type: 'string'
+        type:
+          type: 'string'
+        serviceIds:
+          type: 'array'
+          items:
+            type: 'number'
+        networkId:
+          type: 'number'
+        flag:
+          type: 'number'
+        nicojkId:
+          type: 'number'
+        nicoliveTags:
+          type: 'array'
+          items:
+            type: 'string'
+        hasOfficialNicolive:
+          type: 'boolean'
+        miyoutvId:
+          type: 'string'
+        nicoliveCommunityIds:
+          type: 'array'
+          items:
+            type: 'string'
+        twitterKeywords:
+          type: 'array'
+          items:
+            type: 'string'
+        boardIds:
+          type: 'array'
+          items:
+            type: 'string'
+        syobocalId:
+          type: 'number'
+        annictId:
+          type: 'number'
+
+  boards:
+    type: 'array'
+    items:
+      type: 'object'
+      required:
+        - 'id'
+        - 'name'
+        - 'server'
+        - 'board'
+      properties:
+        id:
+          type: 'string'
+        name:
+          type: 'string'
+        server:
+          type: 'string'
+        board:
+          type: 'string'
+        keywords:
+          type: 'array'
+          items:
+            type: 'string'

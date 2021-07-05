@@ -3,9 +3,10 @@ package blue.starry.saya.services.nicojk
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.models.CommentInfo
 import blue.starry.saya.services.comments.CommentChannelManager
-import blue.starry.saya.services.SayaHttpClient
-import blue.starry.saya.services.mirakurun.MirakurunDataManager
+import blue.starry.saya.services.createSayaHttpClient
 import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
@@ -14,33 +15,47 @@ import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
 object NicoJkApi {
-    suspend fun getComments(id: String, startTime: Long, endTime: Long) = SayaHttpClient.get<String>("https://jikkyo.tsukumijima.net/api/kakolog/$id") {
-        parameter("starttime", startTime)
-        parameter("endtime", endTime)
-        parameter("format", "json")
-    }.parseObject {
-        CommentLog(it)
+    suspend fun getComments(id: String, startTime: Long, endTime: Long): CommentLog {
+        val client = createSayaHttpClient()
+        return client.use {
+            it.get<String>("https://jikkyo.tsukumijima.net/api/kakolog/$id") {
+                parameter("starttime", startTime)
+                parameter("endtime", endTime)
+                parameter("format", "json")
+            }.parseObject {
+                CommentLog(it)
+            }
+        }
     }
 
-    suspend fun getChannels() = SayaHttpClient.get<String>("http://jk.from.tv/api/v2_app/getchannels").let {
-        val source = InputSource(StringReader(it))
-        val document = DocumentBuilderFactory
-            .newInstance()
-            .newDocumentBuilder()
-            .parse(source)
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun getChannels(): List<CommentInfo> {
+        val client = createSayaHttpClient()
+        return client.use {
+            it.get<String>("http://jk.from.tv/api/v2_app/getchannels").let {
+                val source = InputSource(StringReader(it))
+                val document = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .run {
+                        withContext(Dispatchers.IO) {
+                            parse(source)
+                        }
+                    }
 
-        document.getElementsByTagName("channel").toList() + document.getElementsByTagName("bs_channel").toList()
-    }.let { channels ->
-        channels.map { channel ->
-            val jk = channel.getFirstElementByTagName("id").textContent.toInt()
-            val jkChannel = CommentChannelManager.Channels.first { it.nicojkId == jk }
+                document.getElementsByTagName("channel").toList() + document.getElementsByTagName("bs_channel").toList()
+            }.let { channels ->
+                channels.map { channel ->
+                    val jk = channel.getFirstElementByTagName("id").textContent.toInt()
+                    val jkChannel = CommentChannelManager.Channels.first { it.nicojkId == jk }
 
-            CommentInfo(
-                channel = jkChannel,
-                service = MirakurunDataManager.Services.find { it.actualId in jkChannel.serviceIds },
-                force = channel.getFirstElementByTagName("force").textContent.toInt(),
-                last = channel.getFirstElementByTagName("last_res").textContent
-            )
+                    CommentInfo(
+                        channel = jkChannel,
+                        force = channel.getFirstElementByTagName("force").textContent.toInt(),
+                        last = channel.getFirstElementByTagName("last_res").textContent
+                    )
+                }
+            }
         }
     }
 

@@ -4,11 +4,13 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 object GochanDatParser {
-    fun parse(text: String): List<GochanRes> {
+    fun parse(text: String): Sequence<GochanRes> {
         return text.trim()
-            .lines()
+            .lineSequence()
             .map { it.split("<>") }
             .filter { it.size == 5 }
+            .takeWhile { !it[2].startsWith("Over 1000 Thread") }
+            .takeWhile { "このスレッドは過去ログ倉庫に格納されています" !in it[3] }
             .map { res ->
                 GochanRes(
                     name = removeHtml(res[0]),
