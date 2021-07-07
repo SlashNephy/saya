@@ -595,6 +595,27 @@ channels:
     syobocalId: 5
     annictId: 5
 
+  - name: 'ABC'
+    type: 'GR'
+    serviceIds:
+      - 2072   # 近畿広域: ABCテレビ
+    networkId: 15
+    nicojkId: 5
+    nicoliveTags:
+      - 'テレビ朝日'
+    hasOfficialNicolive: true
+    miyoutvId: 'テレビ朝日'
+    nicoliveCommunityIds:
+      - 'ch2646439'
+    twitterKeywords:
+      - '#tvasahi'
+    boardIds:
+      - 'ANB'
+      - 'NANJ_ANB'
+      - 'NANJ_ABC'
+    syobocalId: 6
+    annictId: 6
+
   # GR (CATV)
   - name: 'J:COM HD'
     type: 'GR'
@@ -1829,6 +1850,7 @@ boards:
     keywords:
       - 'ONE'
       - 'ゲームセンターCX'
+      - '競馬予想TV'
   - id: 'SKYPER_CXTWO'
     name: 'スカパー実況'
     server: 'himawari'
@@ -2090,6 +2112,12 @@ boards:
     board: 'livejupiter'
     keywords:
       - 'MBS'
+  - id: 'NANJ_ABC'
+    name: 'なんでも実況(ジュピター)'
+    server: 'swallow'
+    board: 'livejupiter'
+    keywords:
+      - 'ABC'
   - id: 'NANJ_CBC'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
@@ -2178,6 +2206,8 @@ boards:
       - 'BS17'
       - 'BS18'
       - 'BS19'
+      - 'BS20'
+      - 'BS21'
   - id: 'NANJ_BS12'
     name: 'なんでも実況(ジュピター)'
     server: 'swallow'
