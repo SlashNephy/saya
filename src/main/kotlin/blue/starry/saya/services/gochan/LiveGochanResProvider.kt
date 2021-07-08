@@ -115,6 +115,7 @@ class LiveGochanResProvider(
                                 }
                                 .map {
                                     launch {
+                                        delay(Random.nextLong(2000L))
                                         queue.emit(
                                             it.toSayaComment(
                                                 source = "5ch [${item.title}]",
@@ -123,7 +124,6 @@ class LiveGochanResProvider(
                                         )
 
                                         logger.trace { it }
-                                        delay(Random.nextLong(2000L))
                                     }
                                 }.toList().joinAll()
 
