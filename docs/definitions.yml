@@ -642,8 +642,9 @@ channels:
       - 'NHKBS'
       - 'NHK_BS'
     miyoutvId: 'NHKBS1'
+    hasOfficialNicolive: true
     nicoliveCommunityIds:
-      - 'co5214081'
+      - 'ch2647992'
     twitterKeywords:
       - '#nhkbs1'
     boardIds:
