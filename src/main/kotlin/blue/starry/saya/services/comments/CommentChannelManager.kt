@@ -1,5 +1,6 @@
 package blue.starry.saya.services.comments
 
+import blue.starry.saya.common.asThreadSafe
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Comment
 import blue.starry.saya.models.CommentSource
@@ -18,8 +19,6 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.decodeFromString
 import mu.KLogger
 import mu.KotlinLogging
@@ -69,10 +68,8 @@ object CommentChannelManager {
         }
     }
 
-    private val liveProviders = mutableMapOf<Pair<Definitions.Channel, CommentSource>, LiveCommentProvider>()
-    private val liveProvidersLock = Mutex()
-    private val liveJobs = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Job>()
-    private val liveJobsLock = Mutex()
+    private val liveProviders = mutableMapOf<Pair<Definitions.Channel, CommentSource>, LiveCommentProvider>().asThreadSafe()
+    private val liveJobs = mutableMapOf<Pair<Definitions.Channel, CommentSource>, Job>().asThreadSafe()
 
     /**
      * リアルタイムコメント配信を購読する。
@@ -102,15 +99,15 @@ object CommentChannelManager {
                 }
 
                 // リアルタイムコメントを取得する LiveCommentProvider
-                val provider = liveProvidersLock.withLock {
+                val provider = liveProviders.withLock { liveProviders ->
                     liveProviders.getOrPut(channel to source) {
-                        block() ?: return
+                        block() ?: return@withLock null
                     }
-                }
+                } ?: return
 
                 // コメント取得 Job
                 // 前回の Job が走っていなければ再生成
-                val job = liveJobsLock.withLock {
+                val job = liveJobs.withLock { liveJobs ->
                     val previousJob = liveJobs.entries.firstOrNull { it.key == channel to source && it.value.isActive }?.value
                     if (previousJob != null) {
                         return@withLock previousJob
@@ -156,13 +153,13 @@ object CommentChannelManager {
 
                             // 取得 Job の停止
                             job.cancel()
-                            liveJobsLock.withLock {
+                            liveJobs.withLock { liveJobs ->
                                 liveJobs.remove(channel to source)
                             }
 
                             // LiveCommentProvider のクリーンアップ
                             provider.close()
-                            liveProvidersLock.withLock {
+                            liveProviders.withLock { liveProviders ->
                                 liveProviders.remove(channel to source)
                             }
                         }

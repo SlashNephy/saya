@@ -94,18 +94,18 @@ class LiveGochanResProvider(
         subjects.withLock { subjects ->
             subjects.flatMap { (board, items) ->
                 items.mapNotNull { (address, item) ->
-                    val loader = threadLoaders.withLock { safeThreadLoaders ->
-                        safeThreadLoaders.getOrPut(address) {
-                            GochanDatThreadLoader(address)
-                        }
-                    }
-
-                    val lastResCount = resCountCache.withLock { it[address] }
-                    if (lastResCount == item.resCount) {
-                        return@mapNotNull null
-                    }
-
                     launch {
+                        val loader = threadLoaders.withLock { safeThreadLoaders ->
+                            safeThreadLoaders.getOrPut(address) {
+                                GochanDatThreadLoader(address)
+                            }
+                        }
+
+                        val lastResCount = resCountCache.withLock { it[address] }
+                        if (lastResCount == item.resCount) {
+                            return@launch
+                        }
+
                         val now = ZonedDateTime.now()
 
                         try {
@@ -115,6 +115,7 @@ class LiveGochanResProvider(
                                 }
                                 .map {
                                     launch {
+                                        delay(Random.nextLong(2000L))
                                         queue.emit(
                                             it.toSayaComment(
                                                 source = "5ch [${item.title}]",
@@ -123,7 +124,6 @@ class LiveGochanResProvider(
                                         )
 
                                         logger.trace { it }
-                                        delay(Random.nextLong(2000L))
                                     }
                                 }.toList().joinAll()
 
@@ -136,8 +136,8 @@ class LiveGochanResProvider(
                         }
                     }
                 }
-            }.joinAll()
-        }
+            }
+        }.joinAll()
     }
 
     override fun close() {
