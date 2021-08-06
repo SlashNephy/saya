@@ -57,13 +57,27 @@ object CommentChannelManager {
                 val serviceId = sid.toIntOrNull() ?: return null
                 val channelType = Definitions.Channel.Type.values().find { it.name == type } ?: Definitions.Channel.Type.GR
 
-                Channels.find { it.type == channelType && serviceId in it.serviceIds }
+                // サブチャンネルを考慮する
+                // NHK総合1・2, NHK Eテレ1・3, NHK BS1・2 など
+                (serviceId..serviceId + 2).asSequence()
+                    .mapNotNull { addition ->
+                        Channels.find {
+                            it.type == channelType && serviceId - addition in it.serviceIds
+                        }
+                    }.firstOrNull()
             }
             // {Service ID} から探す
             else -> {
                 val serviceId = target.toIntOrNull() ?: return null
 
-                Channels.find { serviceId in it.serviceIds }
+                // サブチャンネルを考慮する
+                (serviceId..serviceId + 2).asSequence()
+                    .mapNotNull { addition ->
+                        Channels.find {
+                            serviceId - addition in it.serviceIds
+                        }
+                    }
+                    .firstOrNull()
             }
         }
     }
