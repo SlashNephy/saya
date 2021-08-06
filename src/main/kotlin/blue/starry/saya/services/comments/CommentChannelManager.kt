@@ -59,7 +59,7 @@ object CommentChannelManager {
 
                 // サブチャンネルを考慮する
                 // NHK総合1・2, NHK Eテレ1・3, NHK BS1・2 など
-                (serviceId..serviceId + 2).asSequence()
+                (0..2).asSequence()
                     .mapNotNull { addition ->
                         Channels.find {
                             it.type == channelType && serviceId - addition in it.serviceIds
@@ -71,7 +71,7 @@ object CommentChannelManager {
                 val serviceId = target.toIntOrNull() ?: return null
 
                 // サブチャンネルを考慮する
-                (serviceId..serviceId + 2).asSequence()
+                (0..2).asSequence()
                     .mapNotNull { addition ->
                         Channels.find {
                             serviceId - addition in it.serviceIds
