@@ -1,7 +1,6 @@
 package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
 import blue.starry.saya.services.createSayaHttpClient
@@ -14,6 +13,8 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider, private val data: EmbeddedData) {
@@ -57,8 +58,10 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
         var keepSeatJob: Job? = null
 
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            val message = frame.readText().parseObject {
-                NicoliveWebSocketSystemJson(it)
+            val message = frame.readText().let {
+                Json {
+                    ignoreUnknownKeys = true
+                }.decodeFromString<NicoliveWebSocketSystemJson>(it)
             }
 
             when (message.type) {

@@ -10,16 +10,16 @@ plugins {
 }
 
 object Versions {
-    const val Ktor = "1.6.1"
-    const val kaml = "0.34.0"
-    const val Penicillin = "6.2.0"
+    const val Ktor = "1.6.2"
+    const val KotlinxSerializationJson = "1.2.2"
+    const val kaml = "0.35.2"
+    const val Penicillin = "6.2.1"
     const val CommonsCodec = "1.15"
     const val Jsoup = "1.13.1"
     const val Guava = "30.1.1-jre"
 
-    const val KotlinLogging = "2.0.8"
+    const val KotlinLogging = "2.0.10"
     const val Logback = "1.2.3"
-    const val jansi = "2.3.2"
 
     const val JUnit = "5.7.1"
 }
@@ -33,6 +33,7 @@ object Libraries {
     const val KtorClientSerialization = "io.ktor:ktor-client-serialization:${Versions.Ktor}"
     const val KtorClientLogging = "io.ktor:ktor-client-logging:${Versions.Ktor}"
 
+    const val KotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinxSerializationJson}"
     const val kaml = "com.charleskorn.kaml:kaml:${Versions.kaml}"
     const val Penicillin = "blue.starry:penicillin:${Versions.Penicillin}"
     const val CommonsCodec = "commons-codec:commons-codec:${Versions.CommonsCodec}"
@@ -42,7 +43,6 @@ object Libraries {
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
     const val LogbackCore = "ch.qos.logback:logback-core:${Versions.Logback}"
     const val LogbackClassic = "ch.qos.logback:logback-classic:${Versions.Logback}"
-    const val Jansi = "org.fusesource.jansi:jansi:${Versions.jansi}"
     const val JUnitJupiter = "org.junit.jupiter:junit-jupiter:${Versions.JUnit}"
 
     val ExperimentalAnnotations = setOf(
@@ -72,6 +72,7 @@ dependencies {
     implementation(Libraries.KtorClientSerialization)
     implementation(Libraries.KtorClientLogging)
 
+    implementation(Libraries.KotlinxSerializationJson)
     implementation(Libraries.kaml)
     implementation(Libraries.Penicillin)
     implementation(Libraries.CommonsCodec)
@@ -81,7 +82,6 @@ dependencies {
     implementation(Libraries.KotlinLogging)
     implementation(Libraries.LogbackCore)
     implementation(Libraries.LogbackClassic)
-    implementation(Libraries.Jansi)
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))

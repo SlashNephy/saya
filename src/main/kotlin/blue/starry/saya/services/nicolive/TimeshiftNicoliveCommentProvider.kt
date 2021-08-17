@@ -9,7 +9,6 @@ import blue.starry.saya.services.nicojk.NicoJkApi
 import kotlinx.coroutines.*
 import mu.KotlinLogging
 import kotlin.time.Duration
-import kotlin.time.seconds
 
 class TimeshiftNicoliveCommentProvider(
     channel: Definitions.Channel,
@@ -59,7 +58,7 @@ class TimeshiftNicoliveCommentProvider(
         return NicoJkApi.getComments("jk${channel.nicojkId}", startAt, endAt)
             .packets
             .asSequence()
-            .filter { "deleted" !in it.chat.json }
+            .filter { it.chat.deleted == 0 }
             .map { it.chat }
             .map {
                 it.toSayaComment(

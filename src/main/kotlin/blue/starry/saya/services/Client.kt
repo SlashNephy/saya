@@ -34,7 +34,9 @@ fun createSayaHttpClient(): HttpClient {
             storage = AcceptAllCookiesStorage()
         }
         install(JsonFeature) {
-            serializer = KotlinxSerializer()
+            serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+                ignoreUnknownKeys = true
+            })
         }
         engine {
             requestTimeout = Duration.minutes(1).inWholeMilliseconds

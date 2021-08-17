@@ -1,6 +1,5 @@
 package blue.starry.saya.services.nicojk
 
-import blue.starry.jsonkt.parseObject
 import blue.starry.saya.models.CommentInfo
 import blue.starry.saya.services.comments.CommentChannelManager
 import blue.starry.saya.services.createSayaHttpClient
@@ -16,23 +15,19 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 object NicoJkApi {
     suspend fun getComments(id: String, startTime: Long, endTime: Long): CommentLog {
-        val client = createSayaHttpClient()
-        return client.use {
-            it.get<String>("https://jikkyo.tsukumijima.net/api/kakolog/$id") {
+        return createSayaHttpClient().use { client ->
+            client.get("https://jikkyo.tsukumijima.net/api/kakolog/$id") {
                 parameter("starttime", startTime)
                 parameter("endtime", endTime)
                 parameter("format", "json")
-            }.parseObject {
-                CommentLog(it)
             }
         }
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getChannels(): List<CommentInfo> {
-        val client = createSayaHttpClient()
-        return client.use {
-            it.get<String>("http://jk.from.tv/api/v2_app/getchannels").let {
+        return createSayaHttpClient().use { client ->
+            client.get<String>("http://jk.from.tv/api/v2_app/getchannels").let {
                 val source = InputSource(StringReader(it))
                 val document = DocumentBuilderFactory
                     .newInstance()

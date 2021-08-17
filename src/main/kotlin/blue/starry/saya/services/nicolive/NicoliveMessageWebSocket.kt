@@ -2,7 +2,6 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.jsonArrayOf
 import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.jsonkt.parseObject
 import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.common.send
 import blue.starry.saya.services.createSayaHttpClient
@@ -11,6 +10,8 @@ import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 class NicoliveMessageWebSocket(
@@ -72,8 +73,10 @@ class NicoliveMessageWebSocket(
 
     private suspend fun DefaultClientWebSocketSession.consumeFrames() {
         incoming.consumeAsFlow().filterIsInstance<Frame.Text>().collect { frame ->
-            val message = frame.readText().parseObject {
-                NicoliveWebSocketMessageJson(it)
+            val message = frame.readText().let {
+                Json {
+                    ignoreUnknownKeys = true
+                }.decodeFromString<NicoliveWebSocketMessageJson>(it)
             }
 
             val comment = message.chat?.toSayaComment(
