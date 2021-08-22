@@ -77,11 +77,11 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
                     return@collect
                 }
                 "seat" -> {
+                    require(message is NicoliveWebSocketSystemJson.Seat)
                     keepSeatJob?.cancel()
-                    val messageData = Json { ignoreUnknownKeys = true }.decodeFromJsonElement<NicoliveWebSocketSystemJsonSeat>(message.data)
                     keepSeatJob = launch {
                         while (isActive) {
-                            delay(messageData.keepIntervalSec * 1000)
+                            delay(message.data.keepIntervalSec * 1000)
                             send(
                                 jsonObjectOf(
                                     "type" to "keepSeat"
@@ -91,10 +91,10 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
                     }
                 }
                 "room" -> {
+                    require(message is NicoliveWebSocketSystemJson.Room)
                     mwsJob?.cancel()
-                    val messageData = Json { ignoreUnknownKeys = true }.decodeFromJsonElement<NicoliveWebSocketSystemJsonRoom>(message.data)
                     mwsJob = launch {
-                        NicoliveMessageWebSocket(provider, messageData, data).start()
+                        NicoliveMessageWebSocket(provider, message.data, data).start()
                     }
                 }
                 "disconnect" -> {

@@ -1,7 +1,6 @@
 package blue.starry.saya.services.nicolive
 
-import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.jsonkt.JsonElement
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,29 +41,52 @@ data class SearchPrograms(
     }
 }
 
-@Serializable
-data class NicoliveWebSocketSystemJson(
-    val type: String,
-    val data: JsonElement = jsonObjectOf()
-)
+@Serializable(with = NicoliveWebSocketSystemJsonDeserializer::class)
+sealed class NicoliveWebSocketSystemJson {
+    abstract val type: String
 
-@Serializable
-data class NicoliveWebSocketSystemJsonSeat(
-    val keepIntervalSec: Long
-)
+    @Serializable
+    data class Default(
+        override val type: String,
+    ) : NicoliveWebSocketSystemJson()
 
-@Serializable
-data class NicoliveWebSocketSystemJsonRoom(
-    val messageServer: MessageServer,
-    val threadId: JsonElement
-) {
-    @Serializable data class MessageServer(val uri: String)
+    @Serializable
+    data class Seat(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
+        @Serializable
+        data class Data(
+            val keepIntervalSec: Long
+        )
+    }
+
+    @Serializable
+    data class Room(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
+        @Serializable
+        data class Data(
+            val messageServer: MessageServer,
+            val threadId: JsonElement
+        ) {
+            @Serializable
+            data class MessageServer(val uri: String)
+        }
+    }
+
+    @Serializable
+    data class Statistics(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
+        @Serializable
+        data class Data(
+            val comments: Int
+        )
+    }
 }
-
-@Serializable
-data class NicoliveWebSocketSystemJsonStatistics(
-    val comments: Int
-)
 
 @Serializable
 data class NicoliveWebSocketMessageJson(
