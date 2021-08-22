@@ -1,5 +1,6 @@
 package blue.starry.saya.services.nicolive
 
+import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.jsonkt.JsonElement
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -44,28 +45,30 @@ data class SearchPrograms(
 @Serializable
 data class NicoliveWebSocketSystemJson(
     val type: String,
-    val data: Data
+    val data: JsonElement = jsonObjectOf()
+)
+
+@Serializable
+data class NicoliveWebSocketSystemJsonSeat(
+    val keepIntervalSec: Long
+)
+
+@Serializable
+data class NicoliveWebSocketSystemJsonRoom(
+    val messageServer: MessageServer,
+    val threadId: JsonElement
 ) {
-    @Serializable
-    data class Data(
-        // seat
-        val keepIntervalSec: Long,
-
-        // room
-        val messageServer: MessageServer,
-        val threadId: JsonElement,
-
-        // statistics
-        val comments: Int
-    ) {
-        @Serializable
-        data class MessageServer(val uri: String)
-    }
+    @Serializable data class MessageServer(val uri: String)
 }
 
 @Serializable
+data class NicoliveWebSocketSystemJsonStatistics(
+    val comments: Int
+)
+
+@Serializable
 data class NicoliveWebSocketMessageJson(
-    val chat: Chat?
+    val chat: Chat? = null
 )
 
 @Serializable

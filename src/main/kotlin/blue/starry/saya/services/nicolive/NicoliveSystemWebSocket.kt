@@ -15,6 +15,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import mu.KotlinLogging
 
 class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider, private val data: EmbeddedData) {
@@ -77,9 +78,10 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
                 }
                 "seat" -> {
                     keepSeatJob?.cancel()
+                    val messageData = Json { ignoreUnknownKeys = true }.decodeFromJsonElement<NicoliveWebSocketSystemJsonSeat>(message.data)
                     keepSeatJob = launch {
                         while (isActive) {
-                            delay(message.data.keepIntervalSec * 1000)
+                            delay(messageData.keepIntervalSec * 1000)
                             send(
                                 jsonObjectOf(
                                     "type" to "keepSeat"
@@ -90,8 +92,9 @@ class NicoliveSystemWebSocket(private val provider: LiveNicoliveCommentProvider,
                 }
                 "room" -> {
                     mwsJob?.cancel()
+                    val messageData = Json { ignoreUnknownKeys = true }.decodeFromJsonElement<NicoliveWebSocketSystemJsonRoom>(message.data)
                     mwsJob = launch {
-                        NicoliveMessageWebSocket(provider, message.data, data).start()
+                        NicoliveMessageWebSocket(provider, messageData, data).start()
                     }
                 }
                 "disconnect" -> {

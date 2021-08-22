@@ -16,7 +16,7 @@ import mu.KotlinLogging
 
 class NicoliveMessageWebSocket(
     private val provider: LiveNicoliveCommentProvider,
-    private val room: NicoliveWebSocketSystemJson.Data,
+    private val room: NicoliveWebSocketSystemJsonRoom,
     private val data: EmbeddedData
 ) {
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${provider.channel.name}]")
