@@ -55,7 +55,9 @@ object Libraries {
         // CoroutineScope#produce {}
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         // GlobalScope
-        "kotlinx.coroutines.DelicateCoroutinesApi"
+        "kotlinx.coroutines.DelicateCoroutinesApi",
+        // @Serializer
+        "kotlinx.serialization.ExperimentalSerializationApi"
     )
 }
 
@@ -158,8 +160,4 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     manifest {
         attributes("Main-Class" to "blue.starry.saya.MainKt")
     }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }

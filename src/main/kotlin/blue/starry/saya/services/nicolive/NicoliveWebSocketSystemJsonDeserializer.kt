@@ -1,6 +1,5 @@
 package blue.starry.saya.services.nicolive
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.encoding.Decoder
@@ -9,7 +8,6 @@ import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = NicoliveWebSocketSystemJson::class)
 object NicoliveWebSocketSystemJsonDeserializer : KSerializer<NicoliveWebSocketSystemJson> {
 
