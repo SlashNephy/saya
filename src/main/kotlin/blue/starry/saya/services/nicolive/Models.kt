@@ -1,6 +1,6 @@
 package blue.starry.saya.services.nicolive
 
-import blue.starry.jsonkt.JsonElement
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -41,31 +41,56 @@ data class SearchPrograms(
     }
 }
 
-@Serializable
-data class NicoliveWebSocketSystemJson(
-    val type: String,
-    val data: Data
-) {
+@Serializable(with = NicoliveWebSocketSystemJsonDeserializer::class)
+sealed class NicoliveWebSocketSystemJson {
+    abstract val type: String
+
     @Serializable
-    data class Data(
-        // seat
-        val keepIntervalSec: Long,
+    data class Default(
+        override val type: String,
+    ) : NicoliveWebSocketSystemJson()
 
-        // room
-        val messageServer: MessageServer,
-        val threadId: JsonElement,
-
-        // statistics
-        val comments: Int
-    ) {
+    @Serializable
+    data class Seat(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
         @Serializable
-        data class MessageServer(val uri: String)
+        data class Data(
+            val keepIntervalSec: Long
+        )
+    }
+
+    @Serializable
+    data class Room(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
+        @Serializable
+        data class Data(
+            val messageServer: MessageServer,
+            val threadId: JsonElement
+        ) {
+            @Serializable
+            data class MessageServer(val uri: String)
+        }
+    }
+
+    @Serializable
+    data class Statistics(
+        override val type: String,
+        val data: Data
+    ) : NicoliveWebSocketSystemJson() {
+        @Serializable
+        data class Data(
+            val comments: Int
+        )
     }
 }
 
 @Serializable
 data class NicoliveWebSocketMessageJson(
-    val chat: Chat?
+    val chat: Chat? = null
 )
 
 @Serializable

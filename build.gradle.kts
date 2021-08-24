@@ -55,7 +55,9 @@ object Libraries {
         // CoroutineScope#produce {}
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         // GlobalScope
-        "kotlinx.coroutines.DelicateCoroutinesApi"
+        "kotlinx.coroutines.DelicateCoroutinesApi",
+        // @Serializer
+        "kotlinx.serialization.ExperimentalSerializationApi"
     )
 }
 
