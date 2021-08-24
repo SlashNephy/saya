@@ -10,7 +10,6 @@ import kotlinx.serialization.json.jsonPrimitive
 
 @Serializer(forClass = NicoliveWebSocketSystemJson::class)
 object NicoliveWebSocketSystemJsonDeserializer : KSerializer<NicoliveWebSocketSystemJson> {
-
     override fun deserialize(decoder: Decoder): NicoliveWebSocketSystemJson {
         require(decoder is JsonDecoder)
         val element = decoder.decodeJsonElement()
@@ -25,6 +24,6 @@ object NicoliveWebSocketSystemJsonDeserializer : KSerializer<NicoliveWebSocketSy
     }
 
     override fun serialize(encoder: Encoder, value: NicoliveWebSocketSystemJson) {
-        throw NotImplementedError("Serialization of NicoliveWebSocketSystemJson is not impl")
+        throw UnsupportedOperationException("Serialization of NicoliveWebSocketSystemJson is unsupported")
     }
 }
