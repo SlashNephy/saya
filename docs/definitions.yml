@@ -68,7 +68,7 @@ channels:
     nicoliveCommunityIds:
       - 'ch2646436'
     twitterKeywords:
-      - '#nhktv'
+      - '#nhkgtv'
     boardIds:
       - 'NHK'
       - 'LOVELIVE_NHK'
@@ -131,6 +131,7 @@ channels:
     twitterKeywords:
       - '#Eテレ'
       - '#etv'
+      - '#nhketv'
     boardIds:
       - 'ETV'
       - 'LOVELIVE_ETV'
@@ -690,6 +691,7 @@ channels:
       - 'co5175341'
     twitterKeywords:
       - '#BS日テレ'
+      - '#bsntv'
     boardIds:
       - 'BSFREE_NTV'
       - 'NANJ_BSNTV'
@@ -711,6 +713,7 @@ channels:
       - 'co5175345'
     twitterKeywords:
       - '#BS朝日'
+      - '#bsasahi'
     boardIds:
       - 'BSFREE_ANB'
       - 'NANJ_BSANB'
@@ -754,6 +757,7 @@ channels:
     twitterKeywords:
       - '#BSテレ東'
       - '#BSジャパン'
+      - '#bstvtokyo'
     boardIds:
       - 'BSFREE_TX'
       - 'NANJ_BSTX'
@@ -774,6 +778,7 @@ channels:
       - 'co5176125'
     twitterKeywords:
       - '#BSフジ'
+      - '#bsfuji'
     boardIds:
       - 'BSFREE_CX'
       - 'NANJ_BSCX'
