@@ -35,6 +35,7 @@ RUN adduser --disabled-password --gecos "" saya
 COPY --from=build /app/build/libs/saya-all.jar /app/saya.jar
 COPY docs/ /app/docs/
 
+LABEL org.opencontainers.image.source="https://github.com/SlashNephy/saya"
 USER saya
 WORKDIR /app
 ENTRYPOINT ["java", "-jar", "/app/saya.jar"]
