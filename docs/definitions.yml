@@ -1098,6 +1098,33 @@ channels:
       - 'BSFREE_DLIFE'
     syobocalId: 212
     annictId: 212
+  - name: 'BS松竹東急'
+    type: 'BS'
+    serviceIds:
+      - 260
+    networkId: 4
+    nicojkId: 260
+    nicoliveCommunityIds:
+      - 'co5682554'
+    syobocalId: 271
+  - name: 'BSJapanext'
+    type: 'BS'
+    serviceIds:
+      - 263
+    networkId: 4
+    nicojkId: 263
+    nicoliveCommunityIds:
+      - 'co5682551'
+    syobocalId: 273
+  - name: 'BSよしもと'
+    type: 'BS'
+    serviceIds:
+      - 265
+    networkId: 4
+    nicojkId: 265
+    nicoliveCommunityIds:
+      - 'co5682548'
+    syobocalId: 271
   - name: '放送大学ラジオ'
     type: 'BS'
     serviceIds:
