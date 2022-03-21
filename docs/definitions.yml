@@ -1106,7 +1106,10 @@ channels:
     nicojkId: 260
     nicoliveCommunityIds:
       - 'co5682554'
+    boardIds:
+      - 'BSFREE_SYOCHIKUTOKYU'
     syobocalId: 271
+    annictId: 302
   - name: 'BSJapanext'
     type: 'BS'
     serviceIds:
@@ -1115,7 +1118,10 @@ channels:
     nicojkId: 263
     nicoliveCommunityIds:
       - 'co5682551'
+    boardIds:
+      - 'BSFREE_JAPANEXT'
     syobocalId: 273
+    annictId: 303
   - name: 'BSよしもと'
     type: 'BS'
     serviceIds:
@@ -1124,7 +1130,10 @@ channels:
     nicojkId: 265
     nicoliveCommunityIds:
       - 'co5682548'
+    boardIds:
+      - 'BSFREE_YOSHIMOTO'
     syobocalId: 271
+    annictId: 304
   - name: '放送大学ラジオ'
     type: 'BS'
     serviceIds:
@@ -1751,6 +1760,24 @@ boards:
     board: 'livebs2'
     keywords:
       - 'Dlife'
+  - id: 'BSFREE_SYOCHIKUTOKYU'
+    name: 'BS実況(無料)'
+    server: 'tanuki'
+    board: 'livebs2'
+    keywords:
+      - 'BS松竹東急'
+  - id: 'BSFREE_JAPANEXT'
+    name: 'BS実況(無料)'
+    server: 'tanuki'
+    board: 'livebs2'
+    keywords:
+      - 'BSJapanext'
+  - id: 'BSFREE_YOSHIMOTO'
+    name: 'BS実況(無料)'
+    server: 'tanuki'
+    board: 'livebs2'
+    keywords:
+      - 'BSよしもと'
 
   # https://sora.5ch.net/livewowow
   - id: 'BSPAY_WOWOWP'
