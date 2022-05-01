@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
     id("blue.starry.scriptextender") version "0.0.2"
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("com.adarshr.test-logger") version "3.0.0"
