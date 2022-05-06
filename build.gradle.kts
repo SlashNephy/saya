@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.5.20"
-    kotlin("plugin.serialization") version "1.5.20"
+    kotlin("plugin.serialization") version "1.6.21"
     id("blue.starry.scriptextender") version "0.0.2"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 
