@@ -21,7 +21,7 @@ dependencies {
     implementation("com.charleskorn.kaml:kaml:0.44.0")
     implementation("blue.starry:penicillin:6.2.3")
     implementation("commons-codec:commons-codec:1.15")
-    implementation("org.jsoup:jsoup:1.14.3")
+    implementation("org.jsoup:jsoup:1.15.1")
     implementation("com.google.guava:guava:31.1-jre")
 
     implementation("io.github.microutils:kotlin-logging:2.1.21")
