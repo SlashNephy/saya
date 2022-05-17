@@ -21,7 +21,7 @@ import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import mu.KLogger
 import mu.KotlinLogging
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 const val SayaUserAgent = "saya/2.0 (+https://github.com/SlashNephy/saya)"
 private val logger: KLogger
@@ -37,7 +37,7 @@ fun createSayaHttpClient(): HttpClient {
             serializer = KotlinxSerializer()
         }
         engine {
-            requestTimeout = Duration.minutes(1).inWholeMilliseconds
+            requestTimeout = 1.minutes.inWholeMilliseconds
         }
 
         Logging {

@@ -25,11 +25,12 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: 11
+          distribution: 'colletto'
+          java-version: 17
 
       - name: Grant Execute Permission to gradlew
         run: chmod +x gradlew

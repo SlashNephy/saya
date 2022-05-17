@@ -26,7 +26,8 @@ import mu.KotlinLogging
 import java.nio.file.Paths
 import java.util.*
 import kotlin.io.path.readText
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 object CommentChannelManager {
     val Channels: List<Definitions.Channel>
@@ -81,6 +82,7 @@ object CommentChannelManager {
      * @param channel 実況チャンネル [Definitions.Channel]
      * @param sources コメント配信元 [CommentSource] のリスト
      */
+    @OptIn(ExperimentalTime::class, DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun subscribeLiveComments(
         channel: Definitions.Channel,
         sources: List<CommentSource>
@@ -129,7 +131,7 @@ object CommentChannelManager {
                                 logger.error(t) { "Fetch Job: error in $provider" }
                             }
 
-                            delay(Duration.seconds(5))
+                            delay(5.seconds)
                         }
                     }
                     liveJobs[channel to source] = newJob
@@ -205,6 +207,7 @@ object CommentChannelManager {
      * @param startAt タイムシフト開始時刻 (エポック秒)
      * @param endAt タイムシフト終了時刻 (エポック秒)
      */
+    @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
     fun subscribeTimeshiftComments(
         channel: Definitions.Channel,
         sources: List<CommentSource>,
@@ -247,7 +250,7 @@ object CommentChannelManager {
                             logger.error(t) { "Fetch Job: error in $provider" }
                         }
 
-                        delay(Duration.seconds(5))
+                        delay(5.seconds)
                     }
                 }
 
@@ -267,7 +270,7 @@ object CommentChannelManager {
                             logger.error(t) { "Seek Job: error in $provider" }
                         }
 
-                        delay(Duration.seconds(5))
+                        delay(5.seconds)
                     }
                 }
 

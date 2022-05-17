@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import java.time.ZonedDateTime
 import kotlin.random.Random
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 class LiveGochanResProvider(
     override val channel: Definitions.Channel,
@@ -23,6 +24,7 @@ class LiveGochanResProvider(
 
     private val logger = KotlinLogging.createSayaLogger("saya.services.5ch[${channel.name}]")
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun start() = coroutineScope {
         joinAll(
             launch {
@@ -37,7 +39,7 @@ class LiveGochanResProvider(
                         logger.error(t) { "error in doSearchThreadsLoop" }
                     }
 
-                    delay(Duration.seconds(5))
+                    delay(5.seconds)
                 }
             },
             launch {
@@ -52,7 +54,7 @@ class LiveGochanResProvider(
                         logger.error(t) { "error in doCollectResLoop" }
                     }
 
-                    delay(Duration.seconds(3))
+                    delay(3.seconds)
                 }
             }
         )
@@ -130,7 +132,7 @@ class LiveGochanResProvider(
                             resCountCache.withLock {
                                 it[address] = item.resCount
                             }
-                        } catch (e: CancellationException) {
+                        } catch (_: CancellationException) {
                         } catch (t: Throwable) {
                             logger.error(t) { "error in doCollectResLoop" }
                         }

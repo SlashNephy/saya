@@ -2,8 +2,9 @@ package blue.starry.saya.services.nicolive
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.saya.services.createSayaHttpClient
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.http.userAgent
 import org.jsoup.Jsoup
 
 object NicoliveApi {
@@ -30,11 +31,11 @@ object NicoliveApi {
                     Jsoup.parse(it)
                 }
                 .getElementById("embedded-data")
-                .attr("data-props")
-                .replace("&quot;", "\"")
-                .parseObject {
+                ?.attr("data-props")
+                ?.replace("&quot;", "\"")
+                ?.parseObject {
                     EmbeddedData(it)
                 }
-        }
+        } ?: throw IllegalStateException("Embedded data is not found.")
     }
 }

@@ -4,13 +4,14 @@ import blue.starry.saya.common.createSayaLogger
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 class TimeshiftGochanResProvider(
     channel: Definitions.Channel,
@@ -19,6 +20,7 @@ class TimeshiftGochanResProvider(
     private val client: GochanClient,
     private val boards: List<Definitions.Board>
 ): TimeshiftCommentProviderImpl(channel, startAt, endAt) {
+    @OptIn(FlowPreview::class)
     override suspend fun fetch(): Unit = coroutineScope {
         comments.withLock { list ->
             list.clear()
@@ -28,7 +30,7 @@ class TimeshiftGochanResProvider(
 
         boards.asFlow()
             .flatMapConcat { board ->
-                AutoPastGochanThreadSelector.enumerate(client, board, startAt, endAt, Duration.hours(3))
+                AutoPastGochanThreadSelector.enumerate(client, board, startAt, endAt, 3.hours)
             }
             .mapNotNull { thread ->
                 val dat = try {

@@ -20,7 +20,7 @@ import blue.starry.saya.models.Comment
 import blue.starry.saya.models.Definitions
 import blue.starry.saya.services.comments.LiveCommentProvider
 import blue.starry.saya.services.createSayaTwitterClient
-import io.ktor.util.date.*
+import io.ktor.util.date.toJvmDate
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -30,10 +30,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import org.apache.http.ConnectionClosedException
+import java.time.Duration
 import java.time.Instant
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 import kotlin.time.toKotlinDuration
-import java.time.Duration as JavaDuration
 
 class LiveTweetProvider(
     override val channel: Definitions.Channel,
@@ -43,6 +44,7 @@ class LiveTweetProvider(
     override val subscription = LiveCommentProvider.Subscription()
     private val logger = KotlinLogging.createSayaLogger("saya.services.twitter[${channel.name}]")
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun start() = coroutineScope {
         if (Env.TWITTER_PREFER_STREAMING_API) {
             while (isActive) {
@@ -64,7 +66,7 @@ class LiveTweetProvider(
                     break
                 }
 
-                delay(Duration.seconds(5))
+                delay(5.seconds)
             }
         }
 
@@ -80,14 +82,14 @@ class LiveTweetProvider(
             } catch (t: Throwable) {
                 // レートリミット
                 if (t is PenicillinTwitterApiException && t.error == TwitterApiError.RateLimitExceeded) {
-                    delay(Duration.seconds(15))
+                    delay(15.seconds)
                     continue
                 }
 
                 logger.trace(t) { "error in doSearchLoop" }
             }
 
-            delay(Duration.seconds(5))
+            delay(5.seconds)
         }
     }
 
@@ -121,6 +123,7 @@ class LiveTweetProvider(
     private var lastId: Long? = null
     private var lastIdLock = Mutex()
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun doSearchLoop(client: ApiClient, keywords: Set<String>) {
         lastIdLock.withLock {
             val response = client.search.search(
@@ -141,9 +144,9 @@ class LiveTweetProvider(
             val limit = response.rateLimit
 
             if (limit == null || limit.remaining == 0) {
-                delay(Duration.seconds(15))
+                delay(15.seconds)
             } else {
-                val duration = JavaDuration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
+                val duration = Duration.between(Instant.now(), limit.resetAt.toJvmDate().toInstant()).toKotlinDuration()
                 val safeRate = duration / limit.remaining
                 logger.trace { "Ratelimit ${limit.remaining}/${limit.limit}: Sleep $safeRate ($keywords)" }
 

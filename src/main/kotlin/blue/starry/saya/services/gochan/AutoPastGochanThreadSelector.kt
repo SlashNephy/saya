@@ -56,7 +56,7 @@ object AutoPastGochanThreadSelector {
                 emit(GochanKakologThreadList(
                     server = server,
                     board = board,
-                    filename = href?.removePrefix("./"),
+                    filename = href.removePrefix("./"),
                     startAt = startAt.toLong(),
                     endAt = endAt.toLong()
                 ))
@@ -79,10 +79,10 @@ object AutoPastGochanThreadSelector {
         doc.select("p.main_even, p.main_odd").reversed().forEach {
             emit(GochanKakologThread(
                 list = list,
-                id = it.selectFirst("span.filename").text().removeSuffix(".dat"),
-                title = it.selectFirst("span.title").text(),
-                url = "https://${list.server}.5ch.net${it.selectFirst("span.title a").attr("href")}",
-                lines = it.selectFirst("span.lines").text().toInt()
+                id = it.selectFirst("span.filename")!!.text().removeSuffix(".dat"),
+                title = it.selectFirst("span.title")!!.text(),
+                url = "https://${list.server}.5ch.net${it.selectFirst("span.title a")!!.attr("href")}",
+                lines = it.selectFirst("span.lines")!!.text().toInt()
             ))
         }
     }

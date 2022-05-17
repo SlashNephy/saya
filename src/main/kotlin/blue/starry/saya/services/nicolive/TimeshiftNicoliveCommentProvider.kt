@@ -8,8 +8,8 @@ import blue.starry.saya.services.comments.TimeshiftCommentProviderImpl
 import blue.starry.saya.services.nicojk.NicoJkApi
 import kotlinx.coroutines.*
 import mu.KotlinLogging
-import kotlin.time.Duration
-import kotlin.time.seconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 class TimeshiftNicoliveCommentProvider(
     channel: Definitions.Channel,
@@ -18,6 +18,7 @@ class TimeshiftNicoliveCommentProvider(
 ): TimeshiftCommentProviderImpl(channel, startAt, endAt) {
     private val logger = KotlinLogging.createSayaLogger("saya.services.nicolive[${channel.name}]")
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun fetch(): Unit = coroutineScope {
         comments.withLock { list ->
             list.clear()
@@ -41,7 +42,7 @@ class TimeshiftNicoliveCommentProvider(
                             break
                         } catch (t: Throwable) {
                             logger.error(t) { "Failed to fetch comments. Retry in 3 sec." }
-                            delay(Duration.seconds(3))
+                            delay(3.seconds)
                         }
                     }
                 }

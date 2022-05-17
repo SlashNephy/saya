@@ -1,6 +1,6 @@
 # saya: 📺 API server to enhance the web-based DTV watching experiences w/ elaina
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.6-blue)](https://kotlinlang.org)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/SlashNephy/saya)](https://github.com/SlashNephy/saya/releases)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SlashNephy/saya/Docker)](https://hub.docker.com/r/slashnephy/saya)
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/slashnephy/saya/latest)](https://hub.docker.com/r/slashnephy/saya)
@@ -69,13 +69,13 @@ saya は以下のプロジェクトとの併用を想定しています。
 
 いくつかのイメージタグを用意しています。現在 linux/amd64 プラットホームのみサポートしています。
 
-- `slashnephy/saya:latest`
+- `ghcr.io/slashnephy/saya:latest`
   + master ブランチへのプッシュの際にビルドされます。基本的に最新の安定版バージョンになります。
   + 比較的安定しています。
-- `slashnephy/saya:dev`
+- `ghcr.io/slashnephy/saya:dev`
   + dev ブランチへのプッシュの際にビルドされます。
   + 開発版のため, 不安定である可能性があります。
-- `slashnephy/saya:<version>`
+- `ghcr.io/slashnephy/saya:<version>`
   + GitHub 上のリリースに対応します。
 
 ### docker-compose
@@ -90,7 +90,7 @@ version: '3.8'
 services:
   saya:
     container_name: saya
-    image: slashnephy/saya:latest
+    image: ghcr.io/slashnephy/saya:latest
     restart: always
     ports:
       - 1017:1017/tcp # いれいな

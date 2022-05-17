@@ -13,13 +13,13 @@ import io.ktor.serialization.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
 fun Application.module() {
     install(WebSockets) {
-        pingPeriod = Duration.seconds(15).toJavaDuration()
-        timeout = Duration.seconds(30).toJavaDuration()
+        pingPeriod = 15.seconds.toJavaDuration()
+        timeout = 30.seconds.toJavaDuration()
     }
     install(XForwardedHeaderSupport)
     install(ContentNegotiation) {
