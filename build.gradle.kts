@@ -24,7 +24,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.1")
     implementation("com.google.guava:guava:31.1-jre")
 
-    implementation("io.github.microutils:kotlin-logging:2.1.21")
+    implementation("io.github.microutils:kotlin-logging:2.1.23")
     implementation("ch.qos.logback:logback-classic:1.2.11")
 }
 
