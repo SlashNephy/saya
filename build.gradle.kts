@@ -18,7 +18,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:1.6.8")
     implementation("io.ktor:ktor-client-logging:1.6.8")
 
-    implementation("com.charleskorn.kaml:kaml:0.44.0")
+    implementation("com.charleskorn.kaml:kaml:0.45.0")
     implementation("blue.starry:penicillin:6.2.3")
     implementation("commons-codec:commons-codec:1.15")
     implementation("org.jsoup:jsoup:1.15.1")
