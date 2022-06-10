@@ -16,7 +16,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:1.6.8")
     implementation("io.ktor:ktor-client-apache:1.6.8")
     implementation("io.ktor:ktor-client-serialization:1.6.8")
-    implementation("io.ktor:ktor-client-logging:1.6.8")
+    implementation("io.ktor:ktor-client-logging:2.0.2")
 
     implementation("com.charleskorn.kaml:kaml:0.45.0")
     implementation("blue.starry:penicillin:6.2.3")
