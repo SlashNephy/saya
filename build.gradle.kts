@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-cio:1.6.8")
+    implementation("io.ktor:ktor-server-cio:2.0.2")
     implementation("io.ktor:ktor-websockets:1.6.8")
     implementation("io.ktor:ktor-serialization:1.6.8")
     implementation("io.ktor:ktor-client-cio:1.6.8")
